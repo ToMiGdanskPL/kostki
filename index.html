@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Kostki for Dorcia</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>">
+    <style>
+        * {
+            box-sizing: border-box;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #1E1E1E;
+            color: #E5E5EA;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        #app-container {
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+            padding: 8px;
+            gap: 6px;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header, .stats-bar, .controls, .radio-panel, .progress-container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            gap: 6px;
+        }
+        .stats-bar {
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 0.85rem;
+            background: #2D2D30;
+            padding: 8px 12px;
+            border-radius: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .progress-container {
+            background-color: #2D2D30;
+            border-radius: 6px;
+            height: 10px;
+            overflow: hidden;
+            padding: 2px;
+        }
+        .progress-bar-fill {
+            background-color: #30D158;
+            height: 100%;
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        button {
+            background-color: #0A84FF;
+            color: white;
+            border: none;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            flex: 1;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        button:disabled {
+            background-color: #48484A;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        button.active {
+            background-color: #FF9F0A;
+        }
+        button.btn-end {
+            background-color: #FF3B30;
+        }
+        .canvas-container {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 0;
+        }
+        canvas {
+            background-color: #2D2D30;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .combo-text {
+            height: 20px;
+            color: #FF3B30;
+            font-weight: bold;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .radio-panel {
+            background: #2D2D30;
+            padding: 8px 10px;
+            border-radius: 10px;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .radio-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            width: 100%;
+        }
+        .radio-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            color: #8E8E93;
+        }
+        .stations-scroll {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            width: 100%;
+            padding-bottom: 2px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .btn-station {
+            background-color: #3A3A3C;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            flex: 0 0 auto;
+            border: 1px solid transparent;
+        }
+        .btn-station.active-station {
+            background-color: #30D158;
+            color: #000;
+            font-weight: bold;
+        }
+        .btn-media {
+            flex: 1;
+            padding: 8px 10px;
+        }
+        .btn-play-state {
+            background-color: #30D158;
+        }
+        .btn-stop-state {
+            background-color: #FF3B30;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 20px;
+        }
+        .modal-content {
+            background: #2D2D30;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            color: #FFF;
+            text-align: left;
+        }
+        .modal-content h2 { margin-top: 0; color: #0A84FF; text-align: center; }
+        .modal-content h3 { color: #FF9F0A; margin-bottom: 5px; font-size: 1rem; }
+        .modal-content ul { padding-left: 20px; margin-top: 5px; }
+        .modal-content li { margin-bottom: 6px; font-size: 0.9rem; }
+        .close-btn {
+            background: #0A84FF;
+            margin-top: 15px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .modal-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            white-space: pre-line;
+            margin: 15px 0;
+            text-align: center;
+        }
+        ol { padding-left: 20px; text-align: left; }
+        ol li { margin-bottom: 5px; }
+        
+        .name-input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #0A84FF;
+            background: #1E1E1E;
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            box-sizing: border-box;
+            user-select: text;
+            -webkit-user-select: text;
+        }
+        .name-input:focus {
+            border-color: #30D158;
+        }
+        .infinity-icon {
+            color: #FF9F0A;
+            font-weight: bold;
+            margin-left: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        <div class="header">
+            <button id="btnGameAction" class="btn-end" onclick="handleGameAction()">🔴 Zakończ grę</button>
+            <button onclick="showInfo()">ℹ️ Instrukcja</button>
+            <button onclick="showHighScores()">🏆 Wyniki</button>
+        </div>
+
+        <div class="stats-bar">
+            <div>🚩 Runda: <span id="roundLabel" style="color:#FFD60A;">1</span></div>
+            <div>⏱️ <span id="timer">180</span></div>
+            <div>📦 Łącznie: <span id="totalClearedGame" style="color:#FF9F0A;">0</span></div>
+            <div>Poziom: <span id="diffDisplay" style="color:#FF9F0A;">🟢 Bardzo Łatwy</span></div>
+            <div>🎯 Zbite: <span id="clearedCount">0</span> / <span id="targetBlocks" style="color:#30D158;">0</span> (<span id="progressPercent" style="color:#0A84FF;">0%</span>)</div>
+        </div>
+
+        <div class="progress-container">
+            <div id="progressBarFill" class="progress-bar-fill"></div>
+        </div>
+
+        <div class="controls">
+            <button id="btnDisableTimer" onclick="disableTimerLifeline()">⏱️ Wyłącz czas</button>
+            <button id="btnHammer" onclick="toggleHammer()">🔨 Młotek</button>
+            <button id="btnShuffle" onclick="triggerShuffle()">🔀 Mieszaj</button>
+        </div>
+
+        <div class="combo-text" id="comboLabel"></div>
+
+        <div class="canvas-container">
+            <canvas id="gameCanvas"></canvas>
+        </div>
+
+        <!-- Panel Radiowy -->
+        <div class="radio-panel">
+            <div class="radio-row">
+                <span class="radio-label">Stacja:</span>
+                <div class="stations-scroll" id="stationsList"></div>
+            </div>
+            <div class="radio-row">
+                <button id="btnPlay" class="btn-media btn-play-state" onclick="togglePlay()">▶ Play</button>
+                <button id="btnPrev" class="btn-media" onclick="prevStation()">⏮️ Poprzednia</button>
+                <button id="btnNext" class="btn-media" onclick="nextStation()">⏭️ Następna</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Instrukcji i Zasad Gry -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <h2>📖 Instrukcja Obsługi Gry</h2>
+            
+            <h3>1. Zasady Rozgrywki</h3>
+            <ul>
+                <li><strong>Cel gry:</strong> Klikaj w grupy co najmniej <strong>2 połączonych ze sobą kostek</strong> tego samego koloru, aby je usunąć z planszy.</li>
+                <li><strong>Awans do kolejnej rundy:</strong> Musisz wyczyścić co najmniej <strong>90% klocków</strong> na obecnej planszy. Wywoła to <em>Złoty Wstrząs</em> i przejście do kolejnego poziomu.</li>
+                <li><strong>Poziomy trudności:</strong> Z każdą kolejną rundą na planszy pojawia się więcej kolorów (od 3 w rundzie 1 do 7 w wyższych rundach).</li>
+                <li><strong>Koniec gry:</strong> Gra kończy się, gdy skończy się czas lub gdy na planszy zabraknie ruchu, a cel 90% nie został osiągnięty.</li>
+            </ul>
+
+            <h3>2. Ułatwienia i Koła Ratunkowe (Jednorazowe)</h3>
+            <ul>
+                <li>⏱️ <strong>Wyłącz czas:</strong> Wyłącza odliczanie zegara, pozwalając na spokojną grę bez limitu czasowego (Twój wynik w tabeli otrzyma symbol <strong>∞</strong> na końcu wpisu).</li>
+                <li>🔨 <strong>Młotek:</strong> Aktywuj przycisk, a następnie kliknij w pojedynczą, przeszkadzającą kostkę na planszy, aby ją zbić.</li>
+                <li>🔀 <strong>Mieszaj:</strong> Losowo przetasowuje układ pozostałych kostek na planszy, gdy zabraknie pasujących kolorów obok siebie.</li>
+            </ul>
+
+            <h3>3. Radio Internetowe</h3>
+            <ul>
+                <li>Użyj paska stacji u dołu ekranu, aby wybrać ulubioną rozgłośnię.</li>
+                <li>Naciśnij <strong>▶ Play</strong>, aby uruchomić strumień muzyki bez przerywania rozgrywki.</li>
+            </ul>
+
+            <button class="close-btn" style="background:#FF3B30;" onclick="closeModal('infoModal')">Zamknij instrukcję</button>
+        </div>
+    </div>
+
+    <div id="scoresModal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <h2>🏆 Najlepsze Wyniki (TOP 10)</h2>
+            <ol id="highScoresList">
+                <li>Brak wyników</li>
+            </ol>
+            <button class="close-btn" style="background:#FF3B30;" onclick="closeModal('scoresModal')">Zamknij</button>
+        </div>
+    </div>
+
+    <!-- Modal Zwykłych Komunikatów -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <h2 id="msgModalTitle">Komunikat</h2>
+            <div id="msgModalText" class="modal-text"></div>
+            <button class="close-btn" onclick="closeModal('messageModal')">OK</button>
+        </div>
+    </div>
+
+    <!-- Modal Końca Gry -->
+    <div id="gameOverModal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <h2>🏁 Koniec Gry!</h2>
+            <div id="gameOverReason" class="modal-text"></div>
+            <div style="font-size: 1.2rem; font-weight: bold; color: #FF9F0A; margin-bottom: 10px;">
+                Twój wynik: <span id="finalScoreDisplay">0</span> pkt
+            </div>
+            <input type="text" id="playerNameInput" class="name-input" placeholder="Wpisz swoje imię..." maxlength="20">
+            <button class="close-btn" style="background:#30D158; color: black; font-weight: bold;" onclick="saveScoreAndClose()">💾 Zapisz wynik</button>
+        </div>
+    </div>
+
+    <audio id="audioPlayer" preload="none"></audio>
+
+<script>
+    const STATIONS = [
+        { name: "RMF FM", url: "https://rs6-krk2.rmfstream.pl/rmf_fm" },
+        { name: "Radio ZET", url: "https://zt01.cdn.eurozet.pl/zet-net.mp3" },
+        { name: "Radio Plus", url: "https://pl05.cdn.eurozet.pl/plu-gdn.mp3" },
+        { name: "Radio Gdańsk", url: "https://stream.task.gda.pl:8443/rg1" },
+        { name: "Radio Złote Przeboje", url: "https://radiostream.pl/tuba8906-1.mp3" },
+        { name: "Muzo FM", url: "https://n12-eu.rcs.revma.com/1nnezw8qz7zuv" },
+        { name: "TOK FM", url: "https://radiostream.pl/tuba10-1.mp3" },
+        { name: "Eska Trójmiasto", url: "https://ic2.smcdn.pl/2110-1.mp3" },
+        { name: "Eska GO", url: "https://ic2.smcdn.pl/6200-1.mp3" },
+        { name: "Eska Rock", url: "https://ic2.smcdn.pl/3990-1.aac" },
+        { name: "Antyradio", url: "https://an05.cdn.eurozet.pl/ant-waw.mp3" },
+        { name: "Radio Pogoda", url: "https://radiostream.pl/tuba145-1.mp3" },
+        { name: "Radio Kaszëbë", url: "https://stream4.nadaje.com:10125/kaszebe128" },
+        { name: "Chillout Zone", url: "https://stream-uk1.radioparadise.com/aac-320" },
+        { name: "Radio Yanosik", url: "https://n02-eu.rcs.revma.com/7vhveccrnquvv?rj-ttl=5&rj-tok=AAABnml7RXUA6ULjB124cXxZTw" },
+        { name: "Radio Yanosik '80", url: "https://n20-eu.rcs.revma.com/uwey4ye0gfcwv?rj-ttl=5&rj-tok=AAABnmmBZ6MA8PxZF6AKc1dAsg" },
+        { name: "Radio Yanosik Love", url: "https://n07-eu.rcs.revma.com/8fqn8rr6ktuvv?rj-ttl=5&rj-tok=AAABnml9ekYA76LkB7To9hHuiQ" },
+        { name: "Radio Yanosik Rock", url: "https://n20-eu.rcs.revma.com/whxxccsdp7uvv?rj-ttl=5&rj-tok=AAABnml_V4AAOT_o7-gcF_FEGQ" },
+        { name: "Radio Yanosik X-Mas", url: "https://n25-eu.rcs.revma.com/b667d2c0qxcwv?rj-ttl=5&rj-tok=AAABnmmA0GgAh3CDkhNB0tClsw" }
+    ];
+
+    let currentStationIdx = 0;
+    const PALETTE = ["#1E88E5", "#4CAF50", "#FFEB3B", "#E91E63", "#00BCD4", "#9C27B0", "#FF9800"];
+
+    let ROWS = 18, COLS = 12, cellSize = 30;
+    let gridData = [], score = 0, roundClearedBlocks = 0, totalRoundBlocks = 0, targetBlocks = 0;
+    let currentRound = 1, timeLeft = 180, isTimerEnabled = true, timerInterval = null, gameActive = false;
+    let hammerMode = false, hammerAvailable = true, shuffleAvailable = true, timerDisableAvailable = true;
+    let usedTimerLifeline = false;
+    let statRemoved = 0, statMaxGroup = 0;
+
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const audio = document.getElementById("audioPlayer");
+
+    function renderStationButtons() {
+        const container = document.getElementById("stationsList");
+        container.innerHTML = "";
+        const isPlaying = audio && !audio.paused;
+
+        STATIONS.forEach((st, idx) => {
+            const btn = document.createElement("button");
+            const isActive = (idx === currentStationIdx) && isPlaying;
+            btn.className = "btn-station" + (isActive ? " active-station" : "");
+            btn.innerText = st.name;
+            btn.onclick = () => selectAndPlayStation(idx);
+            container.appendChild(btn);
+        });
+    }
+
+    function selectAndPlayStation(idx) {
+        currentStationIdx = idx;
+
+        const btnPlay = document.getElementById("btnPlay");
+        audio.src = STATIONS[currentStationIdx].url;
+        audio.load();
+
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                btnPlay.innerText = "⏹️ Stop";
+                btnPlay.className = "btn-media btn-stop-state";
+                renderStationButtons();
+            }).catch(err => {
+                console.log("Błąd odtwarzania:", err);
+                btnPlay.innerText = "▶ Play";
+                btnPlay.className = "btn-media btn-play-state";
+                renderStationButtons();
+            });
+        }
+    }
+
+    function togglePlay() {
+        const btn = document.getElementById("btnPlay");
+
+        if (audio.paused) {
+            if (!audio.src) {
+                audio.src = STATIONS[currentStationIdx].url;
+            }
+            audio.load();
+            audio.play().then(() => {
+                btn.innerText = "⏹️ Stop";
+                btn.className = "btn-media btn-stop-state";
+                renderStationButtons();
+            }).catch(err => console.log("Błąd:", err));
+        } else {
+            audio.pause();
+            audio.currentTime = 0;
+            audio.removeAttribute('src');
+            audio.load();
+            btn.innerText = "▶ Play";
+            btn.className = "btn-media btn-play-state";
+            renderStationButtons();
+        }
+    }
+
+    function prevStation() {
+        let idx = currentStationIdx - 1;
+        if (idx < 0) idx = STATIONS.length - 1;
+        selectAndPlayStation(idx);
+    }
+
+    function nextStation() {
+        let idx = currentStationIdx + 1;
+        if (idx >= STATIONS.length) idx = 0;
+        selectAndPlayStation(idx);
+    }
+
+    function getColorsForRound(round) {
+        if (round <= 2) return 3;
+        if (round <= 4) return 4;
+        if (round <= 6) return 5;
+        if (round <= 8) return 6;
+        return 7;
+    }
+
+    function getDifficultyLabel(round) {
+        if (round <= 2) return "🟢 Bardzo Łatwy";
+        if (round <= 4) return "🟡 Łatwy";
+        if (round <= 6) return "🟠 Średni";
+        if (round <= 8) return "🔴 Trudny";
+        return "🟣 Bardzo Trudny";
+    }
+
+    function calculateGridDimensions() {
+        const container = document.querySelector('.canvas-container');
+        const availableWidth = container.clientWidth;
+        const availableHeight = container.clientHeight;
+        const targetCellSize = window.innerWidth < 600 ? 32 : 40;
+
+        COLS = Math.max(8, Math.floor(availableWidth / targetCellSize));
+        ROWS = Math.max(10, Math.floor(availableHeight / targetCellSize));
+
+        cellSize = Math.min(
+            Math.floor(availableWidth / COLS),
+            Math.floor(availableHeight / ROWS)
+        );
+
+        canvas.width = COLS * cellSize;
+        canvas.height = ROWS * cellSize;
+    }
+
+    function handleGameAction() {
+        if (gameActive) endGame("Gra zakończona przez gracza.");
+        else newGame();
+    }
+
+    function updateActionButton() {
+        const btn = document.getElementById("btnGameAction");
+        if (gameActive) {
+            btn.innerText = "🔴 Zakończ grę";
+            btn.className = "btn-end";
+        } else {
+            btn.innerText = "🔄 Nowa gra";
+            btn.className = "";
+        }
+    }
+
+    function newGame() {
+        calculateGridDimensions();
+        score = 0; currentRound = 1; timeLeft = 180; isTimerEnabled = true; gameActive = true; hammerMode = false;
+        statRemoved = 0; statMaxGroup = 0; usedTimerLifeline = false;
+        hammerAvailable = true; shuffleAvailable = true; timerDisableAvailable = true;
+
+        const btnTimer = document.getElementById("btnDisableTimer");
+        btnTimer.innerText = "⏱️ Wyłącz czas"; btnTimer.disabled = false;
+
+        const btnHammer = document.getElementById("btnHammer");
+        btnHammer.innerText = "🔨 Młotek"; btnHammer.classList.remove("active"); btnHammer.disabled = false;
+
+        document.getElementById("btnShuffle").disabled = false;
+
+        updateActionButton();
+        generateBoard();
+        updateUI();
+
+        clearInterval(timerInterval);
+        timerInterval = setInterval(updateTimer, 1000);
+        drawBoard();
+    }
+
+    function startNextRound() {
+        currentRound++;
+        hammerMode = false;
+        document.getElementById("btnHammer").classList.remove("active");
+        calculateGridDimensions();
+        generateBoard();
+        updateUI();
+        drawBoard();
+        showMessageModal("✨ ZŁOTY WSTRZĄS!", `Przechodzisz do RUNDY ${currentRound}!\n(${getDifficultyLabel(currentRound)})`);
+    }
+
+    function generateBoard() {
+        const colorCount = getColorsForRound(currentRound);
+        gridData = [];
+        for (let r = 0; r < ROWS; r++) {
+            gridData[r] = [];
+            for (let c = 0; c < COLS; c++) {
+                gridData[r][c] = PALETTE[Math.floor(Math.random() * colorCount)];
+            }
+        }
+        totalRoundBlocks = ROWS * COLS;
+        targetBlocks = Math.ceil(totalRoundBlocks * 0.90);
+        roundClearedBlocks = 0;
+    }
+
+    function updateUI() {
+        document.getElementById("clearedCount").innerText = roundClearedBlocks;
+        document.getElementById("targetBlocks").innerText = targetBlocks;
+        document.getElementById("roundLabel").innerText = currentRound;
+        document.getElementById("diffDisplay").innerText = getDifficultyLabel(currentRound);
+        document.getElementById("totalClearedGame").innerText = statRemoved;
+
+        const currentPercentBoard = totalRoundBlocks > 0 ? Math.floor((roundClearedBlocks / totalRoundBlocks) * 100) : 0;
+        const percentLabel = document.getElementById("progressPercent");
+        percentLabel.innerText = currentPercentBoard + "%";
+
+        const progressBarFill = document.getElementById("progressBarFill");
+        const targetPercentProgress = targetBlocks > 0 ? Math.min(100, Math.floor((roundClearedBlocks / targetBlocks) * 100)) : 0;
+        progressBarFill.style.width = targetPercentProgress + "%";
+
+        percentLabel.style.color = currentPercentBoard >= 90 ? "#30D158" : "#0A84FF";
+        updateTimerDisplay();
+    }
+
+    function updateTimerDisplay() {
+        document.getElementById("timer").innerText = isTimerEnabled ? timeLeft + "s" : "∞";
+    }
+
+    function disableTimerLifeline() {
+        if (!gameActive || !timerDisableAvailable) return;
+        isTimerEnabled = false; timerDisableAvailable = false; usedTimerLifeline = true;
+        clearInterval(timerInterval);
+        document.getElementById("btnDisableTimer").disabled = true;
+        updateTimerDisplay();
+    }
+
+    function drawBoard() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                if (gridData[r] && gridData[r][c]) {
+                    ctx.fillStyle = gridData[r][c];
+                    ctx.fillRect(c * cellSize, r * cellSize, cellSize - 1, cellSize - 1);
+                } else {
+                    ctx.fillStyle = "#1E1E1E";
+                    ctx.fillRect(c * cellSize, r * cellSize, cellSize - 1, cellSize - 1);
+                }
+            }
+        }
+    }
+
+    function updateTimer() {
+        if (!gameActive || !isTimerEnabled) return;
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) endGame("Czas minął!");
+    }
+
+    canvas.addEventListener("click", (e) => {
+        if (!gameActive) return;
+        const rect = canvas.getBoundingClientRect();
+        const c = Math.floor((e.clientX - rect.left) / cellSize);
+        const r = Math.floor((e.clientY - rect.top) / cellSize);
+
+        if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return;
+
+        if (hammerMode) {
+            if (gridData[r][c]) {
+                gridData[r][c] = null;
+                hammerMode = false; hammerAvailable = false;
+                const btnHammer = document.getElementById("btnHammer");
+                btnHammer.classList.remove("active"); btnHammer.disabled = true;
+                roundClearedBlocks++; score += 1; statRemoved += 1;
+                updateUI(); applyGravity();
+                if (roundClearedBlocks >= targetBlocks) setTimeout(startNextRound, 200);
+            }
+            return;
+        }
+
+        const group = getConnectedGroup(r, c);
+        if (group.length >= 2) {
+            score += group.length; roundClearedBlocks += group.length; statRemoved += group.length;
+            if (group.length > statMaxGroup) statMaxGroup = group.length;
+            if (group.length >= 8) showCombo(group.length);
+
+            group.forEach(([gr, gc]) => gridData[gr][gc] = null);
+            updateUI(); applyGravity();
+
+            if (roundClearedBlocks >= targetBlocks) {
+                setTimeout(startNextRound, 200);
+                return;
+            }
+            if (checkGameOver()) {
+                setTimeout(() => endGame(`Brak możliwych ruchów!\nNie osiągnięto celu 90% zbitych klocków.`), 300);
+            }
+        }
+    });
+
+    function getConnectedGroup(startR, startC) {
+        const color = gridData[startR][startC];
+        if (!color) return [];
+        const queue = [[startR, startC]], visited = new Set([`${startR},${startC}`]), group = [];
+
+        while (queue.length > 0) {
+            const [r, c] = queue.shift();
+            group.push([r, c]);
+            const dirs = [[-1,0], [1,0], [0,-1], [0,1]];
+            for (let [dr, dc] of dirs) {
+                const nr = r + dr, nc = c + dc;
+                if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
+                    if (gridData[nr][nc] === color && !visited.has(`${nr},${nc}`)) {
+                        visited.add(`${nr},${nc}`);
+                        queue.push([nr, nc]);
+                    }
+                }
+            }
+        }
+        return group;
+    }
+
+    function applyGravity() {
+        for (let c = 0; c < COLS; c++) {
+            let emptyIdx = ROWS - 1;
+            for (let r = ROWS - 1; r >= 0; r--) {
+                if (gridData[r][c] !== null) {
+                    if (r !== emptyIdx) {
+                        gridData[emptyIdx][c] = gridData[r][c];
+                        gridData[r][c] = null;
+                    }
+                    emptyIdx--;
+                }
+            }
+        }
+
+        let targetCol = 0;
+        for (let c = 0; c < COLS; c++) {
+            let isColEmpty = true;
+            for (let r = 0; r < ROWS; r++) {
+                if (gridData[r][c] !== null) { isColEmpty = false; break; }
+            }
+            if (!isColEmpty) {
+                if (targetCol !== c) {
+                    for (let r = 0; r < ROWS; r++) {
+                        gridData[r][targetCol] = gridData[r][c];
+                        gridData[r][c] = null;
+                    }
+                }
+                targetCol++;
+            }
+        }
+        drawBoard();
+    }
+
+    function toggleHammer() {
+        if (!gameActive || !hammerAvailable) return;
+        hammerMode = !hammerMode;
+        document.getElementById("btnHammer").classList.toggle("active", hammerMode);
+    }
+
+    function triggerShuffle() {
+        if (!gameActive || !shuffleAvailable) return;
+        const flat = [];
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                if (gridData[r][c]) flat.push(gridData[r][c]);
+            }
+        }
+        flat.sort(() => Math.random() - 0.5);
+        let idx = 0;
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                if (gridData[r][c]) gridData[r][c] = flat[idx++];
+            }
+        }
+        shuffleAvailable = false;
+        document.getElementById("btnShuffle").disabled = true;
+        applyGravity();
+    }
+
+    function showCombo(count) {
+        const label = document.getElementById("comboLabel");
+        label.innerText = `🔥 COMBO! +${count} klocków`;
+        setTimeout(() => label.innerText = "", 1500);
+    }
+
+    function checkGameOver() {
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                if (gridData[r][c] && getConnectedGroup(r, c).length >= 2) return false;
+            }
+        }
+        return true;
+    }
+
+    function showHighScores() {
+        const scores = JSON.parse(localStorage.getItem("kostki_high_scores") || "[]");
+        const list = document.getElementById("highScoresList");
+        list.innerHTML = scores.length === 0 
+            ? "<li>Brak zapisanych wyników</li>" 
+            : scores.map(s => {
+                const infinityBadge = s.timerDisabled ? `<span class="infinity-icon" title="Użyto koła wyłączającego czas">∞</span>` : "";
+                return `<li><strong>${s.name || 'Gracz'}</strong>: ${s.score} pkt (Runda ${s.round})${infinityBadge}</li>`;
+            }).join("");
+        document.getElementById("scoresModal").style.display = "flex";
+    }
+
+    function showInfo() { document.getElementById("infoModal").style.display = "flex"; }
+    
+    function showMessageModal(title, text) {
+        document.getElementById("msgModalTitle").innerText = title;
+        document.getElementById("msgModalText").innerText = text;
+        document.getElementById("messageModal").style.display = "flex";
+    }
+
+    function closeModal(id) { document.getElementById(id).style.display = "none"; }
+
+    function endGame(reason) {
+        gameActive = false;
+        clearInterval(timerInterval);
+        updateActionButton();
+
+        document.getElementById("gameOverReason").innerText = reason;
+        document.getElementById("finalScoreDisplay").innerText = score;
+        
+        const lastPlayerName = localStorage.getItem("kostki_last_player_name") || "";
+        document.getElementById("playerNameInput").value = lastPlayerName;
+        
+        document.getElementById("gameOverModal").style.display = "flex";
+    }
+
+    function saveScoreAndClose() {
+        const nameInput = document.getElementById("playerNameInput");
+        const playerName = nameInput.value.trim() || "Gracz";
+
+        localStorage.setItem("kostki_last_player_name", playerName);
+
+        let scores = JSON.parse(localStorage.getItem("kostki_high_scores") || "[]");
+        scores.push({ 
+            name: playerName, 
+            score: score, 
+            round: currentRound,
+            timerDisabled: usedTimerLifeline
+        });
+
+        scores.sort((a, b) => b.score - a.score);
+        scores = scores.slice(0, 10);
+
+        localStorage.setItem("kostki_high_scores", JSON.stringify(scores));
+
+        closeModal("gameOverModal");
+        showHighScores();
+    }
+
+    window.addEventListener("resize", () => {
+        if (gameActive) { calculateGridDimensions(); drawBoard(); }
+    });
+
+    renderStationButtons();
+    newGame();
+</script>
+</body>
+</html>
