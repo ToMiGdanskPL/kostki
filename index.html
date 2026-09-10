@@ -196,6 +196,13 @@
             margin: 15px 0;
             text-align: center;
         }
+        .version-badge {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #8E8E93;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
         ol { padding-left: 20px; text-align: left; }
         ol li { margin-bottom: 5px; }
         
@@ -275,6 +282,7 @@
     <div id="infoModal" class="modal">
         <div class="modal-content">
             <h2>📖 Instrukcja Obsługi Gry</h2>
+            <div class="version-badge">wersja 1.0 (wygenerowano przy pomocy AI)</div>
             
             <h3>1. Zasady Rozgrywki</h3>
             <ul>
@@ -356,7 +364,7 @@
         { name: "Radio Yanosik Love", url: "https://n07-eu.rcs.revma.com/8fqn8rr6ktuvv?rj-ttl=5&rj-tok=AAABnml9ekYA76LkB7To9hHuiQ" },
         { name: "Radio Yanosik Rock", url: "https://n20-eu.rcs.revma.com/whxxccsdp7uvv?rj-ttl=5&rj-tok=AAABnml_V4AAOT_o7-gcF_FEGQ" },
         { name: "Radio Yanosik X-Mas", url: "https://n25-eu.rcs.revma.com/b667d2c0qxcwv?rj-ttl=5&rj-tok=AAABnmmA0GgAh3CDkhNB0tClsw" },
-        { name: "Radio Yanosik EDM", url: "https://n11a-eu.rcs.revma.com/s4exa620qxcwv" }
+        { name: "Radio Yanosik EDM", url: "https://n01a-eu.rcs.revma.com/s4exa620qxcwv" }
     ];
 
     let currentStationIdx = 0;
@@ -801,7 +809,7 @@
         scores.sort((a, b) => b.score - a.score);
         scores = scores.slice(0, 10);
 
-        localStorage.setItem("kostki_high_scores", JSON.stringify(stringify(scores)));
+        localStorage.setItem("kostki_high_scores", JSON.stringify(scores));
 
         closeModal("gameOverModal");
         showHighScores();
