@@ -118,12 +118,6 @@
             align-items: center;
             width: 100%;
         }
-        .radio-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            white-space: nowrap;
-            color: #8E8E93;
-        }
         .stations-scroll {
             display: flex;
             gap: 6px;
@@ -267,12 +261,11 @@
         <!-- Panel Radiowy -->
         <div class="radio-panel">
             <div class="radio-row">
-                <span class="radio-label">Stacja:</span>
                 <div class="stations-scroll" id="stationsList"></div>
             </div>
             <div class="radio-row">
-                <button id="btnPlay" class="btn-media btn-play-state" onclick="togglePlay()">▶ Play</button>
                 <button id="btnPrev" class="btn-media" onclick="prevStation()">⏮️ Poprzednia</button>
+                <button id="btnPlay" class="btn-media btn-play-state" onclick="togglePlay()">▶ Play</button>
                 <button id="btnNext" class="btn-media" onclick="nextStation()">Następna ⏭️</button>
             </div>
         </div>
@@ -282,7 +275,7 @@
     <div id="infoModal" class="modal">
         <div class="modal-content">
             <h2>📖 Instrukcja obsługi gry</h2>
-            <div class="version-badge">Wersja 1.1.0</div>
+            <div class="version-badge">Wersja 1.1.1</div>
             
             <h3>1. Zasady rozgrywki i cel gry</h3>
             <ul>
@@ -422,7 +415,7 @@
         
         navigator.mediaSession.metadata = new MediaMetadata({
             title: station.name,
-            artist: "Kostki for Dorcia",
+            artist: "Kostki by ToMi",
             album: "Radio na żywo",
             artwork: [
                 { src: station.logo, sizes: '512x512', type: 'image/svg+xml' }
@@ -800,7 +793,10 @@
                 if (gridData[r][c]) flat.push(gridData[r][c]);
             }
         }
-        flat.sort(() => Math.random() - 0.5);
+        for (let i = flat.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [flat[i], flat[j]] = [flat[j], flat[i]];
+        }
         let idx = 0;
         for (let r = 0; r < ROWS; r++) {
             for (let c = 0; c < COLS; c++) {
@@ -809,88 +805,84 @@
         }
         shuffleAvailable = false;
         document.getElementById("btnShuffle").disabled = true;
-        applyGravity();
+        drawBoard();
     }
 
     function showCombo(count) {
-        const label = document.getElementById("comboLabel");
-        label.innerText = `🔥 COMBO! +${count} klocków`;
-        setTimeout(() => label.innerText = "", 1500);
+        const comboLbl = document.getElementById("comboLabel");
+        comboLbl.innerText = `🔥 COMBO x${count}!`;
+        setTimeout(() => { comboLbl.innerText = ""; }, 1500);
     }
 
     function checkGameOver() {
         for (let r = 0; r < ROWS; r++) {
             for (let c = 0; c < COLS; c++) {
-                if (gridData[r][c] && getConnectedGroup(r, c).length >= 2) return false;
+                if (gridData[r][c] !== null) {
+                    const group = getConnectedGroup(r, c);
+                    if (group.length >= 2) return false;
+                }
             }
         }
         return true;
     }
 
-    function showHighScores() {
-        const scores = JSON.parse(localStorage.getItem("kostki_high_scores") || "[]");
-        const list = document.getElementById("highScoresList");
-        list.innerHTML = scores.length === 0 
-            ? "<li>Brak zapisanych wyników</li>" 
-            : scores.map(s => {
-                const infinityBadge = s.timerDisabled ? `<span class="infinity-icon" title="Użyto koła wyłączającego czas">∞</span>` : "";
-                return `<li><strong>${s.name || 'Gracz'}</strong>: ${s.score} pkt (Runda ${s.round})${infinityBadge}</li>`;
-            }).join("");
-        document.getElementById("scoresModal").style.display = "flex";
-    }
-
-    function showInfo() { document.getElementById("infoModal").style.display = "flex"; }
-    
-    function showMessageModal(title, text) {
-        document.getElementById("msgModalTitle").innerText = title;
-        document.getElementById("msgModalText").innerText = text;
-        document.getElementById("messageModal").style.display = "flex";
-    }
-
-    function closeModal(id) { document.getElementById(id).style.display = "none"; }
-
     function endGame(reason) {
         gameActive = false;
         clearInterval(timerInterval);
         updateActionButton();
-
         document.getElementById("gameOverReason").innerText = reason;
         document.getElementById("finalScoreDisplay").innerText = score;
-        
-        const lastPlayerName = localStorage.getItem("kostki_last_player_name") || "";
-        document.getElementById("playerNameInput").value = lastPlayerName;
-        
-        document.getElementById("gameOverModal").style.display = "flex";
+        openModal("gameOverModal");
     }
 
     function saveScoreAndClose() {
         const nameInput = document.getElementById("playerNameInput");
-        const playerName = nameInput.value.trim() || "Gracz";
-
-        localStorage.setItem("kostki_last_player_name", playerName);
-
-        let scores = JSON.parse(localStorage.getItem("kostki_high_scores") || "[]");
-        scores.push({ 
-            name: playerName, 
-            score: score, 
-            round: currentRound,
-            timerDisabled: usedTimerLifeline
-        });
-
-        scores.sort((a, b) => b.score - a.score);
-        scores = scores.slice(0, 10);
-
-        localStorage.setItem("kostki_high_scores", JSON.stringify(scores));
-
+        const name = nameInput.value.trim() || "Gracz";
+        
+        let highScores = JSON.parse(localStorage.getItem("kostki_highscores") || "[]");
+        highScores.push({ name: name, score: score, infinite: usedTimerLifeline, date: new Date().toLocaleDateString() });
+        highScores.sort((a, b) => b.score - a.score);
+        highScores = highScores.slice(0, 10);
+        
+        localStorage.setItem("kostki_highscores", JSON.stringify(highScores));
         closeModal("gameOverModal");
+        nameInput.value = "";
         showHighScores();
     }
 
+    function showHighScores() {
+        const list = document.getElementById("highScoresList");
+        let highScores = JSON.parse(localStorage.getItem("kostki_highscores") || "[]");
+        list.innerHTML = "";
+        if (highScores.length === 0) {
+            list.innerHTML = "<li>Brak wyników</li>";
+        } else {
+            highScores.forEach(s => {
+                const li = document.createElement("li");
+                li.innerHTML = `${s.name}: <strong>${s.score} pkt</strong> ${s.infinite ? '<span class="infinity-icon">∞</span>' : ''} <small>(${s.date})</small>`;
+                list.appendChild(li);
+            });
+        }
+        openModal("scoresModal");
+    }
+
+    function showInfo() { openModal("infoModal"); }
+    function showMessageModal(title, text) {
+        document.getElementById("msgModalTitle").innerText = title;
+        document.getElementById("msgModalText").innerText = text;
+        openModal("messageModal");
+    }
+
+    function openModal(id) { document.getElementById(id).style.display = "flex"; }
+    function closeModal(id) { document.getElementById(id).style.display = "none"; }
+
     window.addEventListener("resize", () => {
-        if (gameActive) { calculateGridDimensions(); drawBoard(); }
+        if (gameActive) {
+            calculateGridDimensions();
+            drawBoard();
+        }
     });
 
-    setupMediaSessionHandlers();
     renderStationButtons();
     newGame();
 </script>
