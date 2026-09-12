@@ -282,7 +282,7 @@
     <div id="infoModal" class="modal">
         <div class="modal-content">
             <h2>📖 Instrukcja Obsługi Gry</h2>
-            <div class="version-badge">wersja 1.0.8</div>
+            <div class="version-badge">wersja 1.0.9</div>
             
             <h3>1. Zasady Rozgrywki i Cel Gry</h3>
             <ul>
@@ -313,7 +313,7 @@
             <h3>5. Odtwarzacz Radiowy i Dynamic Island</h3>
             <ul>
                 <li>Możesz słuchać muzyki w tle podczas gry. Wybierz stację z poziomego paska i kliknij <strong>▶ Play</strong>.</li>
-                <li><strong>Sterowanie z Dynamic Island i Ekranu Blokady:</strong> Przyciski <strong>⏮️ Poprzednia</strong> i <strong>⏭️ Następna</strong> na Dynamic Island oraz w Centrum Sterowania iOS przełączają stacje radiowe płynnie bez konieczności powrotu do interfejsu gry.</li>
+                <li><strong>Sterowanie na iOS:</strong> Przełączniki stacji ⏮️ i ⏭️ zostały powiązane z API odtwarzacza systemowego tak, aby zamiast przewijania czasu (10s) na ekranie blokady i Dynamic Island pojawiały się ikonki zmiany stacji.</li>
             </ul>
 
             <button class="close-btn" style="background:#FF3B30;" onclick="closeModal('infoModal')">Zamknij instrukcję</button>
@@ -404,14 +404,22 @@
         if ('mediaSession' in navigator) {
             navigator.mediaSession.setActionHandler('play', function() { togglePlay(); });
             navigator.mediaSession.setActionHandler('pause', function() { togglePlay(); });
+            
+            // Wymuszenie ikon poprzedni / następny utwor zamiast przewijania
             navigator.mediaSession.setActionHandler('previoustrack', function() { prevStation(); });
             navigator.mediaSession.setActionHandler('nexttrack', function() { nextStation(); });
+            
+            // Jawne wyłączenie przycisków przeskakiwania sekundowego (seek)
+            try { navigator.mediaSession.setActionHandler('seekbackward', null); } catch (e) {}
+            try { navigator.mediaSession.setActionHandler('seekforward', null); } catch (e) {}
+            try { navigator.mediaSession.setActionHandler('seekto', null); } catch (e) {}
         }
     }
 
     function updateMediaSession() {
         if (!('mediaSession' in navigator)) return;
         const station = STATIONS[currentStationIdx];
+        
         navigator.mediaSession.metadata = new MediaMetadata({
             title: station.name,
             artist: "Kostki for Dorcia",
@@ -420,6 +428,7 @@
                 { src: station.logo, sizes: '512x512', type: 'image/svg+xml' }
             ]
         });
+        
         navigator.mediaSession.playbackState = audio.paused ? "paused" : "playing";
     }
 
@@ -460,6 +469,8 @@
         audio.src = STATIONS[currentStationIdx].url;
         audio.load();
 
+        setupMediaSessionHandlers();
+
         const playPromise = audio.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
@@ -485,6 +496,7 @@
                 audio.src = STATIONS[currentStationIdx].url;
             }
             audio.load();
+            setupMediaSessionHandlers();
             audio.play().then(() => {
                 btn.innerText = "⏹️ Stop";
                 btn.className = "btn-media btn-stop-state";
