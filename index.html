@@ -278,11 +278,11 @@
         </div>
     </div>
 
-    <!-- Modal Instrukcji i Zasad Gry -->
+    <!-- Modal Instrukcji -->
     <div id="infoModal" class="modal">
         <div class="modal-content">
             <h2>📖 Instrukcja Obsługi Gry</h2>
-            <div class="version-badge">wersja 1.0.4 (wygenerowano przy pomocy AI)</div>
+            <div class="version-badge">wersja 1.0.5</div>
             
             <h3>1. Zasady Rozgrywki</h3>
             <ul>
@@ -294,15 +294,9 @@
 
             <h3>2. Ułatwienia i Koła Ratunkowe (Jednorazowe)</h3>
             <ul>
-                <li>⏱️ <strong>Wyłącz czas:</strong> Wyłącza odliczanie zegara, pozwalając na spokojną grę bez limitu czasowego (Twój wynik w tabeli otrzyma symbol <strong>∞</strong> na końcu wpisu).</li>
+                <li>⏱️ <strong>Wyłącz czas:</strong> Wyłącza odliczanie zegara, pozwalając na spokojną grę bez limitu czasowego.</li>
                 <li>🔨 <strong>Młotek:</strong> Aktywuj przycisk, a następnie kliknij w pojedynczą, przeszkadzającą kostkę na planszy, aby ją zbić.</li>
-                <li>🔀 <strong>Mieszaj:</strong> Losowo przetasowuje układ pozostałych kostek na planszy, gdy zabraknie pasujących kolorów obok siebie.</li>
-            </ul>
-
-            <h3>3. Radio Internetowe</h3>
-            <ul>
-                <li>Użyj paska stacji u dołu ekranu, aby wybrać ulubioną rozgłośnię.</li>
-                <li>Naciśnij <strong>▶ Play</strong>, aby uruchomić strumień muzyki bez przerywania rozgrywki.</li>
+                <li>🔀 <strong>Mieszaj:</strong> Losowo przetasowuje układ pozostałych kostek na planszy.</li>
             </ul>
 
             <button class="close-btn" style="background:#FF3B30;" onclick="closeModal('infoModal')">Zamknij instrukcję</button>
@@ -319,7 +313,6 @@
         </div>
     </div>
 
-    <!-- Modal Zwykłych Komunikatów -->
     <div id="messageModal" class="modal">
         <div class="modal-content" style="text-align: center;">
             <h2 id="msgModalTitle">Komunikat</h2>
@@ -328,7 +321,6 @@
         </div>
     </div>
 
-    <!-- Modal Końca Gry -->
     <div id="gameOverModal" class="modal">
         <div class="modal-content" style="text-align: center;">
             <h2>🏁 Koniec Gry!</h2>
@@ -406,11 +398,12 @@
             navigator.mediaSession.metadata = new MediaMetadata({
                 title: station.name,
                 artist: "Kostki for Dorcia",
-                album: "Stacja na żywo",
+                album: "Radio na żywo",
                 artwork: [
                     { src: station.logo, sizes: '512x512', type: 'image/svg+xml' }
                 ]
             });
+            navigator.mediaSession.playbackState = audio.paused ? "paused" : "playing";
         }
     }
 
@@ -421,18 +414,26 @@
 
         STATIONS.forEach((st, idx) => {
             const btn = document.createElement("button");
-            const isActive = (idx === currentStationIdx) && isPlaying;
+            const isActive = (idx === currentStationIdx);
             btn.className = "btn-station" + (isActive ? " active-station" : "");
             btn.innerText = st.name;
             btn.onclick = () => selectAndPlayStation(idx);
             container.appendChild(btn);
         });
+
+        // Automatyczne przewijanie paska stacji do aktywnej pozycji
+        const activeBtn = container.querySelector('.active-station');
+        if (activeBtn) {
+            activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
     }
 
     function selectAndPlayStation(idx) {
         currentStationIdx = idx;
-
         const btnPlay = document.getElementById("btnPlay");
+
+        audio.pause();
+        audio.currentTime = 0;
         audio.src = STATIONS[currentStationIdx].url;
         audio.load();
 
@@ -456,7 +457,7 @@
         const btn = document.getElementById("btnPlay");
 
         if (audio.paused) {
-            if (!audio.src) {
+            if (!audio.src || audio.src === "") {
                 audio.src = STATIONS[currentStationIdx].url;
             }
             audio.load();
@@ -473,6 +474,7 @@
             audio.load();
             btn.innerText = "▶ Play";
             btn.className = "btn-media btn-play-state";
+            updateMediaSession();
             renderStationButtons();
         }
     }
