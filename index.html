@@ -278,11 +278,11 @@
         </div>
     </div>
 
-    <!-- Przywrócona, Rozbudowana Instrukcja -->
+    <!-- Instrukcja Obsługi -->
     <div id="infoModal" class="modal">
         <div class="modal-content">
             <h2>📖 Instrukcja Obsługi Gry</h2>
-            <div class="version-badge">wersja 1.0.6</div>
+            <div class="version-badge">wersja 1.0.8</div>
             
             <h3>1. Zasady Rozgrywki i Cel Gry</h3>
             <ul>
@@ -310,10 +310,10 @@
                 <li>🔀 <strong>Mieszaj:</strong> Przemieszcza losowo układ wszystkich pozostałych na planszy klocków, gdy zabraknie pasujących układów.</li>
             </ul>
 
-            <h3>5. Odtwarzacz Radiowy</h3>
+            <h3>5. Odtwarzacz Radiowy i Dynamic Island</h3>
             <ul>
                 <li>Możesz słuchać muzyki w tle podczas gry. Wybierz stację z poziomego paska i kliknij <strong>▶ Play</strong>.</li>
-                <li>Przyciski <strong>Poprzednia</strong> / <strong>Następna</strong> przełączają stacje bezpośrednio na dole ekranu oraz z poziomu ekranu blokady telefonu lub Dynamic Island na urządzeniach iOS.</li>
+                <li><strong>Sterowanie z Dynamic Island i Ekranu Blokady:</strong> Przyciski <strong>⏮️ Poprzednia</strong> i <strong>⏭️ Następna</strong> na Dynamic Island oraz w Centrum Sterowania iOS przełączają stacje radiowe płynnie bez konieczności powrotu do interfejsu gry.</li>
             </ul>
 
             <button class="close-btn" style="background:#FF3B30;" onclick="closeModal('infoModal')">Zamknij instrukcję</button>
@@ -362,7 +362,7 @@
         return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
     }
 
-    const STATIONS = [
+    var STATIONS = [
         { name: "RMF FM", url: "https://rs6-krk2.rmfstream.pl/rmf_fm", logo: generateStationIconSVG("RMF") },
         { name: "Radio ZET", url: "https://zt01.cdn.eurozet.pl/zet-net.mp3", logo: generateStationIconSVG("ZET") },
         { name: "Radio Plus", url: "https://pl05.cdn.eurozet.pl/plu-gdn.mp3", logo: generateStationIconSVG("PLUS") },
@@ -386,7 +386,7 @@
         { name: "RMF Club EDM", url: "https://rs6-krk2.rmfstream.pl/rmf_club", logo: generateStationIconSVG("CLUB") }
     ];
 
-    let currentStationIdx = 0;
+    var currentStationIdx = 0;
     const PALETTE = ["#1E88E5", "#4CAF50", "#FFEB3B", "#E91E63", "#00BCD4", "#9C27B0", "#FF9800"];
 
     let ROWS = 18, COLS = 12, cellSize = 30;
@@ -402,26 +402,25 @@
 
     function setupMediaSessionHandlers() {
         if ('mediaSession' in navigator) {
-            navigator.mediaSession.setActionHandler('play', () => togglePlay());
-            navigator.mediaSession.setActionHandler('pause', () => togglePlay());
-            navigator.mediaSession.setActionHandler('previoustrack', () => prevStation());
-            navigator.mediaSession.setActionHandler('nexttrack', () => nextStation());
+            navigator.mediaSession.setActionHandler('play', function() { togglePlay(); });
+            navigator.mediaSession.setActionHandler('pause', function() { togglePlay(); });
+            navigator.mediaSession.setActionHandler('previoustrack', function() { prevStation(); });
+            navigator.mediaSession.setActionHandler('nexttrack', function() { nextStation(); });
         }
     }
 
     function updateMediaSession() {
+        if (!('mediaSession' in navigator)) return;
         const station = STATIONS[currentStationIdx];
-        if ('mediaSession' in navigator) {
-            navigator.mediaSession.metadata = new MediaMetadata({
-                title: station.name,
-                artist: "Kostki for Dorcia",
-                album: "Radio na żywo",
-                artwork: [
-                    { src: station.logo, sizes: '512x512', type: 'image/svg+xml' }
-                ]
-            });
-            navigator.mediaSession.playbackState = audio.paused ? "paused" : "playing";
-        }
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: station.name,
+            artist: "Kostki for Dorcia",
+            album: "Radio na żywo",
+            artwork: [
+                { src: station.logo, sizes: '512x512', type: 'image/svg+xml' }
+            ]
+        });
+        navigator.mediaSession.playbackState = audio.paused ? "paused" : "playing";
     }
 
     function renderStationButtons() {
@@ -433,7 +432,7 @@
             const isActive = (idx === currentStationIdx);
             btn.className = "btn-station" + (isActive ? " active-station" : "");
             btn.innerText = st.name;
-            btn.onclick = () => selectAndPlayStation(idx);
+            btn.onclick = function() { selectAndPlayStation(idx); };
             container.appendChild(btn);
         });
 
@@ -444,11 +443,20 @@
     }
 
     function selectAndPlayStation(idx) {
+        if (idx < 0) idx = STATIONS.length - 1;
+        if (idx >= STATIONS.length) idx = 0;
+        
         currentStationIdx = idx;
         const btnPlay = document.getElementById("btnPlay");
 
-        audio.pause();
-        audio.currentTime = 0;
+        try {
+            audio.pause();
+            audio.removeAttribute('src');
+            audio.load();
+        } catch (e) {
+            console.log("Reset error:", e);
+        }
+
         audio.src = STATIONS[currentStationIdx].url;
         audio.load();
 
@@ -463,6 +471,7 @@
                 console.log("Błąd odtwarzania:", err);
                 btnPlay.innerText = "▶ Play";
                 btnPlay.className = "btn-media btn-play-state";
+                updateMediaSession();
                 renderStationButtons();
             });
         }
@@ -472,7 +481,7 @@
         const btn = document.getElementById("btnPlay");
 
         if (audio.paused) {
-            if (!audio.src || audio.src === "") {
+            if (!audio.src || audio.src === "" || audio.src === window.location.href) {
                 audio.src = STATIONS[currentStationIdx].url;
             }
             audio.load();
@@ -485,8 +494,6 @@
         } else {
             audio.pause();
             audio.currentTime = 0;
-            audio.removeAttribute('src');
-            audio.load();
             btn.innerText = "▶ Play";
             btn.className = "btn-media btn-play-state";
             updateMediaSession();
@@ -495,15 +502,15 @@
     }
 
     function prevStation() {
-        let idx = currentStationIdx - 1;
-        if (idx < 0) idx = STATIONS.length - 1;
-        selectAndPlayStation(idx);
+        let newIdx = currentStationIdx - 1;
+        if (newIdx < 0) newIdx = STATIONS.length - 1;
+        selectAndPlayStation(newIdx);
     }
 
     function nextStation() {
-        let idx = currentStationIdx + 1;
-        if (idx >= STATIONS.length) idx = 0;
-        selectAndPlayStation(idx);
+        let newIdx = currentStationIdx + 1;
+        if (newIdx >= STATIONS.length) newIdx = 0;
+        selectAndPlayStation(newIdx);
     }
 
     function getColorsForRound(round) {
