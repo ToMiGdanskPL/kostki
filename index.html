@@ -278,25 +278,42 @@
         </div>
     </div>
 
-    <!-- Modal Instrukcji -->
+    <!-- Przywrócona, Rozbudowana Instrukcja -->
     <div id="infoModal" class="modal">
         <div class="modal-content">
             <h2>📖 Instrukcja Obsługi Gry</h2>
-            <div class="version-badge">wersja 1.0.5</div>
+            <div class="version-badge">wersja 1.0.6</div>
             
-            <h3>1. Zasady Rozgrywki</h3>
+            <h3>1. Zasady Rozgrywki i Cel Gry</h3>
             <ul>
-                <li><strong>Cel gry:</strong> Klikaj w grupy co najmniej <strong>2 połączonych ze sobą kostek</strong> tego samego koloru, aby je usunąć z planszy.</li>
-                <li><strong>Awans do kolejnej rundy:</strong> Musisz wyczyścić co najmniej <strong>90% klocków</strong> na obecnej planszy. Wywoła to <em>Złoty Wstrząs</em> – wolne miejsca zostaną uzupełnione nowymi klockami, a istniejące pozostaną na swoich miejscach.</li>
-                <li><strong>Poziomy trudności:</strong> Z każdą kolejną rundą na planszy pojawia się więcej kolorów (od 3 w rundzie 1 do 7 w wyższych rundach).</li>
-                <li><strong>Koniec gry:</strong> Gra kończy się, gdy skończy się czas lub gdy na planszy zabraknie ruchu, a cel 90% nie został osiągnięty.</li>
+                <li><strong>Główne zadanie:</strong> Klikaj w grupy co najmniej <strong>2 połączonych ze sobą kostek</strong> tego samego koloru (w pionie lub poziomie), aby usunąć je z planszy.</li>
+                <li><strong>Awans do kolejnej rundy:</strong> Musisz wyczyścić co najmniej <strong>90% klocków</strong> z obecnej planszy. Wywoła to <em>Złoty Wstrząs</em> – wolne miejsca zostaną uzupełnione nowymi klockami, a istniejące pozostaną na swoich miejscach.</li>
+                <li><strong>Koniec gry:</strong> Gra kończy się, gdy upłynie limit czasu lub gdy na planszy zabraknie możliwych ruchów, a cel 90% nie został jeszcze osiągnięty.</li>
             </ul>
 
-            <h3>2. Ułatwienia i Koła Ratunkowe (Jednorazowe)</h3>
+            <h3>2. Poziomy Trudności i Grawitacja</h3>
             <ul>
-                <li>⏱️ <strong>Wyłącz czas:</strong> Wyłącza odliczanie zegara, pozwalając na spokojną grę bez limitu czasowego.</li>
-                <li>🔨 <strong>Młotek:</strong> Aktywuj przycisk, a następnie kliknij w pojedynczą, przeszkadzającą kostkę na planszy, aby ją zbić.</li>
-                <li>🔀 <strong>Mieszaj:</strong> Losowo przetasowuje układ pozostałych kostek na planszy.</li>
+                <li><strong>Wzrost trudności:</strong> Z każdą nową rundą na planszy pojawia się więcej kolorów (od 3 kolorów w Rundach 1–2 do 7 kolorów w najwyższych rundach).</li>
+                <li><strong>Fizyka klocków:</strong> Po usunięciu grupy, klocki znajdujące się wyżej opadają w dół. Gdy cała pionowa kolumna zostanie opróżniona, pozostałe kolumny zsuwają się do lewej strony.</li>
+            </ul>
+
+            <h3>3. Punktacja i Combo</h3>
+            <ul>
+                <li>Za każdą zbitą kostkę otrzymujesz <strong>1 punkt</strong>.</li>
+                <li>Zbijanie dużych grup klocków (od 8 w górę) aktywuje specjalną premię wizualną <strong>🔥 COMBO!</strong></li>
+            </ul>
+
+            <h3>4. Ułatwienia i Koła Ratunkowe (Jednorazowe)</h3>
+            <ul>
+                <li>⏱️ <strong>Wyłącz czas:</strong> Zatrzymuje i wyłącza odliczanie zegara, pozwalając na spokojną rozgrywkę bez stresu. Użycie tego koła dodaje symbol <strong>∞</strong> przy Twoim wyniku w tabeli TOP 10.</li>
+                <li>🔨 <strong>Młotek:</strong> Pozwala zniszczyć jedną pojedynczą, wybraną kostkę, która blokuje układ. Kliknij przycisk Młotka, a następnie w wybraną kostkę.</li>
+                <li>🔀 <strong>Mieszaj:</strong> Przemieszcza losowo układ wszystkich pozostałych na planszy klocków, gdy zabraknie pasujących układów.</li>
+            </ul>
+
+            <h3>5. Odtwarzacz Radiowy</h3>
+            <ul>
+                <li>Możesz słuchać muzyki w tle podczas gry. Wybierz stację z poziomego paska i kliknij <strong>▶ Play</strong>.</li>
+                <li>Przyciski <strong>Poprzednia</strong> / <strong>Następna</strong> przełączają stacje bezpośrednio na dole ekranu oraz z poziomu ekranu blokady telefonu lub Dynamic Island na urządzeniach iOS.</li>
             </ul>
 
             <button class="close-btn" style="background:#FF3B30;" onclick="closeModal('infoModal')">Zamknij instrukcję</button>
@@ -410,7 +427,6 @@
     function renderStationButtons() {
         const container = document.getElementById("stationsList");
         container.innerHTML = "";
-        const isPlaying = audio && !audio.paused;
 
         STATIONS.forEach((st, idx) => {
             const btn = document.createElement("button");
@@ -421,7 +437,6 @@
             container.appendChild(btn);
         });
 
-        // Automatyczne przewijanie paska stacji do aktywnej pozycji
         const activeBtn = container.querySelector('.active-station');
         if (activeBtn) {
             activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
