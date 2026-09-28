@@ -32,22 +32,21 @@
             background:
                 radial-gradient(
                     circle at 50% -10%,
-                    rgba(255, 126, 0, 0.13),
+                    rgba(255, 126, 20, 0.12),
                     transparent 38%
                 ),
                 radial-gradient(
                     circle at 100% 100%,
-                    rgba(255, 87, 34, 0.07),
+                    rgba(255, 126, 20, 0.06),
                     transparent 35%
                 ),
-                #0d0d0f;
+                #0c0b0c;
 
             color: #f5f5f7;
 
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
-                "SF Pro Display",
                 "Segoe UI",
                 Roboto,
                 Helvetica,
@@ -63,30 +62,27 @@
             content: "";
             position: fixed;
             inset: 0;
-            pointer-events: none;
 
-            background-image:
+            background:
                 linear-gradient(
-                    rgba(255,255,255,0.018) 1px,
+                    rgba(255,255,255,0.015) 1px,
                     transparent 1px
                 ),
                 linear-gradient(
                     90deg,
-                    rgba(255,255,255,0.018) 1px,
+                    rgba(255,255,255,0.015) 1px,
                     transparent 1px
                 );
 
             background-size: 32px 32px;
-            mask-image: linear-gradient(
-                to bottom,
-                rgba(0,0,0,.7),
-                transparent 75%
-            );
+
+            pointer-events: none;
+            opacity: 0.35;
         }
 
 
         /* =========================================================
-           MAIN APP
+           GŁÓWNY KONTENER
         ========================================================= */
 
         #app-container {
@@ -102,121 +98,119 @@
             padding:
                 max(10px, env(safe-area-inset-top))
                 12px
-                max(8px, env(safe-area-inset-bottom));
+                max(8px, env(safe-area-inset-bottom))
+                12px;
 
-            gap: 9px;
+            gap: 10px;
 
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
         }
 
 
         /* =========================================================
-           COMMON WIDTH
-        ========================================================= */
-
-        .header,
-        .stats-bar,
-        .controls,
-        .progress-container,
-        .canvas-container,
-        .combo-text,
-        .app-footer {
-            width: 100%;
-            max-width: 900px;
-        }
-
-
-        /* =========================================================
-           HEADER
+           GÓRNY PANEL
         ========================================================= */
 
         .header {
+            width: 100%;
+            max-width: 900px;
+
             display: flex;
             gap: 8px;
-            flex-shrink: 0;
-        }
 
-        .header button {
-            min-height: 44px;
+            padding: 8px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(31, 30, 32, 0.96),
+                    rgba(19, 18, 20, 0.96)
+                );
+
+            border: 1px solid rgba(255,255,255,0.08);
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 12px 35px rgba(0,0,0,0.35),
+                inset 0 1px 0 rgba(255,255,255,0.04);
+
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
 
         /* =========================================================
-           BUTTONS
+           PRZYCISKI
         ========================================================= */
 
         button {
-            position: relative;
+            appearance: none;
+            -webkit-appearance: none;
 
             background:
                 linear-gradient(
                     180deg,
-                    #252528 0%,
-                    #1b1b1e 100%
+                    #262529,
+                    #1b1a1d
                 );
 
-            color: #f5f5f7;
+            color: #f7f7f8;
 
-            border: 1px solid rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.08);
 
             padding: 11px 13px;
 
-            border-radius: 13px;
+            border-radius: 14px;
 
             font-weight: 700;
-            font-size: 0.86rem;
+            font-size: 0.82rem;
 
             flex: 1;
 
             cursor: pointer;
+
             white-space: nowrap;
 
             box-shadow:
-                0 5px 15px rgba(0,0,0,0.25),
-                inset 0 1px 0 rgba(255,255,255,0.06);
+                0 4px 12px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.05);
 
             transition:
-                transform .15s ease,
-                background .15s ease,
-                border-color .15s ease,
-                box-shadow .15s ease;
+                transform 0.15s ease,
+                background 0.15s ease,
+                border-color 0.15s ease,
+                box-shadow 0.15s ease;
         }
 
-        button::after {
-            content: "";
-            position: absolute;
-            inset: 1px;
-
-            border-radius: 12px;
-
-            pointer-events: none;
-
+        button:hover {
             background:
                 linear-gradient(
                     180deg,
-                    rgba(255,255,255,.035),
-                    transparent 50%
+                    #302f33,
+                    #202024
                 );
+
+            border-color: rgba(255,126,20,0.35);
+
+            box-shadow:
+                0 6px 18px rgba(0,0,0,0.35),
+                0 0 15px rgba(255,126,20,0.08);
         }
 
         button:active {
-            transform: scale(.97);
-        }
-
-        button:not(:disabled):hover {
-            border-color: rgba(255,126,0,.45);
-
-            box-shadow:
-                0 7px 20px rgba(0,0,0,.35),
-                0 0 18px rgba(255,126,0,.08);
+            transform: scale(0.97);
         }
 
         button:disabled {
-            background: #252528;
-            color: #77777d;
-            opacity: .55;
+            background: #202023;
+            color: #68686d;
+
+            opacity: 0.55;
+
             cursor: not-allowed;
+
             box-shadow: none;
         }
 
@@ -224,39 +218,51 @@
             background:
                 linear-gradient(
                     135deg,
-                    #ff9d00,
-                    #ff5a00
+                    #ff8a1d,
+                    #ff6f00
                 );
-
-            border-color: #ff9d00;
 
             color: #fff;
 
+            border-color: rgba(255,180,100,0.5);
+
             box-shadow:
-                0 0 0 2px rgba(255,126,0,.15),
-                0 7px 22px rgba(255,90,0,.28);
+                0 0 25px rgba(255,126,20,0.30),
+                inset 0 1px 0 rgba(255,255,255,0.25);
         }
 
         button.btn-end {
             background:
                 linear-gradient(
                     135deg,
-                    #ff453a,
-                    #d91f18
+                    #ff5b52,
+                    #d92f28
                 );
 
-            border-color: rgba(255,69,58,.55);
+            border-color: rgba(255,100,90,0.35);
 
             box-shadow:
-                0 7px 20px rgba(255,59,48,.18);
+                0 5px 18px rgba(255,59,48,0.15);
+        }
+
+        button.btn-end:hover {
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff6b63,
+                    #e63830
+                );
         }
 
 
         /* =========================================================
-           STATS BAR
+           STATYSTYKI
         ========================================================= */
 
         .stats-bar {
+            width: 100%;
+            max-width: 900px;
+
             display: flex;
 
             justify-content: space-between;
@@ -264,254 +270,199 @@
 
             gap: 7px;
 
-            font-weight: 700;
-            font-size: .79rem;
+            padding: 11px 13px;
 
             background:
                 linear-gradient(
-                    180deg,
-                    rgba(38,38,42,.94),
-                    rgba(25,25,28,.94)
+                    135deg,
+                    rgba(29,28,31,0.96),
+                    rgba(18,17,19,0.96)
                 );
 
-            padding: 9px 12px;
+            border: 1px solid rgba(255,255,255,0.07);
 
-            border-radius: 14px;
+            border-radius: 17px;
 
-            border: 1px solid rgba(255,255,255,.075);
-
-            box-shadow:
-                0 8px 25px rgba(0,0,0,.22),
-                inset 0 1px 0 rgba(255,255,255,.035);
+            font-weight: 700;
+            font-size: 0.77rem;
 
             flex-wrap: wrap;
+
+            color: #aaa8af;
+
+            box-shadow:
+                0 8px 24px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.03);
         }
 
-        .stats-bar > div {
+        .stats-bar div {
             white-space: nowrap;
         }
 
-        #roundLabel {
-            color: #ffd60a !important;
-        }
-
-        #totalClearedGame {
-            color: #ff9f0a !important;
-        }
-
-        #targetBlocks {
-            color: #30d158 !important;
-        }
-
-        #progressPercent {
-            color: #0a84ff !important;
+        .stats-bar span {
+            font-weight: 800;
         }
 
 
         /* =========================================================
-           PROGRESS BAR
+           PASEK POSTĘPU
         ========================================================= */
 
         .progress-container {
-            height: 16px;
-
-            padding: 3px;
+            width: 100%;
+            max-width: 900px;
 
             background:
-                linear-gradient(
-                    180deg,
-                    #252529,
-                    #19191c
-                );
+                rgba(255,255,255,0.055);
 
-            border-radius: 10px;
+            border-radius: 999px;
+
+            height: 9px;
 
             overflow: hidden;
 
-            border: 1px solid rgba(255,255,255,.08);
+            padding: 2px;
+
+            border: 1px solid rgba(255,255,255,0.05);
 
             box-shadow:
-                inset 0 2px 5px rgba(0,0,0,.45),
-                0 5px 15px rgba(0,0,0,.20);
-
-            flex-shrink: 0;
+                inset 0 2px 5px rgba(0,0,0,0.5);
         }
 
         .progress-bar-fill {
-            position: relative;
-
             background:
                 linear-gradient(
                     90deg,
-                    #ff7a00,
-                    #ff9f0a,
-                    #ffd60a
+                    #ff6f00,
+                    #ff8a1d,
+                    #ffb347
                 );
 
             height: 100%;
+
             width: 0%;
 
-            border-radius: 7px;
+            border-radius: 999px;
 
-            transition:
-                width .35s ease;
+            transition: width 0.3s ease;
 
             box-shadow:
-                0 0 12px rgba(255,126,0,.45);
-        }
-
-        .progress-bar-fill::after {
-            content: "";
-
-            position: absolute;
-
-            top: 0;
-            left: 0;
-
-            width: 100%;
-            height: 45%;
-
-            background: rgba(255,255,255,.18);
-
-            border-radius: inherit;
+                0 0 12px rgba(255,126,20,0.55);
         }
 
 
         /* =========================================================
-           GAME CONTROLS
+           DOLNY / GŁÓWNY PANEL STEROWANIA
         ========================================================= */
 
         .controls {
+            width: 100%;
+            max-width: 900px;
+
             display: flex;
 
-            gap: 10px;
-
-            flex-shrink: 0;
+            gap: 8px;
         }
 
         .controls button {
-            min-height: 50px;
-
-            padding:
-                12px
-                10px;
-
-            border-radius: 15px;
-
-            font-size: .88rem;
-
-            background:
-                linear-gradient(
-                    180deg,
-                    #222226,
-                    #17171a
-                );
-
-            border-color: rgba(255,255,255,.11);
-        }
-
-        .controls button:not(:disabled):hover {
-            background:
-                linear-gradient(
-                    180deg,
-                    #2b2b30,
-                    #1c1c20
-                );
-        }
-
-        #btnDisableTimer {
-            color: #f5f5f7;
-        }
-
-        #btnHammer {
-            color: #f5f5f7;
-        }
-
-        #btnShuffle {
-            color: #f5f5f7;
+            min-height: 45px;
         }
 
 
         /* =========================================================
-           CANVAS
+           PLANSZA
         ========================================================= */
 
         .canvas-container {
             flex: 1;
 
-            min-height: 0;
+            width: 100%;
 
             display: flex;
 
             justify-content: center;
             align-items: center;
 
-            padding:
-                2px
-                0;
+            min-height: 0;
+
+            position: relative;
+
+            padding: 5px 0;
+        }
+
+        .canvas-container::before {
+            content: "";
+
+            position: absolute;
+
+            width: min(75vw, 500px);
+            height: min(75vw, 500px);
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(255,126,20,0.07),
+                    transparent 65%
+                );
+
+            pointer-events: none;
         }
 
         canvas {
-            display: block;
+            position: relative;
+            z-index: 1;
 
             background:
-                #171719;
+                linear-gradient(
+                    145deg,
+                    #171619,
+                    #0f0e10
+                );
 
-            border-radius: 15px;
+            border-radius: 24px;
 
-            border: 1px solid rgba(255,255,255,.12);
+            border: 1px solid rgba(255,255,255,0.09);
 
             box-shadow:
-                0 12px 40px rgba(0,0,0,.45),
-                0 0 0 1px rgba(255,126,0,.035);
+                0 25px 55px rgba(0,0,0,0.55),
+                0 0 35px rgba(255,126,20,0.08),
+                inset 0 1px 0 rgba(255,255,255,0.04);
 
-            image-rendering: auto;
+            padding: 3px;
         }
 
 
         /* =========================================================
-           COMBO
+           COMBO — TERAZ POD PLANSZĄ
         ========================================================= */
 
         .combo-text {
-            height: 28px;
+            order: 10;
 
-            display: flex;
+            flex: 0 0 28px;
 
-            align-items: center;
-            justify-content: center;
+            width: 100%;
 
-            color: #ff9f0a;
+            color: #ff8a1d;
 
             font-weight: 900;
 
             font-size: 1.05rem;
 
-            letter-spacing: .08em;
+            letter-spacing: 1.5px;
 
             text-align: center;
 
             text-shadow:
-                0 0 12px rgba(255,126,0,.45);
+                0 0 12px rgba(255,126,20,0.65);
 
-            flex-shrink: 0;
-        }
+            transition:
+                opacity 0.2s ease,
+                transform 0.2s ease;
 
-        .combo-text:not(:empty) {
-            animation:
-                comboPop .25s ease-out;
-        }
-
-        @keyframes comboPop {
-            0% {
-                opacity: 0;
-                transform: scale(.8);
-            }
-
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
+            min-height: 28px;
         }
 
 
@@ -519,28 +470,31 @@
            FOOTER
         ========================================================= */
 
-        .app-footer {
-            flex-shrink: 0;
+        .game-footer {
+            width: 100%;
+            max-width: 900px;
+
+            flex: 0 0 auto;
 
             text-align: center;
 
-            color: #6f6f75;
+            padding: 5px 0 2px;
 
-            font-size: .68rem;
+            color: #6f6d73;
 
-            letter-spacing: .04em;
+            font-size: 0.70rem;
 
-            padding-top: 1px;
-            padding-bottom: 2px;
+            letter-spacing: 0.35px;
         }
 
-        .app-footer span {
-            color: #8c8c92;
+        .game-footer strong {
+            color: #8d8a91;
+            font-weight: 700;
         }
 
 
         /* =========================================================
-           MODALS
+           MODALE
         ========================================================= */
 
         .modal {
@@ -555,10 +509,7 @@
             height: 100%;
 
             background:
-                rgba(0,0,0,.78);
-
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+                rgba(5,5,6,0.82);
 
             justify-content: center;
             align-items: center;
@@ -566,21 +517,22 @@
             z-index: 100;
 
             padding: 20px;
+
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
         }
 
         .modal-content {
             background:
                 linear-gradient(
-                    180deg,
-                    #252529,
-                    #19191c
+                    145deg,
+                    #222124,
+                    #151416
                 );
 
             padding: 22px;
 
-            border-radius: 20px;
-
-            border: 1px solid rgba(255,255,255,.10);
+            border-radius: 24px;
 
             max-width: 500px;
             width: 100%;
@@ -593,15 +545,32 @@
 
             text-align: left;
 
+            border: 1px solid rgba(255,255,255,0.09);
+
             box-shadow:
-                0 25px 70px rgba(0,0,0,.65),
-                0 0 0 1px rgba(255,126,0,.04);
+                0 30px 80px rgba(0,0,0,0.65),
+                0 0 35px rgba(255,126,20,0.08),
+                inset 0 1px 0 rgba(255,255,255,0.04);
+
+            animation: modalIn 0.22s ease-out;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .modal-content h2 {
             margin-top: 0;
 
-            color: #ff9f0a;
+            color: #ff8a1d;
 
             text-align: center;
 
@@ -609,7 +578,7 @@
         }
 
         .modal-content h3 {
-            color: #ff9f0a;
+            color: #ff9b3d;
 
             margin-bottom: 5px;
 
@@ -623,16 +592,16 @@
 
         .modal-content li {
             margin-bottom: 8px;
-            font-size: .9rem;
-            line-height: 1.4;
+            font-size: 0.9rem;
+            line-height: 1.45;
         }
 
         .close-btn {
             background:
                 linear-gradient(
                     135deg,
-                    #ff7a00,
-                    #ff4f00
+                    #ff7b12,
+                    #ed6200
                 );
 
             margin-top: 15px;
@@ -645,10 +614,8 @@
 
             font-weight: 800;
 
-            border: none;
-
             box-shadow:
-                0 8px 20px rgba(255,90,0,.18);
+                0 8px 22px rgba(255,126,20,0.18);
         }
 
         .modal-text {
@@ -661,14 +628,16 @@
             margin: 15px 0;
 
             text-align: center;
+
+            color: #c8c6cb;
         }
 
         .version-badge {
             text-align: center;
 
-            font-size: .75rem;
+            font-size: 0.75rem;
 
-            color: #77777d;
+            color: #77747b;
 
             margin-top: -8px;
 
@@ -676,7 +645,7 @@
         }
 
         ol {
-            padding-left: 22px;
+            padding-left: 20px;
             text-align: left;
         }
 
@@ -686,7 +655,7 @@
 
 
         /* =========================================================
-           NAME INPUT
+           POLE IMIENIA
         ========================================================= */
 
         .name-input {
@@ -698,10 +667,10 @@
 
             border-radius: 13px;
 
-            border: 1px solid rgba(255,126,0,.45);
+            border: 1px solid rgba(255,126,20,0.45);
 
             background:
-                #111113;
+                #111012;
 
             color: white;
 
@@ -714,16 +683,20 @@
             user-select: text;
             -webkit-user-select: text;
 
+            box-shadow:
+                inset 0 3px 8px rgba(0,0,0,0.35);
+
             transition:
-                border-color .2s ease,
-                box-shadow .2s ease;
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
         }
 
         .name-input:focus {
-            border-color: #ff9f0a;
+            border-color: #ff8a1d;
 
             box-shadow:
-                0 0 0 3px rgba(255,159,10,.12);
+                0 0 0 3px rgba(255,126,20,0.12),
+                inset 0 3px 8px rgba(0,0,0,0.35);
         }
 
         .infinity-icon {
@@ -732,11 +705,14 @@
             font-weight: bold;
 
             margin-left: 4px;
+
+            text-shadow:
+                0 0 10px rgba(255,159,10,0.5);
         }
 
 
         /* =========================================================
-           MOBILE
+           RESPONSIVE — TELEFON
         ========================================================= */
 
         @media (max-width: 600px) {
@@ -749,70 +725,93 @@
             }
 
             .header {
-                gap: 7px;
+                padding: 6px;
+
+                gap: 6px;
+
+                border-radius: 17px;
             }
 
             .header button {
-                min-height: 43px;
+                padding: 10px 6px;
 
-                padding:
-                    9px 7px;
-
-                font-size: .75rem;
+                font-size: 0.72rem;
 
                 border-radius: 12px;
             }
 
             .stats-bar {
-                padding:
-                    8px 9px;
+                padding: 9px 10px;
 
                 gap: 5px;
 
-                font-size: .70rem;
+                border-radius: 15px;
 
-                border-radius: 13px;
-            }
-
-            .progress-container {
-                height: 17px;
-
-                border-radius: 10px;
+                font-size: 0.68rem;
             }
 
             .controls {
-                gap: 8px;
+                gap: 6px;
             }
 
             .controls button {
-                min-height: 52px;
+                min-height: 43px;
 
-                padding:
-                    11px 5px;
+                font-size: 0.75rem;
 
-                font-size: .78rem;
-
-                border-radius: 14px;
+                padding: 9px 5px;
             }
 
-            .combo-text {
-                height: 27px;
-
-                font-size: .92rem;
+            .canvas-container {
+                padding: 3px 0;
             }
 
             canvas {
-                border-radius: 13px;
+                border-radius: 19px;
+
+                box-shadow:
+                    0 18px 40px rgba(0,0,0,0.55),
+                    0 0 25px rgba(255,126,20,0.07);
             }
 
-            .app-footer {
-                font-size: .62rem;
+            .combo-text {
+                flex-basis: 25px;
+
+                min-height: 25px;
+
+                font-size: 0.95rem;
+            }
+
+            .game-footer {
+                font-size: 0.65rem;
+
+                padding-bottom: 2px;
+            }
+
+            .modal {
+                padding: 12px;
+            }
+
+            .modal-content {
+                padding: 19px;
+
+                border-radius: 21px;
+
+                max-height: 88vh;
+            }
+
+            .modal-content h2 {
+                font-size: 1.2rem;
+            }
+
+            .modal-content li {
+                font-size: 0.84rem;
             }
         }
 
 
         /* =========================================================
-           VERY SMALL PHONES
+           BARDZO MAŁE TELEFONY
         ========================================================= */
 
         @media (max-height: 700px) {
@@ -821,52 +820,56 @@
                 gap: 5px;
             }
 
-            .header button {
-                min-height: 38px;
+            .header {
+                padding: 5px;
+            }
 
-                padding:
-                    7px 6px;
+            .header button {
+                padding: 7px 5px;
             }
 
             .stats-bar {
-                padding:
-                    6px 8px;
-
-                font-size: .66rem;
-            }
-
-            .progress-container {
-                height: 14px;
+                padding: 7px 9px;
             }
 
             .controls button {
-                min-height: 44px;
+                min-height: 38px;
+                padding: 7px 4px;
             }
 
             .combo-text {
-                height: 22px;
-
-                font-size: .85rem;
+                min-height: 21px;
+                flex-basis: 21px;
+                font-size: 0.85rem;
             }
 
-            .app-footer {
-                font-size: .58rem;
+            .game-footer {
+                font-size: 0.58rem;
             }
         }
 
 
         /* =========================================================
-           SAFE AREA - IPHONE
+           SZEROKI EKRAN
         ========================================================= */
 
-        @supports (padding: max(0px)) {
+        @media (min-width: 901px) {
 
             #app-container {
-                padding-top:
-                    max(8px, env(safe-area-inset-top));
+                padding-left: 20px;
+                padding-right: 20px;
+            }
 
-                padding-bottom:
-                    max(6px, env(safe-area-inset-bottom));
+            .header {
+                border-radius: 22px;
+            }
+
+            .stats-bar {
+                border-radius: 19px;
+            }
+
+            .controls button {
+                font-size: 0.88rem;
             }
         }
 
@@ -875,432 +878,473 @@
 
 <body>
 
-<div id="app-container">
+    <div id="app-container">
 
-    <!-- =========================================================
-         HEADER
-    ========================================================== -->
+        <!-- =====================================================
+             GÓRNY PANEL
+        ====================================================== -->
 
-    <div class="header">
+        <div class="header">
 
-        <button
-            id="btnGameAction"
-            class="btn-end"
-            onclick="handleGameAction()">
-            🔴 Zakończ grę
-        </button>
+            <button
+                id="btnGameAction"
+                class="btn-end"
+                onclick="handleGameAction()"
+            >
+                🔴 Zakończ grę
+            </button>
 
-        <button onclick="showInfo()">
-            ℹ️ Instrukcja
-        </button>
+            <button onclick="showInfo()">
+                ℹ️ Instrukcja
+            </button>
 
-        <button onclick="showHighScores()">
-            🏆 Wyniki
-        </button>
+            <button onclick="showHighScores()">
+                🏆 Wyniki
+            </button>
 
-    </div>
-
-
-    <!-- =========================================================
-         STATYSTYKI
-    ========================================================== -->
-
-    <div class="stats-bar">
-
-        <div>
-            🚩 Runda:
-            <span id="roundLabel" style="color:#FFD60A;">
-                1
-            </span>
         </div>
 
-        <div>
-            ⏱️
-            <span id="timer">
-                180
-            </span>
-        </div>
 
-        <div>
-            📦 Łącznie:
-            <span
-                id="totalClearedGame"
-                style="color:#FF9F0A;">
-                0
-            </span>
-        </div>
+        <!-- =====================================================
+             STATYSTYKI
+        ====================================================== -->
 
-        <div>
-            Poziom:
-            <span
-                id="diffDisplay"
-                style="color:#FF9F0A;">
-                🟢 Bardzo Łatwy
-            </span>
-        </div>
+        <div class="stats-bar">
 
-        <div>
-            🎯 Zbite:
-            <span id="clearedCount">
-                0
-            </span>
-            /
-            <span
-                id="targetBlocks"
-                style="color:#30D158;">
-                0
-            </span>
-            (
-            <span
-                id="progressPercent"
-                style="color:#0A84FF;">
-                0%
-            </span>
-            )
-        </div>
+            <div>
+                🚩 Runda:
+                <span
+                    id="roundLabel"
+                    style="color:#FFD60A;"
+                >
+                    1
+                </span>
+            </div>
 
-    </div>
-
-
-    <!-- =========================================================
-         PROGRESS
-    ========================================================== -->
-
-    <div class="progress-container">
-
-        <div
-            id="progressBarFill"
-            class="progress-bar-fill">
-        </div>
-
-    </div>
-
-
-    <!-- =========================================================
-         GAME CONTROLS
-    ========================================================== -->
-
-    <div class="controls">
-
-        <button
-            id="btnDisableTimer"
-            onclick="disableTimerLifeline()">
-            ⏱️ Wyłącz czas
-        </button>
-
-        <button
-            id="btnHammer"
-            onclick="toggleHammer()">
-            🔨 Młotek
-        </button>
-
-        <button
-            id="btnShuffle"
-            onclick="triggerShuffle()">
-            🔀 Mieszaj
-        </button>
-
-    </div>
-
-
-    <!-- =========================================================
-         GAME BOARD
-    ========================================================== -->
-
-    <div class="canvas-container">
-
-        <canvas id="gameCanvas"></canvas>
-
-    </div>
-
-
-    <!-- =========================================================
-         COMBO - POD PLANSZĄ
-    ========================================================== -->
-
-    <div
-        class="combo-text"
-        id="comboLabel">
-    </div>
-
-
-    <!-- =========================================================
-         FOOTER
-    ========================================================== -->
-
-    <div class="app-footer">
-        Created by ToMi with AI · wersja 2.0.0
-    </div>
-
-</div>
-
-
-<!-- =============================================================
-     INSTRUKCJA
-============================================================== -->
-
-<div id="infoModal" class="modal">
-
-    <div class="modal-content">
-
-        <h2>
-            📖 Instrukcja obsługi gry
-        </h2>
-
-        <div class="version-badge">
-            Wersja 2.0.0
-        </div>
-
-        <h3>
-            1. Zasady rozgrywki i cel gry
-        </h3>
-
-        <ul>
-
-            <li>
-                <strong>Główne zadanie:</strong>
-                Klikaj w grupy co najmniej
-                <strong>2 połączonych ze sobą kostek</strong>
-                tego samego koloru
-                (w pionie lub poziomie),
-                aby usunąć je z planszy.
-            </li>
-
-            <li>
-                <strong>Awans do kolejnej rundy:</strong>
-                Musisz wyczyścić co najmniej
-                <strong>90% klocków</strong>
-                z obecnej planszy.
-                Wywoła to
-                <em>Złoty Wstrząs</em>.
-            </li>
-
-            <li>
-                <strong>Koniec gry:</strong>
-                Gra kończy się,
-                gdy upłynie limit czasu
-                lub gdy na planszy zabraknie
-                możliwych ruchów,
-                a cel 90% nie został osiągnięty.
-            </li>
-
-        </ul>
-
-
-        <h3>
-            2. Poziomy trudności i grawitacja
-        </h3>
-
-        <ul>
-
-            <li>
-                <strong>Wzrost trudności:</strong>
-                Z każdą nową rundą na planszy
-                pojawia się więcej kolorów.
-            </li>
-
-            <li>
-                <strong>Fizyka klocków:</strong>
-                Po usunięciu grupy klocki
-                znajdujące się wyżej opadają w dół.
-            </li>
-
-        </ul>
-
-
-        <h3>
-            3. Punktacja i Combo
-        </h3>
-
-        <ul>
-
-            <li>
-                Za każdą zbitą kostkę otrzymujesz
-                <strong>1 punkt</strong>.
-            </li>
-
-            <li>
-                Zbijanie dużych grup klocków
-                (od 8 w górę)
-                aktywuje specjalną premię wizualną
-                <strong>🔥 COMBO!</strong>
-            </li>
-
-        </ul>
-
-
-        <h3>
-            4. Ułatwienia i koła ratunkowe
-        </h3>
-
-        <ul>
-
-            <li>
+            <div>
                 ⏱️
-                <strong>Wyłącz czas:</strong>
-                Zatrzymuje i wyłącza odliczanie zegara.
-            </li>
+                <span id="timer">
+                    180
+                </span>
+            </div>
 
-            <li>
-                🔨
-                <strong>Młotek:</strong>
-                Pozwala zniszczyć jedną pojedynczą
-                wybraną kostkę.
-            </li>
+            <div>
+                📦 Łącznie:
+                <span
+                    id="totalClearedGame"
+                    style="color:#FF9F0A;"
+                >
+                    0
+                </span>
+            </div>
 
-            <li>
-                🔀
-                <strong>Mieszaj:</strong>
-                Przemieszcza losowo układ
-                wszystkich pozostałych klocków.
-            </li>
+            <div>
+                Poziom:
+                <span
+                    id="diffDisplay"
+                    style="color:#FF9F0A;"
+                >
+                    🟢 Bardzo Łatwy
+                </span>
+            </div>
 
-        </ul>
-
-
-        <button
-            class="close-btn"
-            style="background:#FF3B30;"
-            onclick="closeModal('infoModal')">
-
-            Zamknij instrukcję
-
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =============================================================
-     HIGH SCORES
-============================================================== -->
-
-<div id="scoresModal" class="modal">
-
-    <div
-        class="modal-content"
-        style="text-align:center;">
-
-        <h2>
-            🏆 Najlepsze wyniki (TOP 10)
-        </h2>
-
-        <ol id="highScoresList">
-
-            <li>
-                Brak wyników
-            </li>
-
-        </ol>
-
-        <button
-            class="close-btn"
-            style="background:#FF3B30;"
-            onclick="closeModal('scoresModal')">
-
-            Zamknij
-
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =============================================================
-     MESSAGE MODAL
-============================================================== -->
-
-<div id="messageModal" class="modal">
-
-    <div
-        class="modal-content"
-        style="text-align:center;">
-
-        <h2 id="msgModalTitle">
-            Komunikat
-        </h2>
-
-        <div
-            id="msgModalText"
-            class="modal-text">
-        </div>
-
-        <button
-            class="close-btn"
-            onclick="closeModal('messageModal')">
-
-            OK
-
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =============================================================
-     GAME OVER
-============================================================== -->
-
-<div id="gameOverModal" class="modal">
-
-    <div
-        class="modal-content"
-        style="text-align:center;">
-
-        <h2>
-            🏁 Koniec gry!
-        </h2>
-
-        <div
-            id="gameOverReason"
-            class="modal-text">
-        </div>
-
-        <div
-            style="
-                font-size:1.2rem;
-                font-weight:bold;
-                color:#FF9F0A;
-                margin-bottom:10px;
-            ">
-
-            Twój wynik:
-            <span id="finalScoreDisplay">
-                0
-            </span>
-            pkt
+            <div>
+                🎯 Zbite:
+                <span id="clearedCount">
+                    0
+                </span>
+                /
+                <span
+                    id="targetBlocks"
+                    style="color:#30D158;"
+                >
+                    0
+                </span>
+                (
+                <span
+                    id="progressPercent"
+                    style="color:#0A84FF;"
+                >
+                    0%
+                </span>
+                )
+            </div>
 
         </div>
 
-        <input
-            type="text"
-            id="playerNameInput"
-            class="name-input"
-            placeholder="Wpisz swoje imię..."
-            maxlength="20">
 
-        <button
-            class="close-btn"
-            style="
-                background:#30D158;
-                color:black;
-                font-weight:bold;
-            "
-            onclick="saveScoreAndClose()">
+        <!-- =====================================================
+             PROGRESS BAR
+        ====================================================== -->
 
-            💾 Zapisz wynik
+        <div class="progress-container">
 
-        </button>
+            <div
+                id="progressBarFill"
+                class="progress-bar-fill"
+            ></div>
+
+        </div>
+
+
+        <!-- =====================================================
+             PRZYCISKI
+        ====================================================== -->
+
+        <div class="controls">
+
+            <button
+                id="btnDisableTimer"
+                onclick="disableTimerLifeline()"
+            >
+                ⏱️ Wyłącz czas
+            </button>
+
+            <button
+                id="btnHammer"
+                onclick="toggleHammer()"
+            >
+                🔨 Młotek
+            </button>
+
+            <button
+                id="btnShuffle"
+                onclick="triggerShuffle()"
+            >
+                🔀 Mieszaj
+            </button>
+
+        </div>
+
+
+        <!-- =====================================================
+             PLANSZA
+        ====================================================== -->
+
+        <div class="canvas-container">
+
+            <canvas id="gameCanvas"></canvas>
+
+        </div>
+
+
+        <!-- =====================================================
+             COMBO — POD PLANSZĄ
+        ====================================================== -->
+
+        <div
+            class="combo-text"
+            id="comboLabel"
+        ></div>
+
+
+        <!-- =====================================================
+             STOPKA
+        ====================================================== -->
+
+        <div class="game-footer">
+            Created by <strong>ToMi</strong> with AI · wersja 2.0.0
+        </div>
 
     </div>
 
-</div>
+
+    <!-- =========================================================
+         INSTRUKCJA
+    ========================================================= -->
+
+    <div
+        id="infoModal"
+        class="modal"
+    >
+
+        <div class="modal-content">
+
+            <h2>
+                📖 Instrukcja obsługi gry
+            </h2>
+
+            <div class="version-badge">
+                Wersja 1.2.0
+            </div>
+
+            <h3>
+                1. Zasady rozgrywki i cel gry
+            </h3>
+
+            <ul>
+
+                <li>
+                    <strong>Główne zadanie:</strong>
+                    Klikaj w grupy co najmniej
+                    <strong>2 połączonych ze sobą kostek</strong>
+                    tego samego koloru
+                    (w pionie lub poziomie),
+                    aby usunąć je z planszy.
+                </li>
+
+                <li>
+                    <strong>Awans do kolejnej rundy:</strong>
+                    Musisz wyczyścić co najmniej
+                    <strong>90% klocków</strong>
+                    z obecnej planszy.
+                    Wywoła to
+                    <em>Złoty Wstrząs</em>
+                    – wolne miejsca zostaną uzupełnione
+                    nowymi klockami,
+                    a istniejące pozostaną na swoich miejscach.
+                </li>
+
+                <li>
+                    <strong>Koniec gry:</strong>
+                    Gra kończy się,
+                    gdy upłynie limit czasu
+                    lub gdy na planszy zabraknie
+                    możliwych ruchów,
+                    a cel 90% nie został jeszcze osiągnięty.
+                </li>
+
+            </ul>
+
+
+            <h3>
+                2. Poziomy trudności i grawitacja
+            </h3>
+
+            <ul>
+
+                <li>
+                    <strong>Wzrost trudności:</strong>
+                    Z każdą nową rundą na planszy pojawia się
+                    więcej kolorów
+                    (od 3 kolorów w Rundach 1–2
+                    do 7 kolorów w najwyższych rundach).
+                </li>
+
+                <li>
+                    <strong>Fizyka klocków:</strong>
+                    Po usunięciu grupy,
+                    klocki znajdujące się wyżej
+                    opadają w dół.
+                    Gdy cała pionowa kolumna zostanie opróżniona,
+                    pozostałe kolumny zsuwają się
+                    do lewej strony.
+                </li>
+
+            </ul>
+
+
+            <h3>
+                3. Punktacja i Combo
+            </h3>
+
+            <ul>
+
+                <li>
+                    Za każdą zbitą kostkę otrzymujesz
+                    <strong>1 punkt</strong>.
+                </li>
+
+                <li>
+                    Zbijanie dużych grup klocków
+                    (od 8 w górę)
+                    aktywuje specjalną premię wizualną
+                    <strong>🔥 COMBO!</strong>
+                </li>
+
+            </ul>
+
+
+            <h3>
+                4. Ułatwienia i koła ratunkowe (jednorazowe)
+            </h3>
+
+            <ul>
+
+                <li>
+                    ⏱️
+                    <strong>Wyłącz czas:</strong>
+                    Zatrzymuje i wyłącza odliczanie zegara,
+                    pozwalając na spokojną rozgrywkę bez stresu.
+                    Użycie tego koła dodaje symbol
+                    <strong>∞</strong>
+                    przy Twoim wyniku w tabeli TOP 10.
+                </li>
+
+                <li>
+                    🔨
+                    <strong>Młotek:</strong>
+                    Pozwala zniszczyć jedną pojedynczą,
+                    wybraną kostkę,
+                    która blokuje układ.
+                    Kliknij przycisk Młotka,
+                    a następnie w wybraną kostkę.
+                </li>
+
+                <li>
+                    🔀
+                    <strong>Mieszaj:</strong>
+                    Przemieszcza losowo układ wszystkich
+                    pozostałych na planszy klocków,
+                    gdy zabraknie pasujących układów.
+                </li>
+
+            </ul>
+
+
+            <button
+                class="close-btn"
+                style="background:#FF3B30;"
+                onclick="closeModal('infoModal')"
+            >
+                Zamknij instrukcję
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         WYNIKI
+    ========================================================= -->
+
+    <div
+        id="scoresModal"
+        class="modal"
+    >
+
+        <div
+            class="modal-content"
+            style="text-align: center;"
+        >
+
+            <h2>
+                🏆 Najlepsze wyniki (TOP 10)
+            </h2>
+
+            <ol id="highScoresList">
+                <li>
+                    Brak wyników
+                </li>
+            </ol>
+
+            <button
+                class="close-btn"
+                style="background:#FF3B30;"
+                onclick="closeModal('scoresModal')"
+            >
+                Zamknij
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         KOMUNIKAT
+    ========================================================= -->
+
+    <div
+        id="messageModal"
+        class="modal"
+    >
+
+        <div
+            class="modal-content"
+            style="text-align: center;"
+        >
+
+            <h2 id="msgModalTitle">
+                Komunikat
+            </h2>
+
+            <div
+                id="msgModalText"
+                class="modal-text"
+            ></div>
+
+            <button
+                class="close-btn"
+                onclick="closeModal('messageModal')"
+            >
+                OK
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         KONIEC GRY
+    ========================================================= -->
+
+    <div
+        id="gameOverModal"
+        class="modal"
+    >
+
+        <div
+            class="modal-content"
+            style="text-align: center;"
+        >
+
+            <h2>
+                🏁 Koniec gry!
+            </h2>
+
+            <div
+                id="gameOverReason"
+                class="modal-text"
+            ></div>
+
+            <div
+                style="
+                    font-size:1.2rem;
+                    font-weight:bold;
+                    color:#FF9F0A;
+                    margin-bottom:10px;
+                "
+            >
+                Twój wynik:
+                <span id="finalScoreDisplay">
+                    0
+                </span>
+                pkt
+            </div>
+
+            <input
+                type="text"
+                id="playerNameInput"
+                class="name-input"
+                placeholder="Wpisz swoje imię..."
+                maxlength="20"
+            >
+
+            <button
+                class="close-btn"
+                style="
+                    background:#30D158;
+                    color:black;
+                    font-weight:bold;
+                "
+                onclick="saveScoreAndClose()"
+            >
+                💾 Zapisz wynik
+            </button>
+
+        </div>
+
+    </div>
 
 
 <script>
+
+    /* =========================================================
+       KOLORY KLOCKÓW
+    ========================================================= */
 
     const PALETTE = [
         "#1E88E5",
@@ -1311,6 +1355,11 @@
         "#9C27B0",
         "#FF9800"
     ];
+
+
+    /* =========================================================
+       ZMIENNE GRY
+    ========================================================= */
 
     let ROWS = 18,
         COLS = 12,
@@ -1339,6 +1388,10 @@
         statMaxGroup = 0;
 
 
+    /* =========================================================
+       CANVAS
+    ========================================================= */
+
     const canvas =
         document.getElementById("gameCanvas");
 
@@ -1346,16 +1399,27 @@
         canvas.getContext("2d");
 
 
+    /* =========================================================
+       KOLORY DLA RUND
+    ========================================================= */
+
     function getColorsForRound(round) {
 
         if (round <= 2) return 3;
+
         if (round <= 4) return 4;
+
         if (round <= 6) return 5;
+
         if (round <= 8) return 6;
 
         return 7;
     }
 
+
+    /* =========================================================
+       POZIOM TRUDNOŚCI
+    ========================================================= */
 
     function getDifficultyLabel(round) {
 
@@ -1375,11 +1439,15 @@
     }
 
 
+    /* =========================================================
+       WYMIARY PLANSZY
+    ========================================================= */
+
     function calculateGridDimensions() {
 
         const container =
             document.querySelector(
-                '.canvas-container'
+                ".canvas-container"
             );
 
         const availableWidth =
@@ -1414,12 +1482,10 @@
         cellSize =
             Math.min(
                 Math.floor(
-                    availableWidth /
-                    COLS
+                    availableWidth / COLS
                 ),
                 Math.floor(
-                    availableHeight /
-                    ROWS
+                    availableHeight / ROWS
                 )
             );
 
@@ -1431,16 +1497,25 @@
     }
 
 
+    /* =========================================================
+       AKCJA GŁÓWNA
+    ========================================================= */
+
     function handleGameAction() {
 
         if (gameActive)
             endGame(
                 "Gra zakończona przez gracza."
             );
+
         else
             newGame();
     }
 
+
+    /* =========================================================
+       PRZYCISK NOWA GRA / ZAKOŃCZ
+    ========================================================= */
 
     function updateActionButton() {
 
@@ -1462,11 +1537,14 @@
             btn.innerText =
                 "🔄 Nowa gra";
 
-            btn.className =
-                "";
+            btn.className = "";
         }
     }
 
+
+    /* =========================================================
+       NOWA GRA
+    ========================================================= */
 
     function newGame() {
 
@@ -1475,12 +1553,14 @@
         score = 0;
         currentRound = 1;
         timeLeft = 180;
+
         isTimerEnabled = true;
         gameActive = true;
         hammerMode = false;
 
         statRemoved = 0;
         statMaxGroup = 0;
+
         usedTimerLifeline = false;
 
         hammerAvailable = true;
@@ -1526,9 +1606,7 @@
         updateUI();
 
 
-        clearInterval(
-            timerInterval
-        );
+        clearInterval(timerInterval);
 
         timerInterval =
             setInterval(
@@ -1536,9 +1614,14 @@
                 1000
             );
 
+
         drawBoard();
     }
 
+
+    /* =========================================================
+       KOLEJNA RUNDA
+    ========================================================= */
 
     function startNextRound() {
 
@@ -1546,11 +1629,9 @@
 
         hammerMode = false;
 
-        document.getElementById(
-            "btnHammer"
-        ).classList.remove(
-            "active"
-        );
+        document
+            .getElementById("btnHammer")
+            .classList.remove("active");
 
         calculateGridDimensions();
 
@@ -1567,6 +1648,10 @@
     }
 
 
+    /* =========================================================
+       GENEROWANIE PLANSZY
+    ========================================================= */
+
     function generateBoard() {
 
         const colorCount =
@@ -1575,6 +1660,7 @@
             );
 
         gridData = [];
+
 
         for (
             let r = 0;
@@ -1600,18 +1686,22 @@
             }
         }
 
+
         totalRoundBlocks =
             ROWS * COLS;
 
         targetBlocks =
             Math.ceil(
-                totalRoundBlocks *
-                0.90
+                totalRoundBlocks * 0.90
             );
 
         roundClearedBlocks = 0;
     }
 
+
+    /* =========================================================
+       UZUPEŁNIANIE PUSTYCH PÓL
+    ========================================================= */
 
     function fillEmptySlots() {
 
@@ -1619,6 +1709,7 @@
             getColorsForRound(
                 currentRound
             );
+
 
         for (
             let r = 0;
@@ -1628,6 +1719,7 @@
 
             if (!gridData[r])
                 gridData[r] = [];
+
 
             for (
                 let c = 0;
@@ -1648,18 +1740,22 @@
             }
         }
 
+
         totalRoundBlocks =
             ROWS * COLS;
 
         targetBlocks =
             Math.ceil(
-                totalRoundBlocks *
-                0.90
+                totalRoundBlocks * 0.90
             );
 
         roundClearedBlocks = 0;
     }
 
+
+    /* =========================================================
+       AKTUALIZACJA UI
+    ========================================================= */
 
     function updateUI() {
 
@@ -1668,15 +1764,18 @@
         ).innerText =
             roundClearedBlocks;
 
+
         document.getElementById(
             "targetBlocks"
         ).innerText =
             targetBlocks;
 
+
         document.getElementById(
             "roundLabel"
         ).innerText =
             currentRound;
+
 
         document.getElementById(
             "diffDisplay"
@@ -1684,6 +1783,7 @@
             getDifficultyLabel(
                 currentRound
             );
+
 
         document.getElementById(
             "totalClearedGame"
@@ -1707,6 +1807,7 @@
                 "progressPercent"
             );
 
+
         percentLabel.innerText =
             currentPercentBoard + "%";
 
@@ -1715,6 +1816,7 @@
             document.getElementById(
                 "progressBarFill"
             );
+
 
         const targetPercentProgress =
             targetBlocks > 0
@@ -1744,6 +1846,10 @@
     }
 
 
+    /* =========================================================
+       TIMER
+    ========================================================= */
+
     function updateTimerDisplay() {
 
         document.getElementById(
@@ -1755,6 +1861,10 @@
     }
 
 
+    /* =========================================================
+       WYŁĄCZ TIMER
+    ========================================================= */
+
     function disableTimerLifeline() {
 
         if (
@@ -1763,23 +1873,30 @@
         )
             return;
 
+
         isTimerEnabled = false;
 
         timerDisableAvailable = false;
 
         usedTimerLifeline = true;
 
-        clearInterval(
-            timerInterval
-        );
+
+        clearInterval(timerInterval);
+
 
         document.getElementById(
             "btnDisableTimer"
         ).disabled = true;
 
+
         updateTimerDisplay();
     }
 
+
+    /* =========================================================
+       RYSOWANIE PLANSZY
+       — wizualnie odświeżone
+    ========================================================= */
 
     function drawBoard() {
 
@@ -1789,6 +1906,25 @@
             canvas.width,
             canvas.height
         );
+
+
+        const gap =
+            Math.max(
+                2,
+                Math.floor(
+                    cellSize * 0.075
+                )
+            );
+
+
+        const radius =
+            Math.min(
+                8,
+                Math.floor(
+                    cellSize * 0.22
+                )
+            );
+
 
         for (
             let r = 0;
@@ -1802,37 +1938,328 @@
                 c++
             ) {
 
+                const x =
+                    c * cellSize + gap / 2;
+
+                const y =
+                    r * cellSize + gap / 2;
+
+                const size =
+                    cellSize - gap;
+
+
                 if (
                     gridData[r] &&
                     gridData[r][c]
                 ) {
 
-                    ctx.fillStyle =
+                    const color =
                         gridData[r][c];
 
-                    ctx.fillRect(
-                        c * cellSize,
-                        r * cellSize,
-                        cellSize - 1,
-                        cellSize - 1
+
+                    /* cień */
+
+                    ctx.save();
+
+                    ctx.shadowColor =
+                        color;
+
+                    ctx.shadowBlur =
+                        Math.max(
+                            3,
+                            cellSize * 0.12
+                        );
+
+                    ctx.shadowOffsetY =
+                        1;
+
+
+                    /* gradient */
+
+                    const gradient =
+                        ctx.createLinearGradient(
+                            x,
+                            y,
+                            x,
+                            y + size
+                        );
+
+
+                    gradient.addColorStop(
+                        0,
+                        lightenColor(
+                            color,
+                            25
+                        )
                     );
+
+
+                    gradient.addColorStop(
+                        0.45,
+                        color
+                    );
+
+
+                    gradient.addColorStop(
+                        1,
+                        darkenColor(
+                            color,
+                            18
+                        )
+                    );
+
+
+                    ctx.fillStyle =
+                        gradient;
+
+
+                    roundedRect(
+                        ctx,
+                        x,
+                        y,
+                        size,
+                        size,
+                        radius
+                    );
+
+                    ctx.fill();
+
+
+                    /* delikatne światło */
+
+                    ctx.shadowBlur = 0;
+
+                    const shine =
+                        ctx.createLinearGradient(
+                            x,
+                            y,
+                            x,
+                            y + size * 0.45
+                        );
+
+                    shine.addColorStop(
+                        0,
+                        "rgba(255,255,255,0.25)"
+                    );
+
+                    shine.addColorStop(
+                        1,
+                        "rgba(255,255,255,0)"
+                    );
+
+
+                    ctx.fillStyle =
+                        shine;
+
+
+                    roundedRect(
+                        ctx,
+                        x + 1,
+                        y + 1,
+                        size - 2,
+                        size * 0.42,
+                        Math.max(
+                            3,
+                            radius - 1
+                        )
+                    );
+
+                    ctx.fill();
+
+
+                    ctx.restore();
 
                 } else {
 
                     ctx.fillStyle =
-                        "#1E1E1E";
+                        "rgba(255,255,255,0.018)";
 
-                    ctx.fillRect(
-                        c * cellSize,
-                        r * cellSize,
-                        cellSize - 1,
-                        cellSize - 1
+
+                    roundedRect(
+                        ctx,
+                        x,
+                        y,
+                        size,
+                        size,
+                        radius
                     );
+
+                    ctx.fill();
                 }
             }
         }
     }
 
+
+    /* =========================================================
+       RYSOWANIE ZAOKRĄGLONEGO PROSTOKĄTA
+    ========================================================= */
+
+    function roundedRect(
+        context,
+        x,
+        y,
+        width,
+        height,
+        radius
+    ) {
+
+        context.beginPath();
+
+        context.moveTo(
+            x + radius,
+            y
+        );
+
+        context.lineTo(
+            x + width - radius,
+            y
+        );
+
+        context.quadraticCurveTo(
+            x + width,
+            y,
+            x + width,
+            y + radius
+        );
+
+        context.lineTo(
+            x + width,
+            y + height - radius
+        );
+
+        context.quadraticCurveTo(
+            x + width,
+            y + height,
+            x + width - radius,
+            y + height
+        );
+
+        context.lineTo(
+            x + radius,
+            y + height
+        );
+
+        context.quadraticCurveTo(
+            x,
+            y + height,
+            x,
+            y + height - radius
+        );
+
+        context.lineTo(
+            x,
+            y + radius
+        );
+
+        context.quadraticCurveTo(
+            x,
+            y,
+            x + radius,
+            y
+        );
+
+        context.closePath();
+    }
+
+
+    /* =========================================================
+       ROZJAŚNIANIE KOLORU
+    ========================================================= */
+
+    function lightenColor(
+        hex,
+        amount
+    ) {
+
+        let num =
+            parseInt(
+                hex.replace("#", ""),
+                16
+            );
+
+        let r =
+            Math.min(
+                255,
+                (num >> 16) + amount
+            );
+
+        let g =
+            Math.min(
+                255,
+                ((num >> 8) & 0x00FF) + amount
+            );
+
+        let b =
+            Math.min(
+                255,
+                (num & 0x0000FF) + amount
+            );
+
+        return (
+            "#" +
+            (
+                (1 << 24) |
+                (r << 16) |
+                (g << 8) |
+                b
+            )
+                .toString(16)
+                .slice(1)
+        );
+    }
+
+
+    /* =========================================================
+       PRZYCIEMNIANIE KOLORU
+    ========================================================= */
+
+    function darkenColor(
+        hex,
+        amount
+    ) {
+
+        let num =
+            parseInt(
+                hex.replace("#", ""),
+                16
+            );
+
+        let r =
+            Math.max(
+                0,
+                (num >> 16) - amount
+            );
+
+        let g =
+            Math.max(
+                0,
+                ((num >> 8) & 0x00FF) - amount
+            );
+
+        let b =
+            Math.max(
+                0,
+                (num & 0x0000FF) - amount
+            );
+
+        return (
+            "#" +
+            (
+                (1 << 24) |
+                (r << 16) |
+                (g << 8) |
+                b
+            )
+                .toString(16)
+                .slice(1)
+        );
+    }
+
+
+    /* =========================================================
+       TIMER
+    ========================================================= */
 
     function updateTimer() {
 
@@ -1842,14 +2269,22 @@
         )
             return;
 
+
         timeLeft--;
 
         updateTimerDisplay();
 
+
         if (timeLeft <= 0)
-            endGame("Czas minął!");
+            endGame(
+                "Czas minął!"
+            );
     }
 
+
+    /* =========================================================
+       KLIKNIĘCIE W PLANSZĘ
+    ========================================================= */
 
     canvas.addEventListener(
         "click",
@@ -1858,23 +2293,28 @@
             if (!gameActive)
                 return;
 
+
             const rect =
                 canvas.getBoundingClientRect();
+
 
             const c =
                 Math.floor(
                     (
                         e.clientX -
                         rect.left
-                    ) / cellSize
+                    ) /
+                    cellSize
                 );
+
 
             const r =
                 Math.floor(
                     (
                         e.clientY -
                         rect.top
-                    ) / cellSize
+                    ) /
+                    cellSize
                 );
 
 
@@ -1895,13 +2335,16 @@
                         null;
 
                     hammerMode = false;
-                    hammerAvailable = false;
+
+                    hammerAvailable =
+                        false;
 
 
                     const btnHammer =
                         document.getElementById(
                             "btnHammer"
                         );
+
 
                     btnHammer.classList.remove(
                         "active"
@@ -1912,8 +2355,10 @@
 
 
                     roundClearedBlocks++;
-                    score += 1;
-                    statRemoved += 1;
+
+                    score++;
+
+                    statRemoved++;
 
 
                     updateUI();
@@ -1946,7 +2391,8 @@
 
             if (group.length >= 2) {
 
-                score += group.length;
+                score +=
+                    group.length;
 
                 roundClearedBlocks +=
                     group.length;
@@ -1958,17 +2404,21 @@
                 if (
                     group.length >
                     statMaxGroup
-                )
+                ) {
+
                     statMaxGroup =
                         group.length;
+                }
 
 
                 if (
                     group.length >= 8
-                )
+                ) {
+
                     showCombo(
                         group.length
                     );
+                }
 
 
                 group.forEach(
@@ -2012,6 +2462,10 @@
     );
 
 
+    /* =========================================================
+       GRUPY KLOCKÓW
+    ========================================================= */
+
     function getConnectedGroup(
         startR,
         startC
@@ -2020,18 +2474,24 @@
         const color =
             gridData[startR][startC];
 
+
         if (!color)
             return [];
 
 
-        const queue = [
-            [startR, startC]
-        ];
+        const queue =
+            [
+                [startR, startC]
+            ];
+
 
         const visited =
-            new Set([
-                `${startR},${startC}`
-            ]);
+            new Set(
+                [
+                    `${startR},${startC}`
+                ]
+            );
+
 
         const group = [];
 
@@ -2043,12 +2503,13 @@
             const [
                 r,
                 c
-            ] = queue.shift();
+            ] =
+                queue.shift();
 
-            group.push([
-                r,
-                c
-            ]);
+
+            group.push(
+                [r, c]
+            );
 
 
             const dirs = [
@@ -2080,7 +2541,7 @@
 
                     if (
                         gridData[nr][nc] ===
-                        color &&
+                            color &&
                         !visited.has(
                             `${nr},${nc}`
                         )
@@ -2090,18 +2551,22 @@
                             `${nr},${nc}`
                         );
 
-                        queue.push([
-                            nr,
-                            nc
-                        ]);
+                        queue.push(
+                            [nr, nc]
+                        );
                     }
                 }
             }
         }
 
+
         return group;
     }
 
+
+    /* =========================================================
+       GRAWITACJA
+    ========================================================= */
 
     function applyGravity() {
 
@@ -2130,7 +2595,9 @@
                         r !== emptyIdx
                     ) {
 
-                        gridData[emptyIdx][c] =
+                        gridData[
+                            emptyIdx
+                        ][c] =
                             gridData[r][c];
 
                         gridData[r][c] =
@@ -2166,7 +2633,9 @@
                     null
                 ) {
 
-                    isColEmpty = false;
+                    isColEmpty =
+                        false;
+
                     break;
                 }
             }
@@ -2184,7 +2653,9 @@
                         r++
                     ) {
 
-                        gridData[r][targetCol] =
+                        gridData[
+                            r
+                        ][targetCol] =
                             gridData[r][c];
 
                         gridData[r][c] =
@@ -2201,6 +2672,10 @@
     }
 
 
+    /* =========================================================
+       MŁOTEK
+    ========================================================= */
+
     function toggleHammer() {
 
         if (
@@ -2209,17 +2684,25 @@
         )
             return;
 
+
         hammerMode =
             !hammerMode;
 
-        document.getElementById(
-            "btnHammer"
-        ).classList.toggle(
-            "active",
-            hammerMode
-        );
+
+        document
+            .getElementById(
+                "btnHammer"
+            )
+            .classList.toggle(
+                "active",
+                hammerMode
+            );
     }
 
+
+    /* =========================================================
+       MIESZANIE
+    ========================================================= */
 
     function triggerShuffle() {
 
@@ -2267,10 +2750,12 @@
                     (i + 1)
                 );
 
+
             [
                 flat[i],
                 flat[j]
-            ] = [
+            ] =
+            [
                 flat[j],
                 flat[i]
             ];
@@ -2304,13 +2789,19 @@
         shuffleAvailable =
             false;
 
+
         document.getElementById(
             "btnShuffle"
         ).disabled = true;
 
+
         drawBoard();
     }
 
+
+    /* =========================================================
+       COMBO
+    ========================================================= */
 
     function showCombo(count) {
 
@@ -2319,19 +2810,38 @@
                 "comboLabel"
             );
 
+
         comboLbl.innerText =
             `🔥 COMBO x${count}!`;
 
 
-        setTimeout(
-            () => {
-                comboLbl.innerText =
-                    "";
-            },
-            1500
-        );
+        comboLbl.style.transform =
+            "scale(1.12)";
+
+
+        comboLbl.style.opacity =
+            "1";
+
+
+        setTimeout(() => {
+
+            comboLbl.style.transform =
+                "scale(1)";
+
+        }, 180);
+
+
+        setTimeout(() => {
+
+            comboLbl.innerText = "";
+
+        }, 1500);
     }
 
+
+    /* =========================================================
+       SPRAWDZENIE KOŃCA GRY
+    ========================================================= */
 
     function checkGameOver() {
 
@@ -2358,6 +2868,7 @@
                             c
                         );
 
+
                     if (
                         group.length >= 2
                     )
@@ -2366,9 +2877,14 @@
             }
         }
 
+
         return true;
     }
 
+
+    /* =========================================================
+       KONIEC GRY
+    ========================================================= */
 
     function endGame(reason) {
 
@@ -2377,6 +2893,7 @@
         clearInterval(
             timerInterval
         );
+
 
         updateActionButton();
 
@@ -2399,12 +2916,17 @@
     }
 
 
+    /* =========================================================
+       ZAPIS WYNIKU
+    ========================================================= */
+
     function saveScoreAndClose() {
 
         const nameInput =
             document.getElementById(
                 "playerNameInput"
             );
+
 
         const name =
             nameInput.value.trim() ||
@@ -2426,23 +2948,22 @@
             JSON.parse(
                 localStorage.getItem(
                     "kostki_highscores"
-                ) || "[]"
+                ) ||
+                "[]"
             );
 
 
         highScores.push({
             name: name,
             score: score,
-            infinite:
-                usedTimerLifeline,
+            infinite: usedTimerLifeline,
             date: dateFormatted
         });
 
 
         highScores.sort(
             (a, b) =>
-                b.score -
-                a.score
+                b.score - a.score
         );
 
 
@@ -2466,13 +2987,16 @@
         );
 
 
-        nameInput.value =
-            "";
+        nameInput.value = "";
 
 
         showHighScores();
     }
 
+
+    /* =========================================================
+       TOP 10
+    ========================================================= */
 
     function showHighScores() {
 
@@ -2486,17 +3010,16 @@
             JSON.parse(
                 localStorage.getItem(
                     "kostki_highscores"
-                ) || "[]"
+                ) ||
+                "[]"
             );
 
 
-        list.innerHTML =
-            "";
+        list.innerHTML = "";
 
 
         if (
-            highScores.length ===
-            0
+            highScores.length === 0
         ) {
 
             list.innerHTML =
@@ -2530,6 +3053,10 @@
         );
     }
 
+
+    /* =========================================================
+       MODALE
+    ========================================================= */
 
     function showInfo() {
 
@@ -2580,6 +3107,10 @@
     }
 
 
+    /* =========================================================
+       RESPONSYWNOŚĆ
+    ========================================================= */
+
     window.addEventListener(
         "resize",
         () => {
@@ -2593,6 +3124,10 @@
         }
     );
 
+
+    /* =========================================================
+       START
+    ========================================================= */
 
     newGame();
 
