@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0d0d0f">
 
     <title>Kostki by ToMi</title>
 
@@ -11,41 +12,34 @@
     <style>
         /* =========================================================
            KOSTKI BY TOMI
-           NOWOCZESNY GAMING UI
-           Mechanika gry pozostaje bez zmian
+           NOWOCZESNY INTERFEJS
+           Mechanika gry pozostaje bez zmian.
            ========================================================= */
 
         :root {
-            --bg-main: #070910;
-            --bg-secondary: #0d111c;
-            --panel: rgba(18, 23, 37, 0.88);
-            --panel-light: rgba(28, 35, 54, 0.92);
+            --bg: #0b0b0d;
+            --bg-secondary: #111113;
+            --panel: #171719;
+            --panel-light: #1b1b1e;
+            --panel-hover: #202024;
 
-            --border: rgba(255,255,255,0.09);
-            --border-bright: rgba(255,255,255,0.16);
+            --border: #2b2b30;
+            --border-light: #35353b;
 
-            --text: #f5f7ff;
-            --text-secondary: #9ba5bd;
-            --text-muted: #69738a;
+            --text: #f5f5f7;
+            --text-secondary: #a5a5ad;
+            --text-muted: #77777f;
 
-            --blue: #4da3ff;
-            --blue-bright: #62b4ff;
-            --purple: #9b6cff;
-            --pink: #ff4f9a;
-            --green: #38e58c;
-            --yellow: #ffd84d;
-            --orange: #ff9f43;
-            --red: #ff4d5e;
+            --orange: #ff7200;
+            --orange-light: #ff841f;
+            --orange-dark: #d95d00;
 
-            --shadow:
-                0 20px 50px rgba(0,0,0,0.45),
-                0 5px 20px rgba(0,0,0,0.3);
+            --green: #30d158;
+            --yellow: #ffd60a;
+            --red: #ff453a;
+            --blue: #0a84ff;
 
-            --glow-blue:
-                0 0 20px rgba(77,163,255,0.35),
-                0 0 50px rgba(77,163,255,0.12);
-
-            --radius: 16px;
+            --shadow: rgba(0, 0, 0, 0.45);
         }
 
         * {
@@ -65,21 +59,11 @@
 
             background:
                 radial-gradient(
-                    circle at 15% 10%,
-                    rgba(77,163,255,0.13),
-                    transparent 28%
+                    circle at 50% -20%,
+                    rgba(255, 114, 0, 0.12),
+                    transparent 40%
                 ),
-                radial-gradient(
-                    circle at 85% 15%,
-                    rgba(155,108,255,0.12),
-                    transparent 28%
-                ),
-                radial-gradient(
-                    circle at 50% 100%,
-                    rgba(255,79,154,0.08),
-                    transparent 35%
-                ),
-                #070910;
+                #0b0b0d;
 
             color: var(--text);
 
@@ -93,6 +77,9 @@
                 Helvetica,
                 Arial,
                 sans-serif;
+
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
         }
 
         body::before {
@@ -100,16 +87,16 @@
             position: fixed;
             inset: 0;
             pointer-events: none;
-            opacity: 0.18;
+            z-index: 0;
 
-            background-image:
+            background:
                 linear-gradient(
-                    rgba(255,255,255,0.025) 1px,
+                    rgba(255,255,255,0.015) 1px,
                     transparent 1px
                 ),
                 linear-gradient(
                     90deg,
-                    rgba(255,255,255,0.025) 1px,
+                    rgba(255,255,255,0.015) 1px,
                     transparent 1px
                 );
 
@@ -118,9 +105,12 @@
             mask-image: linear-gradient(
                 to bottom,
                 black,
-                transparent 85%
+                transparent 80%
             );
+
+            opacity: 0.35;
         }
+
 
         /* =========================================================
            GŁÓWNY KONTENER
@@ -137,114 +127,198 @@
             height: 100vh;
 
             padding:
-                max(8px, env(safe-area-inset-top))
-                max(10px, env(safe-area-inset-right))
-                max(8px, env(safe-area-inset-bottom))
-                max(10px, env(safe-area-inset-left));
+                max(12px, env(safe-area-inset-top))
+                max(12px, env(safe-area-inset-right))
+                max(12px, env(safe-area-inset-bottom))
+                max(12px, env(safe-area-inset-left));
 
-            gap: 8px;
+            gap: 10px;
 
             justify-content: space-between;
             align-items: center;
         }
 
-        .header,
-        .stats-bar,
-        .controls,
-        .progress-container {
-            width: 100%;
-            max-width: 900px;
-        }
 
         /* =========================================================
-           HEADER
+           GÓRNY PASEK
            ========================================================= */
 
         .header {
-            display: grid;
-            grid-template-columns: 1.3fr 1fr 1fr;
+            width: 100%;
+            max-width: 900px;
+
+            display: flex;
             gap: 8px;
+
+            padding: 2px 0;
+        }
+
+        .header button {
+            min-height: 46px;
+        }
+
+
+        /* =========================================================
+           STATYSTYKI
+           ========================================================= */
+
+        .stats-bar {
+            width: 100%;
+            max-width: 900px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, minmax(0, 1fr));
+
+            gap: 6px;
 
             padding: 6px;
 
-            background: rgba(14, 18, 29, 0.72);
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(255,255,255,0.045),
+                    rgba(255,255,255,0.02)
+                );
 
             border: 1px solid var(--border);
+
             border-radius: 18px;
 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            box-shadow:
+                0 10px 35px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.03);
+
+            font-weight: 600;
+            font-size: 0.76rem;
+
+            align-items: center;
+        }
+
+        .stats-bar > div {
+            min-width: 0;
+
+            padding: 9px 5px;
+
+            text-align: center;
+
+            border-radius: 12px;
+
+            color: var(--text-secondary);
+
+            background: rgba(255,255,255,0.018);
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .stats-bar span {
+            font-weight: 800;
+        }
+
+
+        /* =========================================================
+           PASEK POSTĘPU
+           ========================================================= */
+
+        .progress-container {
+            width: 100%;
+            max-width: 900px;
+
+            height: 8px;
+
+            padding: 0;
+
+            background: #1b1b1e;
+
+            border: 1px solid #27272c;
+
+            border-radius: 100px;
+
+            overflow: hidden;
 
             box-shadow:
-                0 10px 35px rgba(0,0,0,0.28),
-                inset 0 1px rgba(255,255,255,0.04);
+                inset 0 1px 3px rgba(0,0,0,0.7);
         }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ff6500,
+                    #ff8a22
+                );
+
+            border-radius: 100px;
+
+            box-shadow:
+                0 0 14px rgba(255,114,0,0.65);
+
+            transition:
+                width 0.3s ease;
+        }
+
 
         /* =========================================================
            PRZYCISKI
            ========================================================= */
 
         button {
-            position: relative;
-
-            min-height: 40px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(77,163,255,0.95),
-                    rgba(58,116,230,0.95)
-                );
-
-            color: #fff;
-
-            border: 1px solid rgba(255,255,255,0.12);
-
-            padding: 9px 11px;
-
-            border-radius: 12px;
-
-            font-weight: 700;
-            font-size: 0.84rem;
-
-            cursor: pointer;
-            white-space: nowrap;
-
-            box-shadow:
-                0 6px 16px rgba(0,0,0,0.3),
-                inset 0 1px rgba(255,255,255,0.2);
-
-            transition:
-                transform 0.15s ease,
-                filter 0.15s ease,
-                box-shadow 0.15s ease;
-        }
-
-        button::after {
-            content: "";
-
-            position: absolute;
-            inset: 1px;
-
-            border-radius: 10px;
-
-            pointer-events: none;
+            appearance: none;
+            -webkit-appearance: none;
 
             background:
                 linear-gradient(
                     180deg,
-                    rgba(255,255,255,0.10),
-                    transparent 45%
+                    #242427,
+                    #19191c
                 );
+
+            color: var(--text);
+
+            border: 1px solid var(--border);
+
+            padding: 10px 13px;
+
+            min-height: 44px;
+
+            border-radius: 14px;
+
+            font-weight: 700;
+            font-size: 0.82rem;
+
+            flex: 1;
+
+            cursor: pointer;
+
+            white-space: nowrap;
+
+            box-shadow:
+                0 5px 15px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.04);
+
+            transition:
+                transform 0.15s ease,
+                background 0.15s ease,
+                border-color 0.15s ease,
+                box-shadow 0.15s ease,
+                opacity 0.15s ease;
         }
 
         button:hover {
-            filter: brightness(1.12);
+            background:
+                linear-gradient(
+                    180deg,
+                    #2b2b2f,
+                    #1d1d20
+                );
 
-            box-shadow:
-                0 8px 22px rgba(0,0,0,0.35),
-                0 0 18px rgba(77,163,255,0.18),
-                inset 0 1px rgba(255,255,255,0.2);
+            border-color: #414148;
         }
 
         button:active {
@@ -252,18 +326,12 @@
         }
 
         button:disabled {
-            background:
-                linear-gradient(
-                    145deg,
-                    #252b39,
-                    #1c2130
-                );
+            background: #18181b;
+            border-color: #242428;
 
-            color: #657087;
+            color: #5e5e65;
 
-            border-color: rgba(255,255,255,0.04);
-
-            opacity: 0.65;
+            opacity: 0.5;
 
             cursor: not-allowed;
 
@@ -273,184 +341,52 @@
         button.active {
             background:
                 linear-gradient(
-                    145deg,
-                    #ffb347,
-                    #ff7b39
+                    135deg,
+                    #ff8a22,
+                    #ed6500
                 );
 
+            border-color: #ff9b4a;
+
+            color: #fff;
+
             box-shadow:
-                0 0 22px rgba(255,159,67,0.42),
-                inset 0 1px rgba(255,255,255,0.25);
+                0 0 22px rgba(255,114,0,0.38),
+                inset 0 1px 0 rgba(255,255,255,0.18);
         }
 
         button.btn-end {
             background:
                 linear-gradient(
-                    145deg,
-                    #ff5667,
-                    #d82f48
+                    135deg,
+                    #ff453a,
+                    #c92c25
                 );
 
+            border-color: rgba(255,69,58,0.55);
+
             box-shadow:
-                0 7px 20px rgba(255,77,94,0.20),
-                inset 0 1px rgba(255,255,255,0.18);
+                0 5px 20px rgba(255,69,58,0.18);
         }
 
-        /* =========================================================
-           STATYSTYKI
-           ========================================================= */
-
-        .stats-bar {
-            display: grid;
-
-            grid-template-columns:
-                repeat(5, minmax(0, 1fr));
-
-            gap: 6px;
-
-            padding: 8px;
-
+        button.btn-end:hover {
             background:
                 linear-gradient(
-                    145deg,
-                    rgba(20,26,42,0.92),
-                    rgba(11,15,25,0.92)
+                    135deg,
+                    #ff5147,
+                    #d63129
                 );
-
-            border:
-                1px solid var(--border);
-
-            border-radius: var(--radius);
-
-            box-shadow:
-                var(--shadow),
-                inset 0 1px rgba(255,255,255,0.035);
-
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-
-            font-weight: 700;
-            font-size: 0.76rem;
-
-            flex-wrap: wrap;
-            align-items: center;
         }
 
-        .stats-bar > div {
-            min-width: 0;
-
-            padding: 8px 5px;
-
-            text-align: center;
-
-            color: var(--text-secondary);
-
-            border-radius: 10px;
-
-            background:
-                rgba(255,255,255,0.025);
-
-            border:
-                1px solid rgba(255,255,255,0.035);
-
-            white-space: nowrap;
-        }
-
-        .stats-bar span {
-            color: #ffffff !important;
-
-            text-shadow:
-                0 0 10px rgba(255,255,255,0.15);
-        }
-
-        .stats-bar #roundLabel {
-            color: var(--yellow) !important;
-        }
-
-        .stats-bar #totalClearedGame,
-        .stats-bar #diffDisplay {
-            color: var(--orange) !important;
-        }
-
-        .stats-bar #targetBlocks {
-            color: var(--green) !important;
-        }
-
-        .stats-bar #progressPercent {
-            color: var(--blue-bright) !important;
-        }
 
         /* =========================================================
-           PASEK POSTĘPU
-           ========================================================= */
-
-        .progress-container {
-            height: 11px;
-
-            padding: 2px;
-
-            overflow: hidden;
-
-            background:
-                rgba(9,13,22,0.95);
-
-            border:
-                1px solid rgba(255,255,255,0.07);
-
-            border-radius: 99px;
-
-            box-shadow:
-                inset 0 2px 5px rgba(0,0,0,0.55),
-                0 4px 12px rgba(0,0,0,0.18);
-        }
-
-        .progress-bar-fill {
-            position: relative;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #4da3ff,
-                    #7d7cff,
-                    #b66cff
-                );
-
-            height: 100%;
-
-            width: 0%;
-
-            border-radius: 99px;
-
-            transition:
-                width 0.35s cubic-bezier(.22,1,.36,1);
-
-            box-shadow:
-                0 0 12px rgba(77,163,255,0.55),
-                0 0 25px rgba(155,108,255,0.25);
-        }
-
-        .progress-bar-fill::after {
-            content: "";
-
-            position: absolute;
-
-            top: 1px;
-            left: 4px;
-            right: 4px;
-
-            height: 2px;
-
-            border-radius: 99px;
-
-            background:
-                rgba(255,255,255,0.45);
-        }
-
-        /* =========================================================
-           DOLNE PRZYCISKI
+           KONTROLKI
            ========================================================= */
 
         .controls {
+            width: 100%;
+            max-width: 900px;
+
             display: grid;
 
             grid-template-columns:
@@ -460,88 +396,43 @@
         }
 
         .controls button {
-            min-height: 43px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(27,34,54,0.98),
-                    rgba(17,22,36,0.98)
-                );
-
-            border:
-                1px solid rgba(255,255,255,0.08);
-
-            box-shadow:
-                0 7px 18px rgba(0,0,0,0.25),
-                inset 0 1px rgba(255,255,255,0.055);
+            min-height: 48px;
         }
 
-        .controls button:hover {
-            border-color:
-                rgba(77,163,255,0.35);
-
-            box-shadow:
-                0 7px 20px rgba(0,0,0,0.3),
-                0 0 18px rgba(77,163,255,0.12);
-        }
-
-        #btnDisableTimer {
-            color: #67b8ff;
-        }
-
-        #btnHammer {
-            color: #ffbd62;
-        }
-
-        #btnShuffle {
-            color: #b78cff;
-        }
 
         /* =========================================================
            COMBO
            ========================================================= */
 
         .combo-text {
-            height: 26px;
+            height: 28px;
 
-            color: #ffcf4d;
+            color: var(--orange);
 
             font-weight: 900;
 
-            font-size: 1.05rem;
+            font-size: 1rem;
 
             text-align: center;
 
-            letter-spacing: 1px;
+            letter-spacing: 0.08em;
 
             text-shadow:
-                0 0 8px rgba(255,208,77,0.7),
-                0 0 24px rgba(255,159,67,0.45);
+                0 0 15px rgba(255,114,0,0.65);
 
-            animation:
-                comboPulse 0.55s ease-in-out infinite alternate;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            pointer-events: none;
         }
 
-        @keyframes comboPulse {
-            from {
-                transform: scale(1);
-                opacity: 0.8;
-            }
-
-            to {
-                transform: scale(1.04);
-                opacity: 1;
-            }
-        }
 
         /* =========================================================
            PLANSZA
            ========================================================= */
 
         .canvas-container {
-            position: relative;
-
             flex: 1;
 
             width: 100%;
@@ -553,53 +444,39 @@
 
             min-height: 0;
 
-            padding: 4px;
-        }
-
-        .canvas-container::before {
-            content: "";
-
-            position: absolute;
-
-            width: min(90vw, 720px);
-            height: min(90vw, 720px);
-
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(77,163,255,0.08),
-                    transparent 65%
-                );
-
-            filter: blur(25px);
-
-            pointer-events: none;
+            padding: 2px;
         }
 
         canvas {
-            position: relative;
-            z-index: 2;
-
             background:
                 linear-gradient(
                     145deg,
-                    #111827,
-                    #080c15
+                    #18181b,
+                    #101012
                 );
 
-            border-radius: 18px;
+            border-radius: 20px;
 
-            border:
-                1px solid rgba(255,255,255,0.11);
+            border: 1px solid #303035;
 
             box-shadow:
-                0 25px 55px rgba(0,0,0,0.52),
-                0 0 0 1px rgba(0,0,0,0.45),
-                0 0 45px rgba(77,163,255,0.08),
-                inset 0 1px rgba(255,255,255,0.06);
+                0 20px 50px rgba(0,0,0,0.55),
+                0 0 0 1px rgba(255,255,255,0.025),
+                inset 0 1px 0 rgba(255,255,255,0.035);
 
-            image-rendering: auto;
+            max-width: 100%;
+            max-height: 100%;
+
+            transition:
+                box-shadow 0.25s ease;
         }
+
+        canvas:active {
+            box-shadow:
+                0 12px 35px rgba(0,0,0,0.65),
+                0 0 0 1px rgba(255,114,0,0.18);
+        }
+
 
         /* =========================================================
            MODALE
@@ -610,24 +487,24 @@
 
             position: fixed;
 
-            inset: 0;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
 
             background:
-                radial-gradient(
-                    circle at center,
-                    rgba(30,40,70,0.30),
-                    rgba(2,4,9,0.91)
-                );
+                rgba(0,0,0,0.78);
+
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
 
             justify-content: center;
             align-items: center;
 
             z-index: 100;
 
-            padding: 16px;
-
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            padding: 18px;
         }
 
         .modal-content {
@@ -636,32 +513,32 @@
             background:
                 linear-gradient(
                     145deg,
-                    rgba(24,31,49,0.97),
-                    rgba(10,14,24,0.98)
+                    #1c1c20,
+                    #121214
                 );
 
-            padding: 22px;
+            padding: 24px 20px 20px;
 
-            border-radius: 22px;
+            border-radius: 26px;
+
+            border: 1px solid #34343a;
 
             max-width: 500px;
+
             width: 100%;
 
             max-height: 85vh;
 
             overflow-y: auto;
 
-            color: #fff;
+            color: var(--text);
 
             text-align: left;
 
-            border:
-                1px solid rgba(255,255,255,0.10);
-
             box-shadow:
                 0 30px 80px rgba(0,0,0,0.65),
-                0 0 50px rgba(77,163,255,0.08),
-                inset 0 1px rgba(255,255,255,0.06);
+                0 0 0 1px rgba(255,255,255,0.025),
+                inset 0 1px 0 rgba(255,255,255,0.04);
 
             animation:
                 modalIn 0.22s ease-out;
@@ -670,12 +547,12 @@
         @keyframes modalIn {
             from {
                 opacity: 0;
-                transform: scale(0.94) translateY(10px);
+                transform: translateY(15px) scale(0.97);
             }
 
             to {
                 opacity: 1;
-                transform: scale(1) translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
@@ -685,148 +562,157 @@
             position: absolute;
 
             top: 0;
-            left: 12%;
-            right: 12%;
+            left: 50%;
 
-            height: 1px;
+            transform: translateX(-50%);
 
-            background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    rgba(77,163,255,0.8),
-                    transparent
-                );
+            width: 48px;
+            height: 4px;
+
+            border-radius: 10px;
+
+            background: var(--orange);
 
             box-shadow:
-                0 0 14px rgba(77,163,255,0.45);
+                0 0 12px rgba(255,114,0,0.45);
         }
 
         .modal-content h2 {
-            margin-top: 0;
+            margin-top: 4px;
 
-            color: #ffffff;
+            color: var(--text);
 
             text-align: center;
 
-            font-size: 1.35rem;
+            font-size: 1.45rem;
 
-            letter-spacing: -0.3px;
-
-            text-shadow:
-                0 0 18px rgba(77,163,255,0.25);
+            letter-spacing: -0.03em;
         }
 
         .modal-content h3 {
-            color: #65b5ff;
+            color: var(--orange);
 
-            margin-bottom: 5px;
+            margin-top: 22px;
+            margin-bottom: 8px;
 
             font-size: 0.95rem;
         }
 
         .modal-content ul {
             padding-left: 20px;
+
             margin-top: 5px;
         }
 
         .modal-content li {
-            margin-bottom: 8px;
+            margin-bottom: 9px;
 
-            font-size: 0.88rem;
-
-            color: #b7c0d2;
+            font-size: 0.9rem;
 
             line-height: 1.45;
+
+            color: #c7c7cd;
         }
 
         .modal-content strong {
-            color: #ffffff;
-        }
-
-        .modal-content em {
-            color: #b991ff;
+            color: #fff;
         }
 
         .close-btn {
             background:
                 linear-gradient(
-                    145deg,
-                    #4da3ff,
-                    #376fe4
+                    135deg,
+                    var(--orange-light),
+                    var(--orange-dark)
                 );
 
             margin-top: 15px;
 
             width: 100%;
 
-            padding: 11px;
+            padding: 12px;
 
-            border-radius: 12px;
+            min-height: 48px;
+
+            border-radius: 15px;
 
             font-weight: 800;
 
+            border: 1px solid rgba(255,160,90,0.35);
+
             box-shadow:
-                0 8px 20px rgba(77,163,255,0.18);
+                0 8px 25px rgba(255,114,0,0.18);
+        }
+
+        .close-btn:hover {
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff9238,
+                    #e96800
+                );
         }
 
         .modal-text {
             font-size: 1rem;
 
-            line-height: 1.5;
+            line-height: 1.55;
 
             white-space: pre-line;
 
-            margin: 15px 0;
+            margin: 18px 0;
 
             text-align: center;
 
-            color: #c3cada;
+            color: #c9c9ce;
         }
 
         .version-badge {
             text-align: center;
 
-            font-size: 0.76rem;
+            font-size: 0.75rem;
 
-            color: #68748d;
+            color: var(--text-muted);
 
-            margin-top: -10px;
-
+            margin-top: -8px;
             margin-bottom: 18px;
 
-            letter-spacing: 1px;
+            letter-spacing: 0.08em;
         }
 
         ol {
-            padding-left: 20px;
+            padding-left: 24px;
+
             text-align: left;
         }
 
         ol li {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
 
-            color: #b9c2d4;
+            color: #d2d2d7;
         }
 
+        ol li strong {
+            color: #fff;
+        }
+
+
         /* =========================================================
-           INPUT
+           POLE IMIENIA
            ========================================================= */
 
         .name-input {
             width: 100%;
 
-            padding: 13px 14px;
+            padding: 14px 16px;
 
             margin: 15px 0;
 
-            border-radius: 12px;
+            border-radius: 15px;
 
-            border:
-                1px solid rgba(77,163,255,0.35);
+            border: 1px solid #37373d;
 
-            background:
-                rgba(4,8,15,0.8);
+            background: #101012;
 
             color: white;
 
@@ -842,229 +728,221 @@
             -webkit-user-select: text;
 
             box-shadow:
-                inset 0 2px 8px rgba(0,0,0,0.35);
+                inset 0 2px 6px rgba(0,0,0,0.35);
 
             transition:
-                border-color 0.2s,
-                box-shadow 0.2s;
-        }
-
-        .name-input:focus {
-            border-color: #4da3ff;
-
-            box-shadow:
-                0 0 0 3px rgba(77,163,255,0.10),
-                0 0 20px rgba(77,163,255,0.10);
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
         }
 
         .name-input::placeholder {
-            color: #59657c;
+            color: #66666e;
+        }
+
+        .name-input:focus {
+            border-color: var(--orange);
+
+            box-shadow:
+                0 0 0 3px rgba(255,114,0,0.12),
+                inset 0 2px 6px rgba(0,0,0,0.35);
         }
 
         .infinity-icon {
-            color: #ffbd4d;
+            color: var(--orange);
 
             font-weight: bold;
 
             margin-left: 4px;
 
             text-shadow:
-                0 0 10px rgba(255,189,77,0.6);
+                0 0 8px rgba(255,114,0,0.45);
         }
+
 
         /* =========================================================
-           SCROLLBAR W MODALACH
+           DROBNE EFEKTY
            ========================================================= */
 
-        .modal-content::-webkit-scrollbar {
-            width: 6px;
+        ::-webkit-scrollbar {
+            width: 5px;
         }
 
-        .modal-content::-webkit-scrollbar-track {
+        ::-webkit-scrollbar-track {
             background: transparent;
         }
 
-        .modal-content::-webkit-scrollbar-thumb {
-            background:
-                rgba(255,255,255,0.15);
+        ::-webkit-scrollbar-thumb {
+            background: #3a3a40;
 
-            border-radius: 99px;
+            border-radius: 10px;
         }
 
+        ::-webkit-scrollbar-thumb:hover {
+            background: #505057;
+        }
+
+
         /* =========================================================
-           RESPONSYWNOŚĆ
+           TELEFONY
            ========================================================= */
 
-        @media (max-width: 700px) {
+        @media (max-width: 600px) {
 
             #app-container {
                 padding:
-                    6px
-                    7px
-                    max(6px, env(safe-area-inset-bottom))
-                    7px;
+                    max(8px, env(safe-area-inset-top))
+                    8px
+                    max(8px, env(safe-area-inset-bottom))
+                    8px;
 
-                gap: 6px;
+                gap: 7px;
             }
 
             .header {
-                gap: 5px;
-                padding: 5px;
-
-                border-radius: 15px;
+                gap: 6px;
             }
 
             .header button {
-                min-height: 38px;
+                min-height: 42px;
 
-                padding:
-                    7px 5px;
+                padding: 8px 7px;
 
-                font-size: 0.73rem;
+                border-radius: 13px;
 
-                border-radius: 10px;
+                font-size: 0.72rem;
             }
 
             .stats-bar {
                 grid-template-columns:
                     repeat(3, 1fr);
 
-                gap: 4px;
+                gap: 5px;
 
                 padding: 5px;
 
-                border-radius: 14px;
-
-                font-size: 0.68rem;
+                border-radius: 16px;
             }
 
             .stats-bar > div {
-                padding: 6px 3px;
+                padding: 7px 3px;
 
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            .progress-container {
-                height: 9px;
-            }
-
-            .controls {
-                gap: 5px;
-            }
-
-            .controls button {
-                min-height: 40px;
-
-                padding: 7px 4px;
-
-                font-size: 0.72rem;
+                font-size: 0.68rem;
 
                 border-radius: 10px;
             }
 
+            .stats-bar > div:nth-child(4) {
+                grid-column: span 1;
+            }
+
+            .stats-bar > div:nth-child(5) {
+                grid-column: span 2;
+            }
+
+            .controls {
+                gap: 6px;
+            }
+
+            .controls button {
+                min-height: 45px;
+
+                padding: 8px 5px;
+
+                border-radius: 13px;
+
+                font-size: 0.72rem;
+            }
+
             .combo-text {
-                height: 22px;
+                height: 24px;
 
                 font-size: 0.9rem;
             }
 
             canvas {
-                border-radius: 15px;
+                border-radius: 18px;
             }
 
             .modal {
-                padding: 10px;
+                padding: 12px;
             }
 
             .modal-content {
-                padding: 18px;
+                padding: 23px 17px 17px;
 
-                border-radius: 19px;
+                border-radius: 23px;
+
+                max-height: 88vh;
+            }
+
+            .modal-content h2 {
+                font-size: 1.25rem;
+            }
+
+            .modal-content h3 {
+                font-size: 0.9rem;
+            }
+
+            .modal-content li {
+                font-size: 0.83rem;
             }
         }
 
-        @media (max-width: 430px) {
 
-            .header button {
-                font-size: 0.67rem;
-            }
+        /* =========================================================
+           BARDZO MAŁE EKRANY
+           ========================================================= */
 
-            .stats-bar {
-                font-size: 0.62rem;
-            }
-
-            .controls button {
-                font-size: 0.67rem;
-            }
-        }
-
-        @media (max-height: 650px) {
+        @media (max-width: 380px) {
 
             #app-container {
-                gap: 4px;
+                gap: 5px;
             }
 
             .header button {
-                min-height: 34px;
-                padding: 5px;
-            }
+                font-size: 0.66rem;
 
-            .stats-bar {
-                padding: 4px;
+                padding-left: 5px;
+                padding-right: 5px;
             }
 
             .stats-bar > div {
-                padding: 5px 3px;
+                font-size: 0.61rem;
             }
 
             .controls button {
-                min-height: 35px;
-            }
+                font-size: 0.65rem;
 
-            .combo-text {
-                height: 18px;
+                min-height: 42px;
             }
         }
+
 
         /* =========================================================
-           DELIKATNY EFEKT WEJŚCIA
+           SZERSZE EKRANY
            ========================================================= */
 
-        .header,
-        .stats-bar,
-        .progress-container,
-        .controls,
-        .canvas-container {
-            animation:
-                interfaceAppear 0.45s ease-out both;
-        }
+        @media (min-width: 800px) {
 
-        .stats-bar {
-            animation-delay: 0.04s;
-        }
-
-        .progress-container {
-            animation-delay: 0.08s;
-        }
-
-        .controls {
-            animation-delay: 0.12s;
-        }
-
-        .canvas-container {
-            animation-delay: 0.16s;
-        }
-
-        @keyframes interfaceAppear {
-            from {
-                opacity: 0;
-                transform: translateY(6px);
+            #app-container {
+                padding: 16px;
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .header,
+            .stats-bar,
+            .controls,
+            .progress-container {
+                max-width: 1000px;
+            }
+
+            button {
+                min-height: 48px;
+
+                font-size: 0.88rem;
+            }
+
+            .stats-bar {
+                font-size: 0.82rem;
             }
         }
     </style>
@@ -1072,354 +950,411 @@
 
 <body>
 
-<div id="app-container">
+    <div id="app-container">
 
-    <!-- HEADER -->
-    <div class="header">
+        <div class="header">
 
-        <button
-            id="btnGameAction"
-            class="btn-end"
-            onclick="handleGameAction()">
-            🔴 Zakończ grę
-        </button>
+            <button
+                id="btnGameAction"
+                class="btn-end"
+                onclick="handleGameAction()">
+                🔴 Zakończ grę
+            </button>
 
-        <button onclick="showInfo()">
-            ℹ️ Instrukcja
-        </button>
+            <button onclick="showInfo()">
+                ℹ️ Instrukcja
+            </button>
 
-        <button onclick="showHighScores()">
-            🏆 Wyniki
-        </button>
+            <button onclick="showHighScores()">
+                🏆 Wyniki
+            </button>
 
-    </div>
-
-
-    <!-- STATYSTYKI -->
-    <div class="stats-bar">
-
-        <div>
-            🚩 Runda:
-            <span id="roundLabel" style="color:#FFD60A;">1</span>
         </div>
 
-        <div>
-            ⏱️
-            <span id="timer">180</span>
+
+        <div class="stats-bar">
+
+            <div>
+                🚩 Runda:
+                <span id="roundLabel" style="color:#FFD60A;">
+                    1
+                </span>
+            </div>
+
+            <div>
+                ⏱️
+                <span id="timer">
+                    180
+                </span>
+            </div>
+
+            <div>
+                📦 Łącznie:
+                <span id="totalClearedGame" style="color:#FF9F0A;">
+                    0
+                </span>
+            </div>
+
+            <div>
+                Poziom:
+                <span id="diffDisplay" style="color:#FF9F0A;">
+                    🟢 Bardzo Łatwy
+                </span>
+            </div>
+
+            <div>
+                🎯 Zbite:
+                <span id="clearedCount">
+                    0
+                </span>
+                /
+                <span id="targetBlocks" style="color:#30D158;">
+                    0
+                </span>
+                (
+                <span id="progressPercent" style="color:#0A84FF;">
+                    0%
+                </span>
+                )
+            </div>
+
         </div>
 
-        <div>
-            📦 Łącznie:
-            <span id="totalClearedGame" style="color:#FF9F0A;">0</span>
+
+        <div class="progress-container">
+
+            <div
+                id="progressBarFill"
+                class="progress-bar-fill">
+            </div>
+
         </div>
 
-        <div>
-            Poziom:
-            <span id="diffDisplay" style="color:#FF9F0A;">
-                🟢 Bardzo Łatwy
-            </span>
+
+        <div class="controls">
+
+            <button
+                id="btnDisableTimer"
+                onclick="disableTimerLifeline()">
+                ⏱️ Wyłącz czas
+            </button>
+
+            <button
+                id="btnHammer"
+                onclick="toggleHammer()">
+                🔨 Młotek
+            </button>
+
+            <button
+                id="btnShuffle"
+                onclick="triggerShuffle()">
+                🔀 Mieszaj
+            </button>
+
         </div>
 
-        <div>
-            🎯 Zbite:
-            <span id="clearedCount">0</span>
-            /
-            <span id="targetBlocks" style="color:#30D158;">0</span>
-            (
-            <span id="progressPercent" style="color:#0A84FF;">0%</span>
-            )
-        </div>
-
-    </div>
-
-
-    <!-- PROGRESS -->
-    <div class="progress-container">
-        <div
-            id="progressBarFill"
-            class="progress-bar-fill">
-        </div>
-    </div>
-
-
-    <!-- CONTROLS -->
-    <div class="controls">
-
-        <button
-            id="btnDisableTimer"
-            onclick="disableTimerLifeline()">
-            ⏱️ Wyłącz czas
-        </button>
-
-        <button
-            id="btnHammer"
-            onclick="toggleHammer()">
-            🔨 Młotek
-        </button>
-
-        <button
-            id="btnShuffle"
-            onclick="triggerShuffle()">
-            🔀 Mieszaj
-        </button>
-
-    </div>
-
-
-    <!-- COMBO -->
-    <div
-        class="combo-text"
-        id="comboLabel">
-    </div>
-
-
-    <!-- GAME BOARD -->
-    <div class="canvas-container">
-        <canvas id="gameCanvas"></canvas>
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     INSTRUKCJA
-     ========================================================= -->
-
-<div id="infoModal" class="modal">
-
-    <div class="modal-content">
-
-        <h2>📖 Instrukcja obsługi gry</h2>
-
-        <div class="version-badge">
-            Wersja 1.2.0
-        </div>
-
-        <h3>1. Zasady rozgrywki i cel gry</h3>
-
-        <ul>
-            <li>
-                <strong>Główne zadanie:</strong>
-                Klikaj w grupy co najmniej
-                <strong>2 połączonych ze sobą kostek</strong>
-                tego samego koloru
-                (w pionie lub poziomie),
-                aby usunąć je z planszy.
-            </li>
-
-            <li>
-                <strong>Awans do kolejnej rundy:</strong>
-                Musisz wyczyścić co najmniej
-                <strong>90% klocków</strong>
-                z obecnej planszy.
-                Wywoła to
-                <em>Złoty Wstrząs</em>.
-            </li>
-
-            <li>
-                <strong>Koniec gry:</strong>
-                Gra kończy się,
-                gdy upłynie limit czasu
-                lub gdy na planszy zabraknie
-                możliwych ruchów,
-                a cel 90% nie został osiągnięty.
-            </li>
-        </ul>
-
-
-        <h3>2. Poziomy trudności i grawitacja</h3>
-
-        <ul>
-            <li>
-                <strong>Wzrost trudności:</strong>
-                Z każdą nową rundą
-                na planszy pojawia się więcej kolorów
-                (od 3 kolorów w Rundach 1–2
-                do 7 kolorów w najwyższych rundach).
-            </li>
-
-            <li>
-                <strong>Fizyka klocków:</strong>
-                Po usunięciu grupy,
-                klocki znajdujące się wyżej
-                opadają w dół.
-            </li>
-        </ul>
-
-
-        <h3>3. Punktacja i Combo</h3>
-
-        <ul>
-            <li>
-                Za każdą zbitą kostkę otrzymujesz
-                <strong>1 punkt</strong>.
-            </li>
-
-            <li>
-                Zbijanie dużych grup klocków
-                (od 8 w górę)
-                aktywuje specjalną premię wizualną
-                <strong>🔥 COMBO!</strong>
-            </li>
-        </ul>
-
-
-        <h3>4. Ułatwienia i koła ratunkowe</h3>
-
-        <ul>
-            <li>
-                ⏱️ <strong>Wyłącz czas:</strong>
-                Zatrzymuje i wyłącza odliczanie zegara.
-            </li>
-
-            <li>
-                🔨 <strong>Młotek:</strong>
-                Pozwala zniszczyć jedną pojedynczą,
-                wybraną kostkę.
-            </li>
-
-            <li>
-                🔀 <strong>Mieszaj:</strong>
-                Przemieszcza losowo układ
-                wszystkich pozostałych klocków.
-            </li>
-        </ul>
-
-
-        <button
-            class="close-btn"
-            style="background:linear-gradient(145deg,#ff5667,#d82f48);"
-            onclick="closeModal('infoModal')">
-            Zamknij instrukcję
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     WYNIKI
-     ========================================================= -->
-
-<div id="scoresModal" class="modal">
-
-    <div
-        class="modal-content"
-        style="text-align:center;">
-
-        <h2>🏆 Najlepsze wyniki</h2>
-
-        <ol id="highScoresList">
-            <li>Brak wyników</li>
-        </ol>
-
-        <button
-            class="close-btn"
-            style="background:linear-gradient(145deg,#ff5667,#d82f48);"
-            onclick="closeModal('scoresModal')">
-            Zamknij
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     KOMUNIKAT
-     ========================================================= -->
-
-<div id="messageModal" class="modal">
-
-    <div
-        class="modal-content"
-        style="text-align:center;">
-
-        <h2 id="msgModalTitle">
-            Komunikat
-        </h2>
 
         <div
-            id="msgModalText"
-            class="modal-text">
+            class="combo-text"
+            id="comboLabel">
         </div>
 
-        <button
-            class="close-btn"
-            onclick="closeModal('messageModal')">
-            OK
-        </button>
+
+        <div class="canvas-container">
+
+            <canvas id="gameCanvas"></canvas>
+
+        </div>
 
     </div>
 
-</div>
+
+    <!-- =========================================================
+         INSTRUKCJA
+         ========================================================= -->
+
+    <div id="infoModal" class="modal">
+
+        <div class="modal-content">
+
+            <h2>
+                📖 Instrukcja obsługi gry
+            </h2>
+
+            <div class="version-badge">
+                Wersja 1.2.0
+            </div>
 
 
-<!-- =========================================================
-     GAME OVER
-     ========================================================= -->
+            <h3>
+                1. Zasady rozgrywki i cel gry
+            </h3>
 
-<div id="gameOverModal" class="modal">
+            <ul>
 
-    <div
-        class="modal-content"
-        style="text-align:center;">
+                <li>
+                    <strong>Główne zadanie:</strong>
+                    Klikaj w grupy co najmniej
+                    <strong>2 połączonych ze sobą kostek</strong>
+                    tego samego koloru
+                    (w pionie lub poziomie),
+                    aby usunąć je z planszy.
+                </li>
 
-        <h2>🏁 Koniec gry!</h2>
+                <li>
+                    <strong>Awans do kolejnej rundy:</strong>
+                    Musisz wyczyścić co najmniej
+                    <strong>90% klocków</strong>
+                    z obecnej planszy.
+                    Wywoła to
+                    <em>Złoty Wstrząs</em>
+                    – wolne miejsca zostaną uzupełnione
+                    nowymi klockami,
+                    a istniejące pozostaną na swoich miejscach.
+                </li>
 
-        <div
-            id="gameOverReason"
-            class="modal-text">
+                <li>
+                    <strong>Koniec gry:</strong>
+                    Gra kończy się,
+                    gdy upłynie limit czasu
+                    lub gdy na planszy zabraknie
+                    możliwych ruchów,
+                    a cel 90% nie został jeszcze osiągnięty.
+                </li>
+
+            </ul>
+
+
+            <h3>
+                2. Poziomy trudności i grawitacja
+            </h3>
+
+            <ul>
+
+                <li>
+                    <strong>Wzrost trudności:</strong>
+                    Z każdą nową rundą na planszy
+                    pojawia się więcej kolorów
+                    (od 3 kolorów w Rundach 1–2
+                    do 7 kolorów w najwyższych rundach).
+                </li>
+
+                <li>
+                    <strong>Fizyka klocków:</strong>
+                    Po usunięciu grupy,
+                    klocki znajdujące się wyżej
+                    opadają w dół.
+                    Gdy cała pionowa kolumna zostanie
+                    opróżniona,
+                    pozostałe kolumny zsuwają się
+                    do lewej strony.
+                </li>
+
+            </ul>
+
+
+            <h3>
+                3. Punktacja i Combo
+            </h3>
+
+            <ul>
+
+                <li>
+                    Za każdą zbitą kostkę
+                    otrzymujesz
+                    <strong>1 punkt</strong>.
+                </li>
+
+                <li>
+                    Zbijanie dużych grup klocków
+                    (od 8 w górę)
+                    aktywuje specjalną premię wizualną
+                    <strong>🔥 COMBO!</strong>
+                </li>
+
+            </ul>
+
+
+            <h3>
+                4. Ułatwienia i koła ratunkowe
+                (jednorazowe)
+            </h3>
+
+            <ul>
+
+                <li>
+                    ⏱️
+                    <strong>Wyłącz czas:</strong>
+                    Zatrzymuje i wyłącza odliczanie zegara,
+                    pozwalając na spokojną rozgrywkę
+                    bez stresu.
+                    Użycie tego koła dodaje symbol
+                    <strong>∞</strong>
+                    przy Twoim wyniku
+                    w tabeli TOP 10.
+                </li>
+
+                <li>
+                    🔨
+                    <strong>Młotek:</strong>
+                    Pozwala zniszczyć jedną pojedynczą,
+                    wybraną kostkę,
+                    która blokuje układ.
+                    Kliknij przycisk Młotka,
+                    a następnie w wybraną kostkę.
+                </li>
+
+                <li>
+                    🔀
+                    <strong>Mieszaj:</strong>
+                    Przemieszcza losowo układ
+                    wszystkich pozostałych
+                    na planszy,
+                    gdy zabraknie pasujących układów.
+                </li>
+
+            </ul>
+
+
+            <button
+                class="close-btn"
+                style="background:#FF453A;"
+                onclick="closeModal('infoModal')">
+                Zamknij instrukcję
+            </button>
+
         </div>
-
-        <div
-            style="
-                font-size:1.2rem;
-                font-weight:bold;
-                color:#ffbd4d;
-                margin-bottom:10px;
-                text-shadow:0 0 15px rgba(255,189,77,0.3);
-            ">
-
-            Twój wynik:
-            <span id="finalScoreDisplay">0</span>
-            pkt
-
-        </div>
-
-
-        <input
-            type="text"
-            id="playerNameInput"
-            class="name-input"
-            placeholder="Wpisz swoje imię..."
-            maxlength="20">
-
-
-        <button
-            class="close-btn"
-            style="
-                background:linear-gradient(145deg,#38e58c,#19b96c);
-                color:#04140b;
-                font-weight:bold;
-            "
-            onclick="saveScoreAndClose()">
-
-            💾 Zapisz wynik
-
-        </button>
 
     </div>
 
-</div>
+
+    <!-- =========================================================
+         WYNIKI
+         ========================================================= -->
+
+    <div id="scoresModal" class="modal">
+
+        <div
+            class="modal-content"
+            style="text-align:center;">
+
+            <h2>
+                🏆 Najlepsze wyniki (TOP 10)
+            </h2>
+
+            <ol id="highScoresList">
+
+                <li>
+                    Brak wyników
+                </li>
+
+            </ol>
+
+            <button
+                class="close-btn"
+                style="background:#FF453A;"
+                onclick="closeModal('scoresModal')">
+                Zamknij
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         KOMUNIKAT
+         ========================================================= -->
+
+    <div id="messageModal" class="modal">
+
+        <div
+            class="modal-content"
+            style="text-align:center;">
+
+            <h2 id="msgModalTitle">
+                Komunikat
+            </h2>
+
+            <div
+                id="msgModalText"
+                class="modal-text">
+            </div>
+
+            <button
+                class="close-btn"
+                onclick="closeModal('messageModal')">
+                OK
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         KONIEC GRY
+         ========================================================= -->
+
+    <div id="gameOverModal" class="modal">
+
+        <div
+            class="modal-content"
+            style="text-align:center;">
+
+            <h2>
+                🏁 Koniec gry!
+            </h2>
+
+            <div
+                id="gameOverReason"
+                class="modal-text">
+            </div>
+
+            <div
+                style="
+                    font-size:1.2rem;
+                    font-weight:bold;
+                    color:#FF9F0A;
+                    margin-bottom:10px;
+                ">
+
+                Twój wynik:
+                <span id="finalScoreDisplay">
+                    0
+                </span>
+                pkt
+
+            </div>
+
+
+            <input
+                type="text"
+                id="playerNameInput"
+                class="name-input"
+                placeholder="Wpisz swoje imię..."
+                maxlength="20">
+
+
+            <button
+                class="close-btn"
+                style="
+                    background:#30D158;
+                    color:black;
+                    font-weight:bold;
+                "
+                onclick="saveScoreAndClose()">
+
+                💾 Zapisz wynik
+
+            </button>
+
+        </div>
+
+    </div>
 
 
 <script>
-
-    /* =========================================================
-       MECHANIKA GRY
-       ========================================================= */
 
     const PALETTE = [
         "#1E88E5",
@@ -1465,15 +1400,14 @@
         canvas.getContext("2d");
 
 
-    /* =========================================================
-       USTALANIE TRUDNOŚCI
-       ========================================================= */
-
     function getColorsForRound(round) {
 
         if (round <= 2) return 3;
+
         if (round <= 4) return 4;
+
         if (round <= 6) return 5;
+
         if (round <= 8) return 6;
 
         return 7;
@@ -1498,14 +1432,12 @@
     }
 
 
-    /* =========================================================
-       ROZMIAR PLANSZY
-       ========================================================= */
-
     function calculateGridDimensions() {
 
         const container =
-            document.querySelector(".canvas-container");
+            document.querySelector(
+                '.canvas-container'
+            );
 
         const availableWidth =
             container.clientWidth;
@@ -1518,28 +1450,33 @@
                 ? 32
                 : 40;
 
-        COLS = Math.max(
-            8,
-            Math.floor(
-                availableWidth / targetCellSize
-            )
-        );
+        COLS =
+            Math.max(
+                8,
+                Math.floor(
+                    availableWidth /
+                    targetCellSize
+                )
+            );
 
-        ROWS = Math.max(
-            10,
-            Math.floor(
-                availableHeight / targetCellSize
-            )
-        );
+        ROWS =
+            Math.max(
+                10,
+                Math.floor(
+                    availableHeight /
+                    targetCellSize
+                )
+            );
 
-        cellSize = Math.min(
-            Math.floor(
-                availableWidth / COLS
-            ),
-            Math.floor(
-                availableHeight / ROWS
-            )
-        );
+        cellSize =
+            Math.min(
+                Math.floor(
+                    availableWidth / COLS
+                ),
+                Math.floor(
+                    availableHeight / ROWS
+                )
+            );
 
         canvas.width =
             COLS * cellSize;
@@ -1549,15 +1486,12 @@
     }
 
 
-    /* =========================================================
-       GRA
-       ========================================================= */
-
     function handleGameAction() {
 
         if (gameActive)
-            endGame("Gra zakończona przez gracza.");
-
+            endGame(
+                "Gra zakończona przez gracza."
+            );
         else
             newGame();
     }
@@ -1618,8 +1552,7 @@
         btnTimer.innerText =
             "⏱️ Wyłącz czas";
 
-        btnTimer.disabled =
-            false;
+        btnTimer.disabled = false;
 
 
         const btnHammer =
@@ -1634,8 +1567,7 @@
             "active"
         );
 
-        btnHammer.disabled =
-            false;
+        btnHammer.disabled = false;
 
 
         document.getElementById(
@@ -1671,7 +1603,9 @@
 
         document.getElementById(
             "btnHammer"
-        ).classList.remove("active");
+        ).classList.remove(
+            "active"
+        );
 
         calculateGridDimensions();
 
@@ -1683,7 +1617,8 @@
 
         showMessageModal(
             "✨ ZŁOTY WSTRZĄS!",
-            `Przechodzisz do RUNDY ${currentRound}!\n(${getDifficultyLabel(currentRound)})`
+            `Przechodzisz do RUNDY ${currentRound}!
+(${getDifficultyLabel(currentRound)})`
         );
     }
 
@@ -1698,11 +1633,20 @@
         gridData = [];
 
 
-        for (let r = 0; r < ROWS; r++) {
+        for (
+            let r = 0;
+            r < ROWS;
+            r++
+        ) {
 
             gridData[r] = [];
 
-            for (let c = 0; c < COLS; c++) {
+
+            for (
+                let c = 0;
+                c < COLS;
+                c++
+            ) {
 
                 gridData[r][c] =
                     PALETTE[
@@ -1735,13 +1679,21 @@
             );
 
 
-        for (let r = 0; r < ROWS; r++) {
+        for (
+            let r = 0;
+            r < ROWS;
+            r++
+        ) {
 
             if (!gridData[r])
                 gridData[r] = [];
 
 
-            for (let c = 0; c < COLS; c++) {
+            for (
+                let c = 0;
+                c < COLS;
+                c++
+            ) {
 
                 if (!gridData[r][c]) {
 
@@ -1769,10 +1721,6 @@
     }
 
 
-    /* =========================================================
-       UI
-       ========================================================= */
-
     function updateUI() {
 
         document.getElementById(
@@ -1780,15 +1728,18 @@
         ).innerText =
             roundClearedBlocks;
 
+
         document.getElementById(
             "targetBlocks"
         ).innerText =
             targetBlocks;
 
+
         document.getElementById(
             "roundLabel"
         ).innerText =
             currentRound;
+
 
         document.getElementById(
             "diffDisplay"
@@ -1796,6 +1747,7 @@
             getDifficultyLabel(
                 currentRound
             );
+
 
         document.getElementById(
             "totalClearedGame"
@@ -1818,6 +1770,7 @@
             document.getElementById(
                 "progressPercent"
             );
+
 
         percentLabel.innerText =
             currentPercentBoard + "%";
@@ -1849,8 +1802,8 @@
 
         percentLabel.style.color =
             currentPercentBoard >= 90
-                ? "#38e58c"
-                : "#62b4ff";
+                ? "#30D158"
+                : "#0A84FF";
 
 
         updateTimerDisplay();
@@ -1883,7 +1836,10 @@
 
         usedTimerLifeline = true;
 
-        clearInterval(timerInterval);
+
+        clearInterval(
+            timerInterval
+        );
 
 
         document.getElementById(
@@ -1895,11 +1851,6 @@
     }
 
 
-    /* =========================================================
-       RYSOWANIE PLANSZY
-       TYLKO WARSTWA WIZUALNA
-       ========================================================= */
-
     function drawBoard() {
 
         ctx.clearRect(
@@ -1910,391 +1861,49 @@
         );
 
 
-        /*
-         * Tło planszy
-         */
+        for (
+            let r = 0;
+            r < ROWS;
+            r++
+        ) {
 
-        const boardGradient =
-            ctx.createLinearGradient(
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
+            for (
+                let c = 0;
+                c < COLS;
+                c++
+            ) {
 
-        boardGradient.addColorStop(
-            0,
-            "#111a2b"
-        );
-
-        boardGradient.addColorStop(
-            1,
-            "#080d18"
-        );
-
-        ctx.fillStyle =
-            boardGradient;
-
-        ctx.fillRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
-
-        /*
-         * Kostki
-         */
-
-        const gap =
-            Math.max(
-                2,
-                Math.floor(
-                    cellSize * 0.075
-                )
-            );
-
-        const radius =
-            Math.max(
-                3,
-                Math.floor(
-                    cellSize * 0.16
-                )
-            );
-
-
-        for (let r = 0; r < ROWS; r++) {
-
-            for (let c = 0; c < COLS; c++) {
-
-                const color =
+                if (
                     gridData[r] &&
-                    gridData[r][c];
-
-
-                const x =
-                    c * cellSize + gap;
-
-                const y =
-                    r * cellSize + gap;
-
-                const size =
-                    cellSize - gap * 2;
-
-
-                if (color) {
-
-                    /*
-                     * Cień
-                     */
-
-                    ctx.save();
-
-                    ctx.shadowColor =
-                        color;
-
-                    ctx.shadowBlur =
-                        Math.max(
-                            4,
-                            cellSize * 0.16
-                        );
-
-                    ctx.shadowOffsetY =
-                        2;
-
-
-                    /*
-                     * Główny gradient
-                     */
-
-                    const gradient =
-                        ctx.createLinearGradient(
-                            x,
-                            y,
-                            x + size,
-                            y + size
-                        );
-
-
-                    gradient.addColorStop(
-                        0,
-                        lightenColor(
-                            color,
-                            32
-                        )
-                    );
-
-                    gradient.addColorStop(
-                        0.35,
-                        color
-                    );
-
-                    gradient.addColorStop(
-                        1,
-                        darkenColor(
-                            color,
-                            28
-                        )
-                    );
-
+                    gridData[r][c]
+                ) {
 
                     ctx.fillStyle =
-                        gradient;
+                        gridData[r][c];
 
-
-                    roundRect(
-                        ctx,
-                        x,
-                        y,
-                        size,
-                        size,
-                        radius
+                    ctx.fillRect(
+                        c * cellSize,
+                        r * cellSize,
+                        cellSize - 1,
+                        cellSize - 1
                     );
-
-                    ctx.fill();
-
-
-                    /*
-                     * Obramowanie
-                     */
-
-                    ctx.shadowBlur = 0;
-
-                    ctx.strokeStyle =
-                        "rgba(255,255,255,0.28)";
-
-                    ctx.lineWidth = 1;
-
-                    roundRect(
-                        ctx,
-                        x + 0.5,
-                        y + 0.5,
-                        size - 1,
-                        size - 1,
-                        radius
-                    );
-
-                    ctx.stroke();
-
-
-                    /*
-                     * Refleks świetlny
-                     */
-
-                    const highlight =
-                        ctx.createLinearGradient(
-                            x,
-                            y,
-                            x,
-                            y + size
-                        );
-
-                    highlight.addColorStop(
-                        0,
-                        "rgba(255,255,255,0.28)"
-                    );
-
-                    highlight.addColorStop(
-                        0.25,
-                        "rgba(255,255,255,0.07)"
-                    );
-
-                    highlight.addColorStop(
-                        0.5,
-                        "rgba(255,255,255,0)"
-                    );
-
-
-                    ctx.fillStyle =
-                        highlight;
-
-                    roundRect(
-                        ctx,
-                        x + 1,
-                        y + 1,
-                        size - 2,
-                        size - 2,
-                        Math.max(
-                            2,
-                            radius - 1
-                        )
-                    );
-
-                    ctx.fill();
-
-
-                    ctx.restore();
 
                 } else {
 
-                    /*
-                     * Puste miejsce
-                     */
-
                     ctx.fillStyle =
-                        "rgba(255,255,255,0.012)";
+                        "#1E1E1E";
 
-                    roundRect(
-                        ctx,
-                        x,
-                        y,
-                        size,
-                        size,
-                        radius
+                    ctx.fillRect(
+                        c * cellSize,
+                        r * cellSize,
+                        cellSize - 1,
+                        cellSize - 1
                     );
-
-                    ctx.fill();
                 }
             }
         }
     }
 
-
-    /*
-     * Zaokrąglony prostokąt
-     */
-
-    function roundRect(
-        context,
-        x,
-        y,
-        width,
-        height,
-        radius
-    ) {
-
-        const r =
-            Math.min(
-                radius,
-                width / 2,
-                height / 2
-            );
-
-        context.beginPath();
-
-        context.moveTo(
-            x + r,
-            y
-        );
-
-        context.arcTo(
-            x + width,
-            y,
-            x + width,
-            y + height,
-            r
-        );
-
-        context.arcTo(
-            x + width,
-            y + height,
-            x,
-            y + height,
-            r
-        );
-
-        context.arcTo(
-            x,
-            y + height,
-            x,
-            y,
-            r
-        );
-
-        context.arcTo(
-            x,
-            y,
-            x + width,
-            y,
-            r
-        );
-
-        context.closePath();
-    }
-
-
-    /*
-     * Rozjaśnianie koloru
-     */
-
-    function lightenColor(
-        hex,
-        amount
-    ) {
-
-        let num =
-            parseInt(
-                hex.replace("#", ""),
-                16
-            );
-
-        let r =
-            Math.min(
-                255,
-                (num >> 16) + amount
-            );
-
-        let g =
-            Math.min(
-                255,
-                ((num >> 8) & 0x00FF) +
-                amount
-            );
-
-        let b =
-            Math.min(
-                255,
-                (num & 0x0000FF) +
-                amount
-            );
-
-        return `rgb(${r},${g},${b})`;
-    }
-
-
-    /*
-     * Przyciemnianie koloru
-     */
-
-    function darkenColor(
-        hex,
-        amount
-    ) {
-
-        let num =
-            parseInt(
-                hex.replace("#", ""),
-                16
-            );
-
-        let r =
-            Math.max(
-                0,
-                (num >> 16) - amount
-            );
-
-        let g =
-            Math.max(
-                0,
-                ((num >> 8) & 0x00FF) -
-                amount
-            );
-
-        let b =
-            Math.max(
-                0,
-                (num & 0x0000FF) -
-                amount
-            );
-
-        return `rgb(${r},${g},${b})`;
-    }
-
-
-    /* =========================================================
-       TIMER
-       ========================================================= */
 
     function updateTimer() {
 
@@ -2314,10 +1923,6 @@
             endGame("Czas minął!");
     }
 
-
-    /* =========================================================
-       KLIKANIE KOSTEK
-       ========================================================= */
 
     canvas.addEventListener(
         "click",
@@ -2365,7 +1970,6 @@
                     gridData[r][c] = null;
 
                     hammerMode = false;
-
                     hammerAvailable = false;
 
 
@@ -2379,15 +1983,12 @@
                         "active"
                     );
 
-                    btnHammer.disabled =
-                        true;
+                    btnHammer.disabled = true;
 
 
                     roundClearedBlocks++;
-
-                    score++;
-
-                    statRemoved++;
+                    score += 1;
+                    statRemoved += 1;
 
 
                     updateUI();
@@ -2432,23 +2033,26 @@
                 if (
                     group.length >
                     statMaxGroup
-                )
+                ) {
+
                     statMaxGroup =
                         group.length;
+                }
 
 
                 if (
                     group.length >= 8
-                )
+                ) {
+
                     showCombo(
                         group.length
                     );
+                }
 
 
                 group.forEach(
                     ([gr, gc]) =>
-                        gridData[gr][gc] =
-                            null
+                        gridData[gr][gc] = null
                 );
 
 
@@ -2476,7 +2080,8 @@
                     setTimeout(
                         () =>
                             endGame(
-                                `Brak możliwych ruchów!\nNie osiągnięto celu 90% zbitych klocków.`
+                                `Brak możliwych ruchów!
+Nie osiągnięto celu 90% zbitych klocków.`
                             ),
                         300
                     );
@@ -2485,10 +2090,6 @@
         }
     );
 
-
-    /* =========================================================
-       GRUPY
-       ========================================================= */
 
     function getConnectedGroup(
         startR,
@@ -2503,9 +2104,8 @@
             return [];
 
 
-        const queue = [
-            [startR, startC]
-        ];
+        const queue =
+            [[startR, startC]];
 
 
         const visited =
@@ -2517,7 +2117,9 @@
         const group = [];
 
 
-        while (queue.length > 0) {
+        while (
+            queue.length > 0
+        ) {
 
             const [r, c] =
                 queue.shift();
@@ -2557,8 +2159,7 @@
                 ) {
 
                     if (
-                        gridData[nr][nc] ===
-                        color &&
+                        gridData[nr][nc] === color &&
                         !visited.has(
                             `${nr},${nc}`
                         )
@@ -2582,10 +2183,6 @@
     }
 
 
-    /* =========================================================
-       GRAWITACJA
-       ========================================================= */
-
     function applyGravity() {
 
         for (
@@ -2605,17 +2202,14 @@
             ) {
 
                 if (
-                    gridData[r][c] !==
-                    null
+                    gridData[r][c] !== null
                 ) {
 
                     if (
                         r !== emptyIdx
                     ) {
 
-                        gridData[
-                            emptyIdx
-                        ][c] =
+                        gridData[emptyIdx][c] =
                             gridData[r][c];
 
                         gridData[r][c] =
@@ -2637,8 +2231,7 @@
             c++
         ) {
 
-            let isColEmpty =
-                true;
+            let isColEmpty = true;
 
 
             for (
@@ -2648,12 +2241,10 @@
             ) {
 
                 if (
-                    gridData[r][c] !==
-                    null
+                    gridData[r][c] !== null
                 ) {
 
-                    isColEmpty =
-                        false;
+                    isColEmpty = false;
 
                     break;
                 }
@@ -2672,9 +2263,7 @@
                         r++
                     ) {
 
-                        gridData[
-                            r
-                        ][targetCol] =
+                        gridData[r][targetCol] =
                             gridData[r][c];
 
                         gridData[r][c] =
@@ -2691,10 +2280,6 @@
     }
 
 
-    /* =========================================================
-       MŁOTEK
-       ========================================================= */
-
     function toggleHammer() {
 
         if (
@@ -2704,23 +2289,17 @@
             return;
 
 
-        hammerMode =
-            !hammerMode;
+        hammerMode = !hammerMode;
 
 
-        document
-            .getElementById("btnHammer")
-            .classList
-            .toggle(
-                "active",
-                hammerMode
-            );
+        document.getElementById(
+            "btnHammer"
+        ).classList.toggle(
+            "active",
+            hammerMode
+        );
     }
 
-
-    /* =========================================================
-       MIESZANIE
-       ========================================================= */
 
     function triggerShuffle() {
 
@@ -2772,7 +2351,8 @@
             [
                 flat[i],
                 flat[j]
-            ] = [
+            ] =
+            [
                 flat[j],
                 flat[i]
             ];
@@ -2815,10 +2395,6 @@
     }
 
 
-    /* =========================================================
-       COMBO
-       ========================================================= */
-
     function showCombo(count) {
 
         const comboLbl =
@@ -2840,10 +2416,6 @@
     }
 
 
-    /* =========================================================
-       KONIEC GRY
-       ========================================================= */
-
     function checkGameOver() {
 
         for (
@@ -2859,8 +2431,7 @@
             ) {
 
                 if (
-                    gridData[r][c] !==
-                    null
+                    gridData[r][c] !== null
                 ) {
 
                     const group =
@@ -2891,6 +2462,7 @@
             timerInterval
         );
 
+
         updateActionButton();
 
 
@@ -2912,10 +2484,6 @@
     }
 
 
-    /* =========================================================
-       TOP 10
-       ========================================================= */
-
     function saveScoreAndClose() {
 
         const nameInput =
@@ -2935,8 +2503,8 @@
 
         const dateFormatted =
             `${now.toLocaleDateString()}, ${now.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit"
+                hour: '2-digit',
+                minute: '2-digit'
             })}`;
 
 
@@ -2953,8 +2521,7 @@
             score: score,
             infinite:
                 usedTimerLifeline,
-            date:
-                dateFormatted
+            date: dateFormatted
         });
 
 
@@ -3032,7 +2599,9 @@
                         `${s.name}: <strong>${s.score} pkt</strong> <small>(${s.date})</small>${s.infinite ? ' <span class="infinity-icon">∞</span>' : ''}`;
 
 
-                    list.appendChild(li);
+                    list.appendChild(
+                        li
+                    );
                 }
             );
         }
@@ -3043,10 +2612,6 @@
         );
     }
 
-
-    /* =========================================================
-       MODALE
-       ========================================================= */
 
     function showInfo() {
 
@@ -3083,8 +2648,7 @@
 
         document.getElementById(
             id
-        ).style.display =
-            "flex";
+        ).style.display = "flex";
     }
 
 
@@ -3092,14 +2656,9 @@
 
         document.getElementById(
             id
-        ).style.display =
-            "none";
+        ).style.display = "none";
     }
 
-
-    /* =========================================================
-       ZMIANA ROZMIARU
-       ========================================================= */
 
     window.addEventListener(
         "resize",
@@ -3114,10 +2673,6 @@
         }
     );
 
-
-    /* =========================================================
-       START
-       ========================================================= */
 
     newGame();
 
