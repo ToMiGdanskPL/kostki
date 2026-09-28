@@ -479,6 +479,28 @@
 
 
         /* =========================================================
+           STOPKA
+           ========================================================= */
+
+        .footer {
+            width: 100%;
+            max-width: 900px;
+
+            text-align: center;
+
+            color: var(--text-muted);
+
+            font-size: 0.68rem;
+
+            line-height: 1.2;
+
+            padding: 1px 0 0;
+
+            flex-shrink: 0;
+        }
+
+
+        /* =========================================================
            MODALE
            ========================================================= */
 
@@ -859,6 +881,10 @@
                 font-size: 0.9rem;
             }
 
+            .footer {
+                font-size: 0.62rem;
+            }
+
             canvas {
                 border-radius: 18px;
             }
@@ -915,6 +941,10 @@
 
                 min-height: 42px;
             }
+
+            .footer {
+                font-size: 0.58rem;
+            }
         }
 
 
@@ -931,7 +961,8 @@
             .header,
             .stats-bar,
             .controls,
-            .progress-container {
+            .progress-container,
+            .footer {
                 max-width: 1000px;
             }
 
@@ -1054,16 +1085,27 @@
         </div>
 
 
+        <!-- PLANSZA GRY PRZENIESIONA NAD COMBO -->
+
+        <div class="canvas-container">
+
+            <canvas id="gameCanvas"></canvas>
+
+        </div>
+
+
+        <!-- COMBO PRZENIESIONE POD PLANSZĘ -->
+
         <div
             class="combo-text"
             id="comboLabel">
         </div>
 
 
-        <div class="canvas-container">
+        <!-- STOPKA -->
 
-            <canvas id="gameCanvas"></canvas>
-
+        <div class="footer">
+            Created by ToMi with AI • wersja 2.0.0
         </div>
 
     </div>
