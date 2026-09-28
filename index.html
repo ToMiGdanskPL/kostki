@@ -3,664 +3,3125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
     <title>Kostki by ToMi</title>
+
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>">
+
     <style>
+        /* =========================================================
+           KOSTKI BY TOMI
+           NOWOCZESNY GAMING UI
+           Mechanika gry pozostaje bez zmian
+           ========================================================= */
+
+        :root {
+            --bg-main: #070910;
+            --bg-secondary: #0d111c;
+            --panel: rgba(18, 23, 37, 0.88);
+            --panel-light: rgba(28, 35, 54, 0.92);
+
+            --border: rgba(255,255,255,0.09);
+            --border-bright: rgba(255,255,255,0.16);
+
+            --text: #f5f7ff;
+            --text-secondary: #9ba5bd;
+            --text-muted: #69738a;
+
+            --blue: #4da3ff;
+            --blue-bright: #62b4ff;
+            --purple: #9b6cff;
+            --pink: #ff4f9a;
+            --green: #38e58c;
+            --yellow: #ffd84d;
+            --orange: #ff9f43;
+            --red: #ff4d5e;
+
+            --shadow:
+                0 20px 50px rgba(0,0,0,0.45),
+                0 5px 20px rgba(0,0,0,0.3);
+
+            --glow-blue:
+                0 0 20px rgba(77,163,255,0.35),
+                0 0 50px rgba(77,163,255,0.12);
+
+            --radius: 16px;
+        }
+
         * {
             box-sizing: border-box;
             touch-action: manipulation;
             user-select: none;
             -webkit-user-select: none;
         }
-        html, body {
+
+        html,
+        body {
             width: 100%;
             height: 100%;
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background-color: #1E1E1E;
-            color: #E5E5EA;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 15% 10%,
+                    rgba(77,163,255,0.13),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 85% 15%,
+                    rgba(155,108,255,0.12),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 50% 100%,
+                    rgba(255,79,154,0.08),
+                    transparent 35%
+                ),
+                #070910;
+
+            color: var(--text);
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
         }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.18;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 32px 32px;
+
+            mask-image: linear-gradient(
+                to bottom,
+                black,
+                transparent 85%
+            );
+        }
+
+        /* =========================================================
+           GŁÓWNY KONTENER
+           ========================================================= */
+
         #app-container {
+            position: relative;
+            z-index: 1;
+
             display: flex;
             flex-direction: column;
+
             width: 100vw;
             height: 100vh;
-            padding: 8px;
+
+            padding:
+                max(8px, env(safe-area-inset-top))
+                max(10px, env(safe-area-inset-right))
+                max(8px, env(safe-area-inset-bottom))
+                max(10px, env(safe-area-inset-left));
+
             gap: 8px;
+
             justify-content: space-between;
             align-items: center;
         }
-        .header, .stats-bar, .controls, .progress-container {
+
+        .header,
+        .stats-bar,
+        .controls,
+        .progress-container {
             width: 100%;
             max-width: 900px;
-            display: flex;
-            gap: 6px;
         }
+
+        /* =========================================================
+           HEADER
+           ========================================================= */
+
+        .header {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr 1fr;
+            gap: 8px;
+
+            padding: 6px;
+
+            background: rgba(14, 18, 29, 0.72);
+
+            border: 1px solid var(--border);
+            border-radius: 18px;
+
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+
+            box-shadow:
+                0 10px 35px rgba(0,0,0,0.28),
+                inset 0 1px rgba(255,255,255,0.04);
+        }
+
+        /* =========================================================
+           PRZYCISKI
+           ========================================================= */
+
+        button {
+            position: relative;
+
+            min-height: 40px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(77,163,255,0.95),
+                    rgba(58,116,230,0.95)
+                );
+
+            color: #fff;
+
+            border: 1px solid rgba(255,255,255,0.12);
+
+            padding: 9px 11px;
+
+            border-radius: 12px;
+
+            font-weight: 700;
+            font-size: 0.84rem;
+
+            cursor: pointer;
+            white-space: nowrap;
+
+            box-shadow:
+                0 6px 16px rgba(0,0,0,0.3),
+                inset 0 1px rgba(255,255,255,0.2);
+
+            transition:
+                transform 0.15s ease,
+                filter 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+        button::after {
+            content: "";
+
+            position: absolute;
+            inset: 1px;
+
+            border-radius: 10px;
+
+            pointer-events: none;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(255,255,255,0.10),
+                    transparent 45%
+                );
+        }
+
+        button:hover {
+            filter: brightness(1.12);
+
+            box-shadow:
+                0 8px 22px rgba(0,0,0,0.35),
+                0 0 18px rgba(77,163,255,0.18),
+                inset 0 1px rgba(255,255,255,0.2);
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+
+        button:disabled {
+            background:
+                linear-gradient(
+                    145deg,
+                    #252b39,
+                    #1c2130
+                );
+
+            color: #657087;
+
+            border-color: rgba(255,255,255,0.04);
+
+            opacity: 0.65;
+
+            cursor: not-allowed;
+
+            box-shadow: none;
+        }
+
+        button.active {
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffb347,
+                    #ff7b39
+                );
+
+            box-shadow:
+                0 0 22px rgba(255,159,67,0.42),
+                inset 0 1px rgba(255,255,255,0.25);
+        }
+
+        button.btn-end {
+            background:
+                linear-gradient(
+                    145deg,
+                    #ff5667,
+                    #d82f48
+                );
+
+            box-shadow:
+                0 7px 20px rgba(255,77,94,0.20),
+                inset 0 1px rgba(255,255,255,0.18);
+        }
+
+        /* =========================================================
+           STATYSTYKI
+           ========================================================= */
+
         .stats-bar {
-            justify-content: space-between;
-            font-weight: bold;
-            font-size: 0.85rem;
-            background: #2D2D30;
-            padding: 8px 12px;
-            border-radius: 8px;
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, minmax(0, 1fr));
+
+            gap: 6px;
+
+            padding: 8px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(20,26,42,0.92),
+                    rgba(11,15,25,0.92)
+                );
+
+            border:
+                1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            box-shadow:
+                var(--shadow),
+                inset 0 1px rgba(255,255,255,0.035);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            font-weight: 700;
+            font-size: 0.76rem;
+
             flex-wrap: wrap;
             align-items: center;
         }
-        .progress-container {
-            background-color: #2D2D30;
-            border-radius: 6px;
-            height: 10px;
-            overflow: hidden;
-            padding: 2px;
-        }
-        .progress-bar-fill {
-            background-color: #30D158;
-            height: 100%;
-            width: 0%;
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-        button {
-            background-color: #0A84FF;
-            color: white;
-            border: none;
-            padding: 8px 10px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            flex: 1;
-            cursor: pointer;
+
+        .stats-bar > div {
+            min-width: 0;
+
+            padding: 8px 5px;
+
+            text-align: center;
+
+            color: var(--text-secondary);
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,0.025);
+
+            border:
+                1px solid rgba(255,255,255,0.035);
+
             white-space: nowrap;
         }
-        button:disabled {
-            background-color: #48484A;
-            opacity: 0.6;
-            cursor: not-allowed;
+
+        .stats-bar span {
+            color: #ffffff !important;
+
+            text-shadow:
+                0 0 10px rgba(255,255,255,0.15);
         }
-        button.active {
-            background-color: #FF9F0A;
+
+        .stats-bar #roundLabel {
+            color: var(--yellow) !important;
         }
-        button.btn-end {
-            background-color: #FF3B30;
+
+        .stats-bar #totalClearedGame,
+        .stats-bar #diffDisplay {
+            color: var(--orange) !important;
         }
+
+        .stats-bar #targetBlocks {
+            color: var(--green) !important;
+        }
+
+        .stats-bar #progressPercent {
+            color: var(--blue-bright) !important;
+        }
+
+        /* =========================================================
+           PASEK POSTĘPU
+           ========================================================= */
+
+        .progress-container {
+            height: 11px;
+
+            padding: 2px;
+
+            overflow: hidden;
+
+            background:
+                rgba(9,13,22,0.95);
+
+            border:
+                1px solid rgba(255,255,255,0.07);
+
+            border-radius: 99px;
+
+            box-shadow:
+                inset 0 2px 5px rgba(0,0,0,0.55),
+                0 4px 12px rgba(0,0,0,0.18);
+        }
+
+        .progress-bar-fill {
+            position: relative;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #4da3ff,
+                    #7d7cff,
+                    #b66cff
+                );
+
+            height: 100%;
+
+            width: 0%;
+
+            border-radius: 99px;
+
+            transition:
+                width 0.35s cubic-bezier(.22,1,.36,1);
+
+            box-shadow:
+                0 0 12px rgba(77,163,255,0.55),
+                0 0 25px rgba(155,108,255,0.25);
+        }
+
+        .progress-bar-fill::after {
+            content: "";
+
+            position: absolute;
+
+            top: 1px;
+            left: 4px;
+            right: 4px;
+
+            height: 2px;
+
+            border-radius: 99px;
+
+            background:
+                rgba(255,255,255,0.45);
+        }
+
+        /* =========================================================
+           DOLNE PRZYCISKI
+           ========================================================= */
+
+        .controls {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 8px;
+        }
+
+        .controls button {
+            min-height: 43px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(27,34,54,0.98),
+                    rgba(17,22,36,0.98)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            box-shadow:
+                0 7px 18px rgba(0,0,0,0.25),
+                inset 0 1px rgba(255,255,255,0.055);
+        }
+
+        .controls button:hover {
+            border-color:
+                rgba(77,163,255,0.35);
+
+            box-shadow:
+                0 7px 20px rgba(0,0,0,0.3),
+                0 0 18px rgba(77,163,255,0.12);
+        }
+
+        #btnDisableTimer {
+            color: #67b8ff;
+        }
+
+        #btnHammer {
+            color: #ffbd62;
+        }
+
+        #btnShuffle {
+            color: #b78cff;
+        }
+
+        /* =========================================================
+           COMBO
+           ========================================================= */
+
+        .combo-text {
+            height: 26px;
+
+            color: #ffcf4d;
+
+            font-weight: 900;
+
+            font-size: 1.05rem;
+
+            text-align: center;
+
+            letter-spacing: 1px;
+
+            text-shadow:
+                0 0 8px rgba(255,208,77,0.7),
+                0 0 24px rgba(255,159,67,0.45);
+
+            animation:
+                comboPulse 0.55s ease-in-out infinite alternate;
+        }
+
+        @keyframes comboPulse {
+            from {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            to {
+                transform: scale(1.04);
+                opacity: 1;
+            }
+        }
+
+        /* =========================================================
+           PLANSZA
+           ========================================================= */
+
         .canvas-container {
+            position: relative;
+
             flex: 1;
+
             width: 100%;
+
             display: flex;
+
             justify-content: center;
             align-items: center;
+
             min-height: 0;
+
+            padding: 4px;
         }
+
+        .canvas-container::before {
+            content: "";
+
+            position: absolute;
+
+            width: min(90vw, 720px);
+            height: min(90vw, 720px);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(77,163,255,0.08),
+                    transparent 65%
+                );
+
+            filter: blur(25px);
+
+            pointer-events: none;
+        }
+
         canvas {
-            background-color: #2D2D30;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 2;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #111827,
+                    #080c15
+                );
+
+            border-radius: 18px;
+
+            border:
+                1px solid rgba(255,255,255,0.11);
+
+            box-shadow:
+                0 25px 55px rgba(0,0,0,0.52),
+                0 0 0 1px rgba(0,0,0,0.45),
+                0 0 45px rgba(77,163,255,0.08),
+                inset 0 1px rgba(255,255,255,0.06);
+
+            image-rendering: auto;
         }
-        .combo-text {
-            height: 20px;
-            color: #FF3B30;
-            font-weight: bold;
-            font-size: 1rem;
-            text-align: center;
-        }
+
+        /* =========================================================
+           MODALE
+           ========================================================= */
+
         .modal {
             display: none;
+
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
+
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(30,40,70,0.30),
+                    rgba(2,4,9,0.91)
+                );
+
             justify-content: center;
             align-items: center;
+
             z-index: 100;
-            padding: 20px;
+
+            padding: 16px;
+
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
+
         .modal-content {
-            background: #2D2D30;
-            padding: 20px;
-            border-radius: 12px;
+            position: relative;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(24,31,49,0.97),
+                    rgba(10,14,24,0.98)
+                );
+
+            padding: 22px;
+
+            border-radius: 22px;
+
             max-width: 500px;
             width: 100%;
+
             max-height: 85vh;
+
             overflow-y: auto;
-            color: #FFF;
+
+            color: #fff;
+
             text-align: left;
+
+            border:
+                1px solid rgba(255,255,255,0.10);
+
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.65),
+                0 0 50px rgba(77,163,255,0.08),
+                inset 0 1px rgba(255,255,255,0.06);
+
+            animation:
+                modalIn 0.22s ease-out;
         }
-        .modal-content h2 { margin-top: 0; color: #0A84FF; text-align: center; }
-        .modal-content h3 { color: #FF9F0A; margin-bottom: 5px; font-size: 1rem; }
-        .modal-content ul { padding-left: 20px; margin-top: 5px; }
-        .modal-content li { margin-bottom: 6px; font-size: 0.9rem; }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.94) translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-content::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 12%;
+            right: 12%;
+
+            height: 1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(77,163,255,0.8),
+                    transparent
+                );
+
+            box-shadow:
+                0 0 14px rgba(77,163,255,0.45);
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+
+            color: #ffffff;
+
+            text-align: center;
+
+            font-size: 1.35rem;
+
+            letter-spacing: -0.3px;
+
+            text-shadow:
+                0 0 18px rgba(77,163,255,0.25);
+        }
+
+        .modal-content h3 {
+            color: #65b5ff;
+
+            margin-bottom: 5px;
+
+            font-size: 0.95rem;
+        }
+
+        .modal-content ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        .modal-content li {
+            margin-bottom: 8px;
+
+            font-size: 0.88rem;
+
+            color: #b7c0d2;
+
+            line-height: 1.45;
+        }
+
+        .modal-content strong {
+            color: #ffffff;
+        }
+
+        .modal-content em {
+            color: #b991ff;
+        }
+
         .close-btn {
-            background: #0A84FF;
+            background:
+                linear-gradient(
+                    145deg,
+                    #4da3ff,
+                    #376fe4
+                );
+
             margin-top: 15px;
+
             width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            font-weight: bold;
+
+            padding: 11px;
+
+            border-radius: 12px;
+
+            font-weight: 800;
+
+            box-shadow:
+                0 8px 20px rgba(77,163,255,0.18);
         }
+
         .modal-text {
             font-size: 1rem;
+
             line-height: 1.5;
+
             white-space: pre-line;
+
             margin: 15px 0;
+
             text-align: center;
+
+            color: #c3cada;
         }
+
         .version-badge {
             text-align: center;
-            font-size: 0.8rem;
-            color: #8E8E93;
+
+            font-size: 0.76rem;
+
+            color: #68748d;
+
             margin-top: -10px;
-            margin-bottom: 15px;
+
+            margin-bottom: 18px;
+
+            letter-spacing: 1px;
         }
-        ol { padding-left: 20px; text-align: left; }
-        ol li { margin-bottom: 5px; }
-        
+
+        ol {
+            padding-left: 20px;
+            text-align: left;
+        }
+
+        ol li {
+            margin-bottom: 8px;
+
+            color: #b9c2d4;
+        }
+
+        /* =========================================================
+           INPUT
+           ========================================================= */
+
         .name-input {
             width: 100%;
-            padding: 12px;
+
+            padding: 13px 14px;
+
             margin: 15px 0;
-            border-radius: 8px;
-            border: 1px solid #0A84FF;
-            background: #1E1E1E;
+
+            border-radius: 12px;
+
+            border:
+                1px solid rgba(77,163,255,0.35);
+
+            background:
+                rgba(4,8,15,0.8);
+
             color: white;
+
             font-size: 1rem;
+
             text-align: center;
+
             outline: none;
+
             box-sizing: border-box;
+
             user-select: text;
             -webkit-user-select: text;
+
+            box-shadow:
+                inset 0 2px 8px rgba(0,0,0,0.35);
+
+            transition:
+                border-color 0.2s,
+                box-shadow 0.2s;
         }
+
         .name-input:focus {
-            border-color: #30D158;
+            border-color: #4da3ff;
+
+            box-shadow:
+                0 0 0 3px rgba(77,163,255,0.10),
+                0 0 20px rgba(77,163,255,0.10);
         }
+
+        .name-input::placeholder {
+            color: #59657c;
+        }
+
         .infinity-icon {
-            color: #FF9F0A;
+            color: #ffbd4d;
+
             font-weight: bold;
+
             margin-left: 4px;
+
+            text-shadow:
+                0 0 10px rgba(255,189,77,0.6);
+        }
+
+        /* =========================================================
+           SCROLLBAR W MODALACH
+           ========================================================= */
+
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background:
+                rgba(255,255,255,0.15);
+
+            border-radius: 99px;
+        }
+
+        /* =========================================================
+           RESPONSYWNOŚĆ
+           ========================================================= */
+
+        @media (max-width: 700px) {
+
+            #app-container {
+                padding:
+                    6px
+                    7px
+                    max(6px, env(safe-area-inset-bottom))
+                    7px;
+
+                gap: 6px;
+            }
+
+            .header {
+                gap: 5px;
+                padding: 5px;
+
+                border-radius: 15px;
+            }
+
+            .header button {
+                min-height: 38px;
+
+                padding:
+                    7px 5px;
+
+                font-size: 0.73rem;
+
+                border-radius: 10px;
+            }
+
+            .stats-bar {
+                grid-template-columns:
+                    repeat(3, 1fr);
+
+                gap: 4px;
+
+                padding: 5px;
+
+                border-radius: 14px;
+
+                font-size: 0.68rem;
+            }
+
+            .stats-bar > div {
+                padding: 6px 3px;
+
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .progress-container {
+                height: 9px;
+            }
+
+            .controls {
+                gap: 5px;
+            }
+
+            .controls button {
+                min-height: 40px;
+
+                padding: 7px 4px;
+
+                font-size: 0.72rem;
+
+                border-radius: 10px;
+            }
+
+            .combo-text {
+                height: 22px;
+
+                font-size: 0.9rem;
+            }
+
+            canvas {
+                border-radius: 15px;
+            }
+
+            .modal {
+                padding: 10px;
+            }
+
+            .modal-content {
+                padding: 18px;
+
+                border-radius: 19px;
+            }
+        }
+
+        @media (max-width: 430px) {
+
+            .header button {
+                font-size: 0.67rem;
+            }
+
+            .stats-bar {
+                font-size: 0.62rem;
+            }
+
+            .controls button {
+                font-size: 0.67rem;
+            }
+        }
+
+        @media (max-height: 650px) {
+
+            #app-container {
+                gap: 4px;
+            }
+
+            .header button {
+                min-height: 34px;
+                padding: 5px;
+            }
+
+            .stats-bar {
+                padding: 4px;
+            }
+
+            .stats-bar > div {
+                padding: 5px 3px;
+            }
+
+            .controls button {
+                min-height: 35px;
+            }
+
+            .combo-text {
+                height: 18px;
+            }
+        }
+
+        /* =========================================================
+           DELIKATNY EFEKT WEJŚCIA
+           ========================================================= */
+
+        .header,
+        .stats-bar,
+        .progress-container,
+        .controls,
+        .canvas-container {
+            animation:
+                interfaceAppear 0.45s ease-out both;
+        }
+
+        .stats-bar {
+            animation-delay: 0.04s;
+        }
+
+        .progress-container {
+            animation-delay: 0.08s;
+        }
+
+        .controls {
+            animation-delay: 0.12s;
+        }
+
+        .canvas-container {
+            animation-delay: 0.16s;
+        }
+
+        @keyframes interfaceAppear {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <div id="app-container">
-        <div class="header">
-            <button id="btnGameAction" class="btn-end" onclick="handleGameAction()">🔴 Zakończ grę</button>
-            <button onclick="showInfo()">ℹ️ Instrukcja</button>
-            <button onclick="showHighScores()">🏆 Wyniki</button>
+<div id="app-container">
+
+    <!-- HEADER -->
+    <div class="header">
+
+        <button
+            id="btnGameAction"
+            class="btn-end"
+            onclick="handleGameAction()">
+            🔴 Zakończ grę
+        </button>
+
+        <button onclick="showInfo()">
+            ℹ️ Instrukcja
+        </button>
+
+        <button onclick="showHighScores()">
+            🏆 Wyniki
+        </button>
+
+    </div>
+
+
+    <!-- STATYSTYKI -->
+    <div class="stats-bar">
+
+        <div>
+            🚩 Runda:
+            <span id="roundLabel" style="color:#FFD60A;">1</span>
         </div>
 
-        <div class="stats-bar">
-            <div>🚩 Runda: <span id="roundLabel" style="color:#FFD60A;">1</span></div>
-            <div>⏱️ <span id="timer">180</span></div>
-            <div>📦 Łącznie: <span id="totalClearedGame" style="color:#FF9F0A;">0</span></div>
-            <div>Poziom: <span id="diffDisplay" style="color:#FF9F0A;">🟢 Bardzo Łatwy</span></div>
-            <div>🎯 Zbite: <span id="clearedCount">0</span> / <span id="targetBlocks" style="color:#30D158;">0</span> (<span id="progressPercent" style="color:#0A84FF;">0%</span>)</div>
+        <div>
+            ⏱️
+            <span id="timer">180</span>
         </div>
 
-        <div class="progress-container">
-            <div id="progressBarFill" class="progress-bar-fill"></div>
+        <div>
+            📦 Łącznie:
+            <span id="totalClearedGame" style="color:#FF9F0A;">0</span>
         </div>
 
-        <div class="controls">
-            <button id="btnDisableTimer" onclick="disableTimerLifeline()">⏱️ Wyłącz czas</button>
-            <button id="btnHammer" onclick="toggleHammer()">🔨 Młotek</button>
-            <button id="btnShuffle" onclick="triggerShuffle()">🔀 Mieszaj</button>
+        <div>
+            Poziom:
+            <span id="diffDisplay" style="color:#FF9F0A;">
+                🟢 Bardzo Łatwy
+            </span>
         </div>
 
-        <div class="combo-text" id="comboLabel"></div>
+        <div>
+            🎯 Zbite:
+            <span id="clearedCount">0</span>
+            /
+            <span id="targetBlocks" style="color:#30D158;">0</span>
+            (
+            <span id="progressPercent" style="color:#0A84FF;">0%</span>
+            )
+        </div>
 
-        <div class="canvas-container">
-            <canvas id="gameCanvas"></canvas>
+    </div>
+
+
+    <!-- PROGRESS -->
+    <div class="progress-container">
+        <div
+            id="progressBarFill"
+            class="progress-bar-fill">
         </div>
     </div>
 
-    <!-- Instrukcja Obsługi -->
-    <div id="infoModal" class="modal">
-        <div class="modal-content">
-            <h2>📖 Instrukcja obsługi gry</h2>
-            <div class="version-badge">Wersja 1.2.0</div>
-            
-            <h3>1. Zasady rozgrywki i cel gry</h3>
-            <ul>
-                <li><strong>Główne zadanie:</strong> Klikaj w grupy co najmniej <strong>2 połączonych ze sobą kostek</strong> tego samego koloru (w pionie lub poziomie), aby usunąć je z planszy.</li>
-                <li><strong>Awans do kolejnej rundy:</strong> Musisz wyczyścić co najmniej <strong>90% klocków</strong> z obecnej planszy. Wywoła to <em>Złoty Wstrząs</em> – wolne miejsca zostaną uzupełnione nowymi klockami, a istniejące pozostaną na swoich miejscach.</li>
-                <li><strong>Koniec gry:</strong> Gra kończy się, gdy upłynie limit czasu lub gdy na planszy zabraknie możliwych ruchów, a cel 90% nie został jeszcze osiągnięty.</li>
-            </ul>
 
-            <h3>2. Poziomy trudności i grawitacja</h3>
-            <ul>
-                <li><strong>Wzrost trudności:</strong> Z każdą nową rundą na planszy pojawia się więcej kolorów (od 3 kolorów w Rundach 1–2 do 7 kolorów w najwyższych rundach).</li>
-                <li><strong>Fizyka klocków:</strong> Po usunięciu grupy, klocki znajdujące się wyżej opadają w dół. Gdy cała pionowa kolumna zostanie opróżniona, pozostałe kolumny zsuwają się do lewej strony.</li>
-            </ul>
+    <!-- CONTROLS -->
+    <div class="controls">
 
-            <h3>3. Punktacja i Combo</h3>
-            <ul>
-                <li>Za każdą zbitą kostkę otrzymujesz <strong>1 punkt</strong>.</li>
-                <li>Zbijanie dużych grup klocków (od 8 w górę) aktywuje specjalną premię wizualną <strong>🔥 COMBO!</strong></li>
-            </ul>
+        <button
+            id="btnDisableTimer"
+            onclick="disableTimerLifeline()">
+            ⏱️ Wyłącz czas
+        </button>
 
-            <h3>4. Ułatwienia i koła ratunkowe (jednorazowe)</h3>
-            <ul>
-                <li>⏱️ <strong>Wyłącz czas:</strong> Zatrzymuje i wyłącza odliczanie zegara, pozwalając na spokojną rozgrywkę bez stresu. Użycie tego koła dodaje symbol <strong>∞</strong> przy Twoim wyniku w tabeli TOP 10.</li>
-                <li>🔨 <strong>Młotek:</strong> Pozwala zniszczyć jedną pojedynczą, wybraną kostkę, która blokuje układ. Kliknij przycisk Młotka, a następnie w wybraną kostkę.</li>
-                <li>🔀 <strong>Mieszaj:</strong> Przemieszcza losowo układ wszystkich pozostałych na planszy klocków, gdy zabraknie pasujących układów.</li>
-            </ul>
+        <button
+            id="btnHammer"
+            onclick="toggleHammer()">
+            🔨 Młotek
+        </button>
 
-            <button class="close-btn" style="background:#FF3B30;" onclick="closeModal('infoModal')">Zamknij instrukcję</button>
-        </div>
+        <button
+            id="btnShuffle"
+            onclick="triggerShuffle()">
+            🔀 Mieszaj
+        </button>
+
     </div>
 
-    <div id="scoresModal" class="modal">
-        <div class="modal-content" style="text-align: center;">
-            <h2>🏆 Najlepsze wyniki (TOP 10)</h2>
-            <ol id="highScoresList">
-                <li>Brak wyników</li>
-            </ol>
-            <button class="close-btn" style="background:#FF3B30;" onclick="closeModal('scoresModal')">Zamknij</button>
-        </div>
+
+    <!-- COMBO -->
+    <div
+        class="combo-text"
+        id="comboLabel">
     </div>
 
-    <div id="messageModal" class="modal">
-        <div class="modal-content" style="text-align: center;">
-            <h2 id="msgModalTitle">Komunikat</h2>
-            <div id="msgModalText" class="modal-text"></div>
-            <button class="close-btn" onclick="closeModal('messageModal')">OK</button>
-        </div>
+
+    <!-- GAME BOARD -->
+    <div class="canvas-container">
+        <canvas id="gameCanvas"></canvas>
     </div>
 
-    <div id="gameOverModal" class="modal">
-        <div class="modal-content" style="text-align: center;">
-            <h2>🏁 Koniec gry!</h2>
-            <div id="gameOverReason" class="modal-text"></div>
-            <div style="font-size: 1.2rem; font-weight: bold; color: #FF9F0A; margin-bottom: 10px;">
-                Twój wynik: <span id="finalScoreDisplay">0</span> pkt
-            </div>
-            <input type="text" id="playerNameInput" class="name-input" placeholder="Wpisz swoje imię..." maxlength="20">
-            <button class="close-btn" style="background:#30D158; color: black; font-weight: bold;" onclick="saveScoreAndClose()">💾 Zapisz wynik</button>
+</div>
+
+
+<!-- =========================================================
+     INSTRUKCJA
+     ========================================================= -->
+
+<div id="infoModal" class="modal">
+
+    <div class="modal-content">
+
+        <h2>📖 Instrukcja obsługi gry</h2>
+
+        <div class="version-badge">
+            Wersja 1.2.0
         </div>
+
+        <h3>1. Zasady rozgrywki i cel gry</h3>
+
+        <ul>
+            <li>
+                <strong>Główne zadanie:</strong>
+                Klikaj w grupy co najmniej
+                <strong>2 połączonych ze sobą kostek</strong>
+                tego samego koloru
+                (w pionie lub poziomie),
+                aby usunąć je z planszy.
+            </li>
+
+            <li>
+                <strong>Awans do kolejnej rundy:</strong>
+                Musisz wyczyścić co najmniej
+                <strong>90% klocków</strong>
+                z obecnej planszy.
+                Wywoła to
+                <em>Złoty Wstrząs</em>.
+            </li>
+
+            <li>
+                <strong>Koniec gry:</strong>
+                Gra kończy się,
+                gdy upłynie limit czasu
+                lub gdy na planszy zabraknie
+                możliwych ruchów,
+                a cel 90% nie został osiągnięty.
+            </li>
+        </ul>
+
+
+        <h3>2. Poziomy trudności i grawitacja</h3>
+
+        <ul>
+            <li>
+                <strong>Wzrost trudności:</strong>
+                Z każdą nową rundą
+                na planszy pojawia się więcej kolorów
+                (od 3 kolorów w Rundach 1–2
+                do 7 kolorów w najwyższych rundach).
+            </li>
+
+            <li>
+                <strong>Fizyka klocków:</strong>
+                Po usunięciu grupy,
+                klocki znajdujące się wyżej
+                opadają w dół.
+            </li>
+        </ul>
+
+
+        <h3>3. Punktacja i Combo</h3>
+
+        <ul>
+            <li>
+                Za każdą zbitą kostkę otrzymujesz
+                <strong>1 punkt</strong>.
+            </li>
+
+            <li>
+                Zbijanie dużych grup klocków
+                (od 8 w górę)
+                aktywuje specjalną premię wizualną
+                <strong>🔥 COMBO!</strong>
+            </li>
+        </ul>
+
+
+        <h3>4. Ułatwienia i koła ratunkowe</h3>
+
+        <ul>
+            <li>
+                ⏱️ <strong>Wyłącz czas:</strong>
+                Zatrzymuje i wyłącza odliczanie zegara.
+            </li>
+
+            <li>
+                🔨 <strong>Młotek:</strong>
+                Pozwala zniszczyć jedną pojedynczą,
+                wybraną kostkę.
+            </li>
+
+            <li>
+                🔀 <strong>Mieszaj:</strong>
+                Przemieszcza losowo układ
+                wszystkich pozostałych klocków.
+            </li>
+        </ul>
+
+
+        <button
+            class="close-btn"
+            style="background:linear-gradient(145deg,#ff5667,#d82f48);"
+            onclick="closeModal('infoModal')">
+            Zamknij instrukcję
+        </button>
+
     </div>
+
+</div>
+
+
+<!-- =========================================================
+     WYNIKI
+     ========================================================= -->
+
+<div id="scoresModal" class="modal">
+
+    <div
+        class="modal-content"
+        style="text-align:center;">
+
+        <h2>🏆 Najlepsze wyniki</h2>
+
+        <ol id="highScoresList">
+            <li>Brak wyników</li>
+        </ol>
+
+        <button
+            class="close-btn"
+            style="background:linear-gradient(145deg,#ff5667,#d82f48);"
+            onclick="closeModal('scoresModal')">
+            Zamknij
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     KOMUNIKAT
+     ========================================================= -->
+
+<div id="messageModal" class="modal">
+
+    <div
+        class="modal-content"
+        style="text-align:center;">
+
+        <h2 id="msgModalTitle">
+            Komunikat
+        </h2>
+
+        <div
+            id="msgModalText"
+            class="modal-text">
+        </div>
+
+        <button
+            class="close-btn"
+            onclick="closeModal('messageModal')">
+            OK
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     GAME OVER
+     ========================================================= -->
+
+<div id="gameOverModal" class="modal">
+
+    <div
+        class="modal-content"
+        style="text-align:center;">
+
+        <h2>🏁 Koniec gry!</h2>
+
+        <div
+            id="gameOverReason"
+            class="modal-text">
+        </div>
+
+        <div
+            style="
+                font-size:1.2rem;
+                font-weight:bold;
+                color:#ffbd4d;
+                margin-bottom:10px;
+                text-shadow:0 0 15px rgba(255,189,77,0.3);
+            ">
+
+            Twój wynik:
+            <span id="finalScoreDisplay">0</span>
+            pkt
+
+        </div>
+
+
+        <input
+            type="text"
+            id="playerNameInput"
+            class="name-input"
+            placeholder="Wpisz swoje imię..."
+            maxlength="20">
+
+
+        <button
+            class="close-btn"
+            style="
+                background:linear-gradient(145deg,#38e58c,#19b96c);
+                color:#04140b;
+                font-weight:bold;
+            "
+            onclick="saveScoreAndClose()">
+
+            💾 Zapisz wynik
+
+        </button>
+
+    </div>
+
+</div>
+
 
 <script>
-    const PALETTE = ["#1E88E5", "#4CAF50", "#FFEB3B", "#E91E63", "#00BCD4", "#9C27B0", "#FF9800"];
 
-    let ROWS = 18, COLS = 12, cellSize = 30;
-    let gridData = [], score = 0, roundClearedBlocks = 0, totalRoundBlocks = 0, targetBlocks = 0;
-    let currentRound = 1, timeLeft = 180, isTimerEnabled = true, timerInterval = null, gameActive = false;
-    let hammerMode = false, hammerAvailable = true, shuffleAvailable = true, timerDisableAvailable = true;
+    /* =========================================================
+       MECHANIKA GRY
+       ========================================================= */
+
+    const PALETTE = [
+        "#1E88E5",
+        "#4CAF50",
+        "#FFEB3B",
+        "#E91E63",
+        "#00BCD4",
+        "#9C27B0",
+        "#FF9800"
+    ];
+
+    let ROWS = 18,
+        COLS = 12,
+        cellSize = 30;
+
+    let gridData = [],
+        score = 0,
+        roundClearedBlocks = 0,
+        totalRoundBlocks = 0,
+        targetBlocks = 0;
+
+    let currentRound = 1,
+        timeLeft = 180,
+        isTimerEnabled = true,
+        timerInterval = null,
+        gameActive = false;
+
+    let hammerMode = false,
+        hammerAvailable = true,
+        shuffleAvailable = true,
+        timerDisableAvailable = true;
+
     let usedTimerLifeline = false;
-    let statRemoved = 0, statMaxGroup = 0;
 
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
+    let statRemoved = 0,
+        statMaxGroup = 0;
+
+
+    const canvas =
+        document.getElementById("gameCanvas");
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    /* =========================================================
+       USTALANIE TRUDNOŚCI
+       ========================================================= */
 
     function getColorsForRound(round) {
+
         if (round <= 2) return 3;
         if (round <= 4) return 4;
         if (round <= 6) return 5;
         if (round <= 8) return 6;
+
         return 7;
     }
 
+
     function getDifficultyLabel(round) {
-        if (round <= 2) return "🟢 Bardzo Łatwy";
-        if (round <= 4) return "🟡 Łatwy";
-        if (round <= 6) return "🟠 Średni";
-        if (round <= 8) return "🔴 Trudny";
+
+        if (round <= 2)
+            return "🟢 Bardzo Łatwy";
+
+        if (round <= 4)
+            return "🟡 Łatwy";
+
+        if (round <= 6)
+            return "🟠 Średni";
+
+        if (round <= 8)
+            return "🔴 Trudny";
+
         return "🟣 Bardzo Trudny";
     }
 
+
+    /* =========================================================
+       ROZMIAR PLANSZY
+       ========================================================= */
+
     function calculateGridDimensions() {
-        const container = document.querySelector('.canvas-container');
-        const availableWidth = container.clientWidth;
-        const availableHeight = container.clientHeight;
-        const targetCellSize = window.innerWidth < 600 ? 32 : 40;
 
-        COLS = Math.max(8, Math.floor(availableWidth / targetCellSize));
-        ROWS = Math.max(10, Math.floor(availableHeight / targetCellSize));
+        const container =
+            document.querySelector(".canvas-container");
 
-        cellSize = Math.min(
-            Math.floor(availableWidth / COLS),
-            Math.floor(availableHeight / ROWS)
+        const availableWidth =
+            container.clientWidth;
+
+        const availableHeight =
+            container.clientHeight;
+
+        const targetCellSize =
+            window.innerWidth < 600
+                ? 32
+                : 40;
+
+        COLS = Math.max(
+            8,
+            Math.floor(
+                availableWidth / targetCellSize
+            )
         );
 
-        canvas.width = COLS * cellSize;
-        canvas.height = ROWS * cellSize;
+        ROWS = Math.max(
+            10,
+            Math.floor(
+                availableHeight / targetCellSize
+            )
+        );
+
+        cellSize = Math.min(
+            Math.floor(
+                availableWidth / COLS
+            ),
+            Math.floor(
+                availableHeight / ROWS
+            )
+        );
+
+        canvas.width =
+            COLS * cellSize;
+
+        canvas.height =
+            ROWS * cellSize;
     }
+
+
+    /* =========================================================
+       GRA
+       ========================================================= */
 
     function handleGameAction() {
-        if (gameActive) endGame("Gra zakończona przez gracza.");
-        else newGame();
+
+        if (gameActive)
+            endGame("Gra zakończona przez gracza.");
+
+        else
+            newGame();
     }
+
 
     function updateActionButton() {
-        const btn = document.getElementById("btnGameAction");
+
+        const btn =
+            document.getElementById(
+                "btnGameAction"
+            );
+
         if (gameActive) {
-            btn.innerText = "🔴 Zakończ grę";
-            btn.className = "btn-end";
+
+            btn.innerText =
+                "🔴 Zakończ grę";
+
+            btn.className =
+                "btn-end";
+
         } else {
-            btn.innerText = "🔄 Nowa gra";
-            btn.className = "";
+
+            btn.innerText =
+                "🔄 Nowa gra";
+
+            btn.className =
+                "";
         }
     }
+
 
     function newGame() {
+
         calculateGridDimensions();
-        score = 0; currentRound = 1; timeLeft = 180; isTimerEnabled = true; gameActive = true; hammerMode = false;
-        statRemoved = 0; statMaxGroup = 0; usedTimerLifeline = false;
-        hammerAvailable = true; shuffleAvailable = true; timerDisableAvailable = true;
 
-        const btnTimer = document.getElementById("btnDisableTimer");
-        btnTimer.innerText = "⏱️ Wyłącz czas"; btnTimer.disabled = false;
+        score = 0;
+        currentRound = 1;
+        timeLeft = 180;
+        isTimerEnabled = true;
+        gameActive = true;
+        hammerMode = false;
 
-        const btnHammer = document.getElementById("btnHammer");
-        btnHammer.innerText = "🔨 Młotek"; btnHammer.classList.remove("active"); btnHammer.disabled = false;
+        statRemoved = 0;
+        statMaxGroup = 0;
 
-        document.getElementById("btnShuffle").disabled = false;
+        usedTimerLifeline = false;
+
+        hammerAvailable = true;
+        shuffleAvailable = true;
+        timerDisableAvailable = true;
+
+
+        const btnTimer =
+            document.getElementById(
+                "btnDisableTimer"
+            );
+
+        btnTimer.innerText =
+            "⏱️ Wyłącz czas";
+
+        btnTimer.disabled =
+            false;
+
+
+        const btnHammer =
+            document.getElementById(
+                "btnHammer"
+            );
+
+        btnHammer.innerText =
+            "🔨 Młotek";
+
+        btnHammer.classList.remove(
+            "active"
+        );
+
+        btnHammer.disabled =
+            false;
+
+
+        document.getElementById(
+            "btnShuffle"
+        ).disabled = false;
+
 
         updateActionButton();
+
         generateBoard();
+
         updateUI();
 
+
         clearInterval(timerInterval);
-        timerInterval = setInterval(updateTimer, 1000);
+
+        timerInterval =
+            setInterval(
+                updateTimer,
+                1000
+            );
+
+
         drawBoard();
     }
+
 
     function startNextRound() {
+
         currentRound++;
+
         hammerMode = false;
-        document.getElementById("btnHammer").classList.remove("active");
+
+        document.getElementById(
+            "btnHammer"
+        ).classList.remove("active");
+
         calculateGridDimensions();
+
         fillEmptySlots();
+
         updateUI();
+
         drawBoard();
-        showMessageModal("✨ ZŁOTY WSTRZĄS!", `Przechodzisz do RUNDY ${currentRound}!\n(${getDifficultyLabel(currentRound)})`);
+
+        showMessageModal(
+            "✨ ZŁOTY WSTRZĄS!",
+            `Przechodzisz do RUNDY ${currentRound}!\n(${getDifficultyLabel(currentRound)})`
+        );
     }
+
 
     function generateBoard() {
-        const colorCount = getColorsForRound(currentRound);
+
+        const colorCount =
+            getColorsForRound(
+                currentRound
+            );
+
         gridData = [];
+
+
         for (let r = 0; r < ROWS; r++) {
+
             gridData[r] = [];
+
             for (let c = 0; c < COLS; c++) {
-                gridData[r][c] = PALETTE[Math.floor(Math.random() * colorCount)];
+
+                gridData[r][c] =
+                    PALETTE[
+                        Math.floor(
+                            Math.random() *
+                            colorCount
+                        )
+                    ];
             }
         }
-        totalRoundBlocks = ROWS * COLS;
-        targetBlocks = Math.ceil(totalRoundBlocks * 0.90);
+
+
+        totalRoundBlocks =
+            ROWS * COLS;
+
+        targetBlocks =
+            Math.ceil(
+                totalRoundBlocks * 0.90
+            );
+
         roundClearedBlocks = 0;
     }
+
 
     function fillEmptySlots() {
-        const colorCount = getColorsForRound(currentRound);
+
+        const colorCount =
+            getColorsForRound(
+                currentRound
+            );
+
+
         for (let r = 0; r < ROWS; r++) {
-            if (!gridData[r]) gridData[r] = [];
+
+            if (!gridData[r])
+                gridData[r] = [];
+
+
             for (let c = 0; c < COLS; c++) {
+
                 if (!gridData[r][c]) {
-                    gridData[r][c] = PALETTE[Math.floor(Math.random() * colorCount)];
+
+                    gridData[r][c] =
+                        PALETTE[
+                            Math.floor(
+                                Math.random() *
+                                colorCount
+                            )
+                        ];
                 }
             }
         }
-        totalRoundBlocks = ROWS * COLS;
-        targetBlocks = Math.ceil(totalRoundBlocks * 0.90);
+
+
+        totalRoundBlocks =
+            ROWS * COLS;
+
+        targetBlocks =
+            Math.ceil(
+                totalRoundBlocks * 0.90
+            );
+
         roundClearedBlocks = 0;
     }
 
+
+    /* =========================================================
+       UI
+       ========================================================= */
+
     function updateUI() {
-        document.getElementById("clearedCount").innerText = roundClearedBlocks;
-        document.getElementById("targetBlocks").innerText = targetBlocks;
-        document.getElementById("roundLabel").innerText = currentRound;
-        document.getElementById("diffDisplay").innerText = getDifficultyLabel(currentRound);
-        document.getElementById("totalClearedGame").innerText = statRemoved;
 
-        const currentPercentBoard = totalRoundBlocks > 0 ? Math.floor((roundClearedBlocks / totalRoundBlocks) * 100) : 0;
-        const percentLabel = document.getElementById("progressPercent");
-        percentLabel.innerText = currentPercentBoard + "%";
+        document.getElementById(
+            "clearedCount"
+        ).innerText =
+            roundClearedBlocks;
 
-        const progressBarFill = document.getElementById("progressBarFill");
-        const targetPercentProgress = targetBlocks > 0 ? Math.min(100, Math.floor((roundClearedBlocks / targetBlocks) * 100)) : 0;
-        progressBarFill.style.width = targetPercentProgress + "%";
+        document.getElementById(
+            "targetBlocks"
+        ).innerText =
+            targetBlocks;
 
-        percentLabel.style.color = currentPercentBoard >= 90 ? "#30D158" : "#0A84FF";
+        document.getElementById(
+            "roundLabel"
+        ).innerText =
+            currentRound;
+
+        document.getElementById(
+            "diffDisplay"
+        ).innerText =
+            getDifficultyLabel(
+                currentRound
+            );
+
+        document.getElementById(
+            "totalClearedGame"
+        ).innerText =
+            statRemoved;
+
+
+        const currentPercentBoard =
+            totalRoundBlocks > 0
+                ? Math.floor(
+                    (
+                        roundClearedBlocks /
+                        totalRoundBlocks
+                    ) * 100
+                )
+                : 0;
+
+
+        const percentLabel =
+            document.getElementById(
+                "progressPercent"
+            );
+
+        percentLabel.innerText =
+            currentPercentBoard + "%";
+
+
+        const progressBarFill =
+            document.getElementById(
+                "progressBarFill"
+            );
+
+
+        const targetPercentProgress =
+            targetBlocks > 0
+                ? Math.min(
+                    100,
+                    Math.floor(
+                        (
+                            roundClearedBlocks /
+                            targetBlocks
+                        ) * 100
+                    )
+                )
+                : 0;
+
+
+        progressBarFill.style.width =
+            targetPercentProgress + "%";
+
+
+        percentLabel.style.color =
+            currentPercentBoard >= 90
+                ? "#38e58c"
+                : "#62b4ff";
+
+
         updateTimerDisplay();
     }
+
 
     function updateTimerDisplay() {
-        document.getElementById("timer").innerText = isTimerEnabled ? timeLeft + "s" : "∞";
+
+        document.getElementById(
+            "timer"
+        ).innerText =
+            isTimerEnabled
+                ? timeLeft + "s"
+                : "∞";
     }
 
+
     function disableTimerLifeline() {
-        if (!gameActive || !timerDisableAvailable) return;
-        isTimerEnabled = false; timerDisableAvailable = false; usedTimerLifeline = true;
+
+        if (
+            !gameActive ||
+            !timerDisableAvailable
+        )
+            return;
+
+
+        isTimerEnabled = false;
+
+        timerDisableAvailable = false;
+
+        usedTimerLifeline = true;
+
         clearInterval(timerInterval);
-        document.getElementById("btnDisableTimer").disabled = true;
+
+
+        document.getElementById(
+            "btnDisableTimer"
+        ).disabled = true;
+
+
         updateTimerDisplay();
     }
 
+
+    /* =========================================================
+       RYSOWANIE PLANSZY
+       TYLKO WARSTWA WIZUALNA
+       ========================================================= */
+
     function drawBoard() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+        /*
+         * Tło planszy
+         */
+
+        const boardGradient =
+            ctx.createLinearGradient(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+        boardGradient.addColorStop(
+            0,
+            "#111a2b"
+        );
+
+        boardGradient.addColorStop(
+            1,
+            "#080d18"
+        );
+
+        ctx.fillStyle =
+            boardGradient;
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+        /*
+         * Kostki
+         */
+
+        const gap =
+            Math.max(
+                2,
+                Math.floor(
+                    cellSize * 0.075
+                )
+            );
+
+        const radius =
+            Math.max(
+                3,
+                Math.floor(
+                    cellSize * 0.16
+                )
+            );
+
+
         for (let r = 0; r < ROWS; r++) {
+
             for (let c = 0; c < COLS; c++) {
-                if (gridData[r] && gridData[r][c]) {
-                    ctx.fillStyle = gridData[r][c];
-                    ctx.fillRect(c * cellSize, r * cellSize, cellSize - 1, cellSize - 1);
+
+                const color =
+                    gridData[r] &&
+                    gridData[r][c];
+
+
+                const x =
+                    c * cellSize + gap;
+
+                const y =
+                    r * cellSize + gap;
+
+                const size =
+                    cellSize - gap * 2;
+
+
+                if (color) {
+
+                    /*
+                     * Cień
+                     */
+
+                    ctx.save();
+
+                    ctx.shadowColor =
+                        color;
+
+                    ctx.shadowBlur =
+                        Math.max(
+                            4,
+                            cellSize * 0.16
+                        );
+
+                    ctx.shadowOffsetY =
+                        2;
+
+
+                    /*
+                     * Główny gradient
+                     */
+
+                    const gradient =
+                        ctx.createLinearGradient(
+                            x,
+                            y,
+                            x + size,
+                            y + size
+                        );
+
+
+                    gradient.addColorStop(
+                        0,
+                        lightenColor(
+                            color,
+                            32
+                        )
+                    );
+
+                    gradient.addColorStop(
+                        0.35,
+                        color
+                    );
+
+                    gradient.addColorStop(
+                        1,
+                        darkenColor(
+                            color,
+                            28
+                        )
+                    );
+
+
+                    ctx.fillStyle =
+                        gradient;
+
+
+                    roundRect(
+                        ctx,
+                        x,
+                        y,
+                        size,
+                        size,
+                        radius
+                    );
+
+                    ctx.fill();
+
+
+                    /*
+                     * Obramowanie
+                     */
+
+                    ctx.shadowBlur = 0;
+
+                    ctx.strokeStyle =
+                        "rgba(255,255,255,0.28)";
+
+                    ctx.lineWidth = 1;
+
+                    roundRect(
+                        ctx,
+                        x + 0.5,
+                        y + 0.5,
+                        size - 1,
+                        size - 1,
+                        radius
+                    );
+
+                    ctx.stroke();
+
+
+                    /*
+                     * Refleks świetlny
+                     */
+
+                    const highlight =
+                        ctx.createLinearGradient(
+                            x,
+                            y,
+                            x,
+                            y + size
+                        );
+
+                    highlight.addColorStop(
+                        0,
+                        "rgba(255,255,255,0.28)"
+                    );
+
+                    highlight.addColorStop(
+                        0.25,
+                        "rgba(255,255,255,0.07)"
+                    );
+
+                    highlight.addColorStop(
+                        0.5,
+                        "rgba(255,255,255,0)"
+                    );
+
+
+                    ctx.fillStyle =
+                        highlight;
+
+                    roundRect(
+                        ctx,
+                        x + 1,
+                        y + 1,
+                        size - 2,
+                        size - 2,
+                        Math.max(
+                            2,
+                            radius - 1
+                        )
+                    );
+
+                    ctx.fill();
+
+
+                    ctx.restore();
+
                 } else {
-                    ctx.fillStyle = "#1E1E1E";
-                    ctx.fillRect(c * cellSize, r * cellSize, cellSize - 1, cellSize - 1);
+
+                    /*
+                     * Puste miejsce
+                     */
+
+                    ctx.fillStyle =
+                        "rgba(255,255,255,0.012)";
+
+                    roundRect(
+                        ctx,
+                        x,
+                        y,
+                        size,
+                        size,
+                        radius
+                    );
+
+                    ctx.fill();
                 }
             }
         }
     }
 
-    function updateTimer() {
-        if (!gameActive || !isTimerEnabled) return;
-        timeLeft--;
-        updateTimerDisplay();
-        if (timeLeft <= 0) endGame("Czas minął!");
+
+    /*
+     * Zaokrąglony prostokąt
+     */
+
+    function roundRect(
+        context,
+        x,
+        y,
+        width,
+        height,
+        radius
+    ) {
+
+        const r =
+            Math.min(
+                radius,
+                width / 2,
+                height / 2
+            );
+
+        context.beginPath();
+
+        context.moveTo(
+            x + r,
+            y
+        );
+
+        context.arcTo(
+            x + width,
+            y,
+            x + width,
+            y + height,
+            r
+        );
+
+        context.arcTo(
+            x + width,
+            y + height,
+            x,
+            y + height,
+            r
+        );
+
+        context.arcTo(
+            x,
+            y + height,
+            x,
+            y,
+            r
+        );
+
+        context.arcTo(
+            x,
+            y,
+            x + width,
+            y,
+            r
+        );
+
+        context.closePath();
     }
 
-    canvas.addEventListener("click", (e) => {
-        if (!gameActive) return;
-        const rect = canvas.getBoundingClientRect();
-        const c = Math.floor((e.clientX - rect.left) / cellSize);
-        const r = Math.floor((e.clientY - rect.top) / cellSize);
 
-        if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return;
+    /*
+     * Rozjaśnianie koloru
+     */
 
-        if (hammerMode) {
-            if (gridData[r][c]) {
-                gridData[r][c] = null;
-                hammerMode = false; hammerAvailable = false;
-                const btnHammer = document.getElementById("btnHammer");
-                btnHammer.classList.remove("active"); btnHammer.disabled = true;
-                roundClearedBlocks++; score += 1; statRemoved += 1;
-                updateUI(); applyGravity();
-                if (roundClearedBlocks >= targetBlocks) setTimeout(startNextRound, 200);
-            }
+    function lightenColor(
+        hex,
+        amount
+    ) {
+
+        let num =
+            parseInt(
+                hex.replace("#", ""),
+                16
+            );
+
+        let r =
+            Math.min(
+                255,
+                (num >> 16) + amount
+            );
+
+        let g =
+            Math.min(
+                255,
+                ((num >> 8) & 0x00FF) +
+                amount
+            );
+
+        let b =
+            Math.min(
+                255,
+                (num & 0x0000FF) +
+                amount
+            );
+
+        return `rgb(${r},${g},${b})`;
+    }
+
+
+    /*
+     * Przyciemnianie koloru
+     */
+
+    function darkenColor(
+        hex,
+        amount
+    ) {
+
+        let num =
+            parseInt(
+                hex.replace("#", ""),
+                16
+            );
+
+        let r =
+            Math.max(
+                0,
+                (num >> 16) - amount
+            );
+
+        let g =
+            Math.max(
+                0,
+                ((num >> 8) & 0x00FF) -
+                amount
+            );
+
+        let b =
+            Math.max(
+                0,
+                (num & 0x0000FF) -
+                amount
+            );
+
+        return `rgb(${r},${g},${b})`;
+    }
+
+
+    /* =========================================================
+       TIMER
+       ========================================================= */
+
+    function updateTimer() {
+
+        if (
+            !gameActive ||
+            !isTimerEnabled
+        )
             return;
-        }
 
-        const group = getConnectedGroup(r, c);
-        if (group.length >= 2) {
-            score += group.length; roundClearedBlocks += group.length; statRemoved += group.length;
-            if (group.length > statMaxGroup) statMaxGroup = group.length;
-            if (group.length >= 8) showCombo(group.length);
 
-            group.forEach(([gr, gc]) => gridData[gr][gc] = null);
-            updateUI(); applyGravity();
+        timeLeft--;
 
-            if (roundClearedBlocks >= targetBlocks) {
-                setTimeout(startNextRound, 200);
+        updateTimerDisplay();
+
+
+        if (timeLeft <= 0)
+            endGame("Czas minął!");
+    }
+
+
+    /* =========================================================
+       KLIKANIE KOSTEK
+       ========================================================= */
+
+    canvas.addEventListener(
+        "click",
+        (e) => {
+
+            if (!gameActive)
+                return;
+
+
+            const rect =
+                canvas.getBoundingClientRect();
+
+
+            const c =
+                Math.floor(
+                    (
+                        e.clientX -
+                        rect.left
+                    ) / cellSize
+                );
+
+
+            const r =
+                Math.floor(
+                    (
+                        e.clientY -
+                        rect.top
+                    ) / cellSize
+                );
+
+
+            if (
+                r < 0 ||
+                r >= ROWS ||
+                c < 0 ||
+                c >= COLS
+            )
+                return;
+
+
+            if (hammerMode) {
+
+                if (gridData[r][c]) {
+
+                    gridData[r][c] = null;
+
+                    hammerMode = false;
+
+                    hammerAvailable = false;
+
+
+                    const btnHammer =
+                        document.getElementById(
+                            "btnHammer"
+                        );
+
+
+                    btnHammer.classList.remove(
+                        "active"
+                    );
+
+                    btnHammer.disabled =
+                        true;
+
+
+                    roundClearedBlocks++;
+
+                    score++;
+
+                    statRemoved++;
+
+
+                    updateUI();
+
+                    applyGravity();
+
+
+                    if (
+                        roundClearedBlocks >=
+                        targetBlocks
+                    ) {
+
+                        setTimeout(
+                            startNextRound,
+                            200
+                        );
+                    }
+                }
+
                 return;
             }
-            if (checkGameOver()) {
-                setTimeout(() => endGame(`Brak możliwych ruchów!\nNie osiągnięto celu 90% zbitych klocków.`), 300);
+
+
+            const group =
+                getConnectedGroup(
+                    r,
+                    c
+                );
+
+
+            if (group.length >= 2) {
+
+                score += group.length;
+
+                roundClearedBlocks +=
+                    group.length;
+
+                statRemoved +=
+                    group.length;
+
+
+                if (
+                    group.length >
+                    statMaxGroup
+                )
+                    statMaxGroup =
+                        group.length;
+
+
+                if (
+                    group.length >= 8
+                )
+                    showCombo(
+                        group.length
+                    );
+
+
+                group.forEach(
+                    ([gr, gc]) =>
+                        gridData[gr][gc] =
+                            null
+                );
+
+
+                updateUI();
+
+                applyGravity();
+
+
+                if (
+                    roundClearedBlocks >=
+                    targetBlocks
+                ) {
+
+                    setTimeout(
+                        startNextRound,
+                        200
+                    );
+
+                    return;
+                }
+
+
+                if (checkGameOver()) {
+
+                    setTimeout(
+                        () =>
+                            endGame(
+                                `Brak możliwych ruchów!\nNie osiągnięto celu 90% zbitych klocków.`
+                            ),
+                        300
+                    );
+                }
             }
         }
-    });
+    );
 
-    function getConnectedGroup(startR, startC) {
-        const color = gridData[startR][startC];
-        if (!color) return [];
-        const queue = [[startR, startC]], visited = new Set([`${startR},${startC}`]), group = [];
+
+    /* =========================================================
+       GRUPY
+       ========================================================= */
+
+    function getConnectedGroup(
+        startR,
+        startC
+    ) {
+
+        const color =
+            gridData[startR][startC];
+
+
+        if (!color)
+            return [];
+
+
+        const queue = [
+            [startR, startC]
+        ];
+
+
+        const visited =
+            new Set([
+                `${startR},${startC}`
+            ]);
+
+
+        const group = [];
+
 
         while (queue.length > 0) {
-            const [r, c] = queue.shift();
-            group.push([r, c]);
-            const dirs = [[-1,0], [1,0], [0,-1], [0,1]];
-            for (let [dr, dc] of dirs) {
-                const nr = r + dr, nc = c + dc;
-                if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
-                    if (gridData[nr][nc] === color && !visited.has(`${nr},${nc}`)) {
-                        visited.add(`${nr},${nc}`);
-                        queue.push([nr, nc]);
+
+            const [r, c] =
+                queue.shift();
+
+
+            group.push([
+                r,
+                c
+            ]);
+
+
+            const dirs = [
+                [-1, 0],
+                [1, 0],
+                [0, -1],
+                [0, 1]
+            ];
+
+
+            for (
+                let [dr, dc]
+                of dirs
+            ) {
+
+                const nr =
+                    r + dr;
+
+                const nc =
+                    c + dc;
+
+
+                if (
+                    nr >= 0 &&
+                    nr < ROWS &&
+                    nc >= 0 &&
+                    nc < COLS
+                ) {
+
+                    if (
+                        gridData[nr][nc] ===
+                        color &&
+                        !visited.has(
+                            `${nr},${nc}`
+                        )
+                    ) {
+
+                        visited.add(
+                            `${nr},${nc}`
+                        );
+
+                        queue.push([
+                            nr,
+                            nc
+                        ]);
                     }
                 }
             }
         }
+
+
         return group;
     }
 
+
+    /* =========================================================
+       GRAWITACJA
+       ========================================================= */
+
     function applyGravity() {
-        for (let c = 0; c < COLS; c++) {
-            let emptyIdx = ROWS - 1;
-            for (let r = ROWS - 1; r >= 0; r--) {
-                if (gridData[r][c] !== null) {
-                    if (r !== emptyIdx) {
-                        gridData[emptyIdx][c] = gridData[r][c];
-                        gridData[r][c] = null;
+
+        for (
+            let c = 0;
+            c < COLS;
+            c++
+        ) {
+
+            let emptyIdx =
+                ROWS - 1;
+
+
+            for (
+                let r = ROWS - 1;
+                r >= 0;
+                r--
+            ) {
+
+                if (
+                    gridData[r][c] !==
+                    null
+                ) {
+
+                    if (
+                        r !== emptyIdx
+                    ) {
+
+                        gridData[
+                            emptyIdx
+                        ][c] =
+                            gridData[r][c];
+
+                        gridData[r][c] =
+                            null;
                     }
+
                     emptyIdx--;
                 }
             }
         }
 
+
         let targetCol = 0;
-        for (let c = 0; c < COLS; c++) {
-            let isColEmpty = true;
-            for (let r = 0; r < ROWS; r++) {
-                if (gridData[r][c] !== null) { isColEmpty = false; break; }
+
+
+        for (
+            let c = 0;
+            c < COLS;
+            c++
+        ) {
+
+            let isColEmpty =
+                true;
+
+
+            for (
+                let r = 0;
+                r < ROWS;
+                r++
+            ) {
+
+                if (
+                    gridData[r][c] !==
+                    null
+                ) {
+
+                    isColEmpty =
+                        false;
+
+                    break;
+                }
             }
+
+
             if (!isColEmpty) {
-                if (targetCol !== c) {
-                    for (let r = 0; r < ROWS; r++) {
-                        gridData[r][targetCol] = gridData[r][c];
-                        gridData[r][c] = null;
+
+                if (
+                    targetCol !== c
+                ) {
+
+                    for (
+                        let r = 0;
+                        r < ROWS;
+                        r++
+                    ) {
+
+                        gridData[
+                            r
+                        ][targetCol] =
+                            gridData[r][c];
+
+                        gridData[r][c] =
+                            null;
                     }
                 }
+
                 targetCol++;
             }
         }
+
+
         drawBoard();
     }
+
+
+    /* =========================================================
+       MŁOTEK
+       ========================================================= */
 
     function toggleHammer() {
-        if (!gameActive || !hammerAvailable) return;
-        hammerMode = !hammerMode;
-        document.getElementById("btnHammer").classList.toggle("active", hammerMode);
+
+        if (
+            !gameActive ||
+            !hammerAvailable
+        )
+            return;
+
+
+        hammerMode =
+            !hammerMode;
+
+
+        document
+            .getElementById("btnHammer")
+            .classList
+            .toggle(
+                "active",
+                hammerMode
+            );
     }
 
+
+    /* =========================================================
+       MIESZANIE
+       ========================================================= */
+
     function triggerShuffle() {
-        if (!gameActive || !shuffleAvailable) return;
+
+        if (
+            !gameActive ||
+            !shuffleAvailable
+        )
+            return;
+
+
         const flat = [];
-        for (let r = 0; r < ROWS; r++) {
-            for (let c = 0; c < COLS; c++) {
-                if (gridData[r][c]) flat.push(gridData[r][c]);
+
+
+        for (
+            let r = 0;
+            r < ROWS;
+            r++
+        ) {
+
+            for (
+                let c = 0;
+                c < COLS;
+                c++
+            ) {
+
+                if (
+                    gridData[r][c]
+                )
+                    flat.push(
+                        gridData[r][c]
+                    );
             }
         }
-        for (let i = flat.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [flat[i], flat[j]] = [flat[j], flat[i]];
+
+
+        for (
+            let i = flat.length - 1;
+            i > 0;
+            i--
+        ) {
+
+            const j =
+                Math.floor(
+                    Math.random() *
+                    (i + 1)
+                );
+
+
+            [
+                flat[i],
+                flat[j]
+            ] = [
+                flat[j],
+                flat[i]
+            ];
         }
+
+
         let idx = 0;
-        for (let r = 0; r < ROWS; r++) {
-            for (let c = 0; c < COLS; c++) {
-                if (gridData[r][c]) gridData[r][c] = flat[idx++];
+
+
+        for (
+            let r = 0;
+            r < ROWS;
+            r++
+        ) {
+
+            for (
+                let c = 0;
+                c < COLS;
+                c++
+            ) {
+
+                if (
+                    gridData[r][c]
+                )
+                    gridData[r][c] =
+                        flat[idx++];
             }
         }
+
+
         shuffleAvailable = false;
-        document.getElementById("btnShuffle").disabled = true;
+
+
+        document.getElementById(
+            "btnShuffle"
+        ).disabled = true;
+
+
         drawBoard();
     }
 
+
+    /* =========================================================
+       COMBO
+       ========================================================= */
+
     function showCombo(count) {
-        const comboLbl = document.getElementById("comboLabel");
-        comboLbl.innerText = `🔥 COMBO x${count}!`;
-        setTimeout(() => { comboLbl.innerText = ""; }, 1500);
+
+        const comboLbl =
+            document.getElementById(
+                "comboLabel"
+            );
+
+
+        comboLbl.innerText =
+            `🔥 COMBO x${count}!`;
+
+
+        setTimeout(
+            () => {
+                comboLbl.innerText = "";
+            },
+            1500
+        );
     }
 
+
+    /* =========================================================
+       KONIEC GRY
+       ========================================================= */
+
     function checkGameOver() {
-        for (let r = 0; r < ROWS; r++) {
-            for (let c = 0; c < COLS; c++) {
-                if (gridData[r][c] !== null) {
-                    const group = getConnectedGroup(r, c);
-                    if (group.length >= 2) return false;
+
+        for (
+            let r = 0;
+            r < ROWS;
+            r++
+        ) {
+
+            for (
+                let c = 0;
+                c < COLS;
+                c++
+            ) {
+
+                if (
+                    gridData[r][c] !==
+                    null
+                ) {
+
+                    const group =
+                        getConnectedGroup(
+                            r,
+                            c
+                        );
+
+
+                    if (
+                        group.length >= 2
+                    )
+                        return false;
                 }
             }
         }
+
+
         return true;
     }
 
+
     function endGame(reason) {
+
         gameActive = false;
-        clearInterval(timerInterval);
+
+        clearInterval(
+            timerInterval
+        );
+
         updateActionButton();
-        document.getElementById("gameOverReason").innerText = reason;
-        document.getElementById("finalScoreDisplay").innerText = score;
-        openModal("gameOverModal");
+
+
+        document.getElementById(
+            "gameOverReason"
+        ).innerText =
+            reason;
+
+
+        document.getElementById(
+            "finalScoreDisplay"
+        ).innerText =
+            score;
+
+
+        openModal(
+            "gameOverModal"
+        );
     }
 
+
+    /* =========================================================
+       TOP 10
+       ========================================================= */
+
     function saveScoreAndClose() {
-        const nameInput = document.getElementById("playerNameInput");
-        const name = nameInput.value.trim() || "Gracz";
-        const now = new Date();
-        const dateFormatted = `${now.toLocaleDateString()}, ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-        
-        let highScores = JSON.parse(localStorage.getItem("kostki_highscores") || "[]");
-        highScores.push({ name: name, score: score, infinite: usedTimerLifeline, date: dateFormatted });
-        highScores.sort((a, b) => b.score - a.score);
-        highScores = highScores.slice(0, 10);
-        
-        localStorage.setItem("kostki_highscores", JSON.stringify(highScores));
-        closeModal("gameOverModal");
+
+        const nameInput =
+            document.getElementById(
+                "playerNameInput"
+            );
+
+
+        const name =
+            nameInput.value.trim() ||
+            "Gracz";
+
+
+        const now =
+            new Date();
+
+
+        const dateFormatted =
+            `${now.toLocaleDateString()}, ${now.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit"
+            })}`;
+
+
+        let highScores =
+            JSON.parse(
+                localStorage.getItem(
+                    "kostki_highscores"
+                ) || "[]"
+            );
+
+
+        highScores.push({
+            name: name,
+            score: score,
+            infinite:
+                usedTimerLifeline,
+            date:
+                dateFormatted
+        });
+
+
+        highScores.sort(
+            (a, b) =>
+                b.score - a.score
+        );
+
+
+        highScores =
+            highScores.slice(
+                0,
+                10
+            );
+
+
+        localStorage.setItem(
+            "kostki_highscores",
+            JSON.stringify(
+                highScores
+            )
+        );
+
+
+        closeModal(
+            "gameOverModal"
+        );
+
+
         nameInput.value = "";
+
+
         showHighScores();
     }
 
+
     function showHighScores() {
-        const list = document.getElementById("highScoresList");
-        let highScores = JSON.parse(localStorage.getItem("kostki_highscores") || "[]");
+
+        const list =
+            document.getElementById(
+                "highScoresList"
+            );
+
+
+        let highScores =
+            JSON.parse(
+                localStorage.getItem(
+                    "kostki_highscores"
+                ) || "[]"
+            );
+
+
         list.innerHTML = "";
-        if (highScores.length === 0) {
-            list.innerHTML = "<li>Brak wyników</li>";
+
+
+        if (
+            highScores.length === 0
+        ) {
+
+            list.innerHTML =
+                "<li>Brak wyników</li>";
+
         } else {
-            highScores.forEach(s => {
-                const li = document.createElement("li");
-                li.innerHTML = `${s.name}: <strong>${s.score} pkt</strong> <small>(${s.date})</small>${s.infinite ? ' <span class="infinity-icon">∞</span>' : ''}`;
-                list.appendChild(li);
-            });
+
+            highScores.forEach(
+                s => {
+
+                    const li =
+                        document.createElement(
+                            "li"
+                        );
+
+
+                    li.innerHTML =
+                        `${s.name}: <strong>${s.score} pkt</strong> <small>(${s.date})</small>${s.infinite ? ' <span class="infinity-icon">∞</span>' : ''}`;
+
+
+                    list.appendChild(li);
+                }
+            );
         }
-        openModal("scoresModal");
+
+
+        openModal(
+            "scoresModal"
+        );
     }
 
-    function showInfo() { openModal("infoModal"); }
-    function showMessageModal(title, text) {
-        document.getElementById("msgModalTitle").innerText = title;
-        document.getElementById("msgModalText").innerText = text;
-        openModal("messageModal");
+
+    /* =========================================================
+       MODALE
+       ========================================================= */
+
+    function showInfo() {
+
+        openModal(
+            "infoModal"
+        );
     }
 
-    function openModal(id) { document.getElementById(id).style.display = "flex"; }
-    function closeModal(id) { document.getElementById(id).style.display = "none"; }
 
-    window.addEventListener("resize", () => {
-        if (gameActive) {
-            calculateGridDimensions();
-            drawBoard();
+    function showMessageModal(
+        title,
+        text
+    ) {
+
+        document.getElementById(
+            "msgModalTitle"
+        ).innerText =
+            title;
+
+
+        document.getElementById(
+            "msgModalText"
+        ).innerText =
+            text;
+
+
+        openModal(
+            "messageModal"
+        );
+    }
+
+
+    function openModal(id) {
+
+        document.getElementById(
+            id
+        ).style.display =
+            "flex";
+    }
+
+
+    function closeModal(id) {
+
+        document.getElementById(
+            id
+        ).style.display =
+            "none";
+    }
+
+
+    /* =========================================================
+       ZMIANA ROZMIARU
+       ========================================================= */
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            if (gameActive) {
+
+                calculateGridDimensions();
+
+                drawBoard();
+            }
         }
-    });
+    );
+
+
+    /* =========================================================
+       START
+       ========================================================= */
 
     newGame();
+
 </script>
+
 </body>
 </html>
