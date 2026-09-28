@@ -11,57 +11,6 @@
     <style>
 
         /* =========================================================
-           KOSTKI BY TOMI 2.0
-           NOWOCZESNY INTERFEJS
-        ========================================================= */
-
-        :root {
-            --bg: #0d0d0f;
-            --bg-secondary: #151518;
-            --panel: #19191d;
-            --panel-light: #202024;
-
-            --border: rgba(255,255,255,0.10);
-            --border-strong: rgba(255,255,255,0.16);
-
-            --text: #f5f5f7;
-            --text-secondary: #a5a5ae;
-            --text-muted: #707078;
-
-            --orange: #ff720f;
-            --orange-light: #ff8a24;
-            --orange-dark: #d95300;
-
-            --green: #30d158;
-            --red: #ff453a;
-            --yellow: #ffd60a;
-            --blue: #0a84ff;
-            --purple: #bf5af2;
-
-            --radius-small: 12px;
-            --radius: 18px;
-            --radius-large: 24px;
-
-            --shadow:
-                0 12px 35px rgba(0,0,0,0.35);
-
-            --orange-glow:
-                0 0 25px rgba(255,114,15,0.22);
-
-            --font:
-                -apple-system,
-                BlinkMacSystemFont,
-                "SF Pro Display",
-                "SF Pro Text",
-                "Segoe UI",
-                Roboto,
-                Helvetica,
-                Arial,
-                sans-serif;
-        }
-
-
-        /* =========================================================
            RESET
         ========================================================= */
 
@@ -71,7 +20,6 @@
             user-select: none;
             -webkit-user-select: none;
         }
-
 
         html,
         body {
@@ -83,32 +31,67 @@
 
             background:
                 radial-gradient(
-                    circle at 50% -20%,
-                    rgba(255,114,15,0.12),
+                    circle at 50% -10%,
+                    rgba(255, 126, 0, 0.13),
                     transparent 38%
                 ),
                 radial-gradient(
-                    circle at 0% 100%,
-                    rgba(255,114,15,0.06),
-                    transparent 30%
+                    circle at 100% 100%,
+                    rgba(255, 87, 34, 0.07),
+                    transparent 35%
                 ),
-                var(--bg);
+                #0d0d0f;
 
-            color: var(--text);
+            color: #f5f5f7;
 
-            font-family: var(--font);
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+        }
 
-            -webkit-font-smoothing: antialiased;
-            text-rendering: optimizeLegibility;
+        body {
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.018) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.018) 1px,
+                    transparent 1px
+                );
+
+            background-size: 32px 32px;
+            mask-image: linear-gradient(
+                to bottom,
+                rgba(0,0,0,.7),
+                transparent 75%
+            );
         }
 
 
         /* =========================================================
-           APP
+           MAIN APP
         ========================================================= */
 
         #app-container {
             position: relative;
+            z-index: 1;
 
             display: flex;
             flex-direction: column;
@@ -117,45 +100,19 @@
             height: 100vh;
 
             padding:
-                max(8px, env(safe-area-inset-top))
-                max(8px, env(safe-area-inset-right))
-                max(8px, env(safe-area-inset-bottom))
-                max(8px, env(safe-area-inset-left));
+                max(10px, env(safe-area-inset-top))
+                12px
+                max(8px, env(safe-area-inset-bottom));
 
-            gap: 8px;
+            gap: 9px;
 
-            justify-content: flex-start;
+            justify-content: space-between;
             align-items: center;
-
-            overflow: hidden;
-        }
-
-
-        /* delikatna poświata w tle */
-
-        #app-container::before {
-            content: "";
-
-            position: absolute;
-
-            width: 380px;
-            height: 380px;
-
-            top: -250px;
-            left: 50%;
-
-            transform: translateX(-50%);
-
-            background: rgba(255,114,15,0.10);
-
-            filter: blur(80px);
-
-            pointer-events: none;
         }
 
 
         /* =========================================================
-           WSPÓLNA SZEROKOŚĆ
+           COMMON WIDTH
         ========================================================= */
 
         .header,
@@ -164,8 +121,7 @@
         .progress-container,
         .canvas-container,
         .combo-text,
-        .game-footer {
-
+        .app-footer {
             width: 100%;
             max-width: 900px;
         }
@@ -177,109 +133,12 @@
 
         .header {
             display: flex;
-
             gap: 8px;
-
-            padding: 2px 0;
+            flex-shrink: 0;
         }
-
 
         .header button {
-            min-height: 42px;
-        }
-
-
-        /* =========================================================
-           STATYSTYKI
-        ========================================================= */
-
-        .stats-bar {
-
-            display: flex;
-
-            justify-content: space-between;
-            align-items: center;
-
-            gap: 8px;
-
-            padding: 10px 14px;
-
-            background:
-                linear-gradient(
-                    180deg,
-                    rgba(255,255,255,0.055),
-                    rgba(255,255,255,0.025)
-                );
-
-            border: 1px solid var(--border);
-
-            border-radius: var(--radius);
-
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.04),
-                0 8px 25px rgba(0,0,0,0.22);
-
-            font-weight: 650;
-            font-size: 0.78rem;
-
-            flex-wrap: wrap;
-        }
-
-
-        .stats-bar div {
-            white-space: nowrap;
-        }
-
-
-        .stats-bar span {
-            font-weight: 800;
-        }
-
-
-        /* =========================================================
-           PROGRESS
-        ========================================================= */
-
-        .progress-container {
-
-            height: 9px;
-
-            padding: 2px;
-
-            overflow: hidden;
-
-            background: #202024;
-
-            border:
-                1px solid rgba(255,255,255,0.07);
-
-            border-radius: 999px;
-
-            box-shadow:
-                inset 0 2px 5px rgba(0,0,0,0.5);
-        }
-
-
-        .progress-bar-fill {
-
-            height: 100%;
-
-            width: 0%;
-
-            border-radius: 999px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #ff6500,
-                    #ff8a1f
-                );
-
-            box-shadow:
-                0 0 14px rgba(255,114,15,0.65);
-
-            transition:
-                width 0.3s ease;
+            min-height: 44px;
         }
 
 
@@ -288,132 +147,296 @@
         ========================================================= */
 
         button {
-
             position: relative;
 
             background:
                 linear-gradient(
                     180deg,
-                    #242428,
-                    #19191d
+                    #252528 0%,
+                    #1b1b1e 100%
                 );
 
-            color: var(--text);
+            color: #f5f5f7;
 
-            border:
-                1px solid rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.10);
 
-            padding: 9px 11px;
+            padding: 11px 13px;
 
             border-radius: 13px;
 
             font-weight: 700;
-
-            font-size: 0.82rem;
+            font-size: 0.86rem;
 
             flex: 1;
 
             cursor: pointer;
-
             white-space: nowrap;
 
             box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.05),
-                0 5px 15px rgba(0,0,0,0.25);
+                0 5px 15px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.06);
 
             transition:
-                transform 0.15s ease,
-                background 0.15s ease,
-                border-color 0.15s ease,
-                box-shadow 0.15s ease;
+                transform .15s ease,
+                background .15s ease,
+                border-color .15s ease,
+                box-shadow .15s ease;
         }
 
+        button::after {
+            content: "";
+            position: absolute;
+            inset: 1px;
 
-        button:active {
-            transform: scale(0.97);
-        }
+            border-radius: 12px;
 
-
-        button:hover {
-            border-color:
-                rgba(255,255,255,0.18);
-        }
-
-
-        button:disabled {
+            pointer-events: none;
 
             background:
-                #202024;
+                linear-gradient(
+                    180deg,
+                    rgba(255,255,255,.035),
+                    transparent 50%
+                );
+        }
 
-            color:
-                #686870;
+        button:active {
+            transform: scale(.97);
+        }
 
-            border-color:
-                rgba(255,255,255,0.05);
+        button:not(:disabled):hover {
+            border-color: rgba(255,126,0,.45);
 
-            opacity: 0.55;
+            box-shadow:
+                0 7px 20px rgba(0,0,0,.35),
+                0 0 18px rgba(255,126,0,.08);
+        }
 
+        button:disabled {
+            background: #252528;
+            color: #77777d;
+            opacity: .55;
             cursor: not-allowed;
-
             box-shadow: none;
         }
 
-
         button.active {
-
             background:
                 linear-gradient(
-                    180deg,
-                    #ff8a24,
-                    #e95d00
+                    135deg,
+                    #ff9d00,
+                    #ff5a00
                 );
+
+            border-color: #ff9d00;
 
             color: #fff;
 
-            border-color:
-                rgba(255,155,80,0.55);
+            box-shadow:
+                0 0 0 2px rgba(255,126,0,.15),
+                0 7px 22px rgba(255,90,0,.28);
+        }
+
+        button.btn-end {
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff453a,
+                    #d91f18
+                );
+
+            border-color: rgba(255,69,58,.55);
 
             box-shadow:
-                0 0 22px rgba(255,114,15,0.35),
-                inset 0 1px 0 rgba(255,255,255,0.18);
+                0 7px 20px rgba(255,59,48,.18);
         }
 
 
-        button.btn-end {
+        /* =========================================================
+           STATS BAR
+        ========================================================= */
+
+        .stats-bar {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 7px;
+
+            font-weight: 700;
+            font-size: .79rem;
 
             background:
                 linear-gradient(
                     180deg,
-                    #ff4b40,
-                    #d92d28
+                    rgba(38,38,42,.94),
+                    rgba(25,25,28,.94)
                 );
 
-            border-color:
-                rgba(255,90,80,0.45);
+            padding: 9px 12px;
+
+            border-radius: 14px;
+
+            border: 1px solid rgba(255,255,255,.075);
 
             box-shadow:
-                0 0 18px rgba(255,69,58,0.18);
+                0 8px 25px rgba(0,0,0,.22),
+                inset 0 1px 0 rgba(255,255,255,.035);
+
+            flex-wrap: wrap;
+        }
+
+        .stats-bar > div {
+            white-space: nowrap;
+        }
+
+        #roundLabel {
+            color: #ffd60a !important;
+        }
+
+        #totalClearedGame {
+            color: #ff9f0a !important;
+        }
+
+        #targetBlocks {
+            color: #30d158 !important;
+        }
+
+        #progressPercent {
+            color: #0a84ff !important;
         }
 
 
         /* =========================================================
-           CONTROLS
+           PROGRESS BAR
+        ========================================================= */
+
+        .progress-container {
+            height: 16px;
+
+            padding: 3px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #252529,
+                    #19191c
+                );
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+            border: 1px solid rgba(255,255,255,.08);
+
+            box-shadow:
+                inset 0 2px 5px rgba(0,0,0,.45),
+                0 5px 15px rgba(0,0,0,.20);
+
+            flex-shrink: 0;
+        }
+
+        .progress-bar-fill {
+            position: relative;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ff7a00,
+                    #ff9f0a,
+                    #ffd60a
+                );
+
+            height: 100%;
+            width: 0%;
+
+            border-radius: 7px;
+
+            transition:
+                width .35s ease;
+
+            box-shadow:
+                0 0 12px rgba(255,126,0,.45);
+        }
+
+        .progress-bar-fill::after {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 45%;
+
+            background: rgba(255,255,255,.18);
+
+            border-radius: inherit;
+        }
+
+
+        /* =========================================================
+           GAME CONTROLS
         ========================================================= */
 
         .controls {
-
             display: flex;
 
-            gap: 8px;
+            gap: 10px;
+
+            flex-shrink: 0;
+        }
+
+        .controls button {
+            min-height: 50px;
+
+            padding:
+                12px
+                10px;
+
+            border-radius: 15px;
+
+            font-size: .88rem;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #222226,
+                    #17171a
+                );
+
+            border-color: rgba(255,255,255,.11);
+        }
+
+        .controls button:not(:disabled):hover {
+            background:
+                linear-gradient(
+                    180deg,
+                    #2b2b30,
+                    #1c1c20
+                );
+        }
+
+        #btnDisableTimer {
+            color: #f5f5f7;
+        }
+
+        #btnHammer {
+            color: #f5f5f7;
+        }
+
+        #btnShuffle {
+            color: #f5f5f7;
         }
 
 
         /* =========================================================
-           PLANSZA
+           CANVAS
         ========================================================= */
 
         .canvas-container {
-
             flex: 1;
 
             min-height: 0;
@@ -423,114 +446,66 @@
             justify-content: center;
             align-items: center;
 
-            position: relative;
+            padding:
+                2px
+                0;
         }
-
-
-        .canvas-container::before {
-
-            content: "";
-
-            position: absolute;
-
-            width: 80%;
-            height: 70%;
-
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(255,114,15,0.09),
-                    transparent 70%
-                );
-
-            filter: blur(25px);
-
-            pointer-events: none;
-        }
-
 
         canvas {
-
-            position: relative;
+            display: block;
 
             background:
-                #111114;
+                #171719;
 
-            border-radius: 18px;
+            border-radius: 15px;
 
-            border:
-                1px solid rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,.12);
 
             box-shadow:
+                0 12px 40px rgba(0,0,0,.45),
+                0 0 0 1px rgba(255,126,0,.035);
 
-                0 20px 45px rgba(0,0,0,0.55),
-
-                0 0 0 1px rgba(255,255,255,0.02),
-
-                0 0 35px rgba(255,114,15,0.08);
-
-            display: block;
+            image-rendering: auto;
         }
 
 
         /* =========================================================
            COMBO
-           PRZENIESIONE POD PLANSZĘ
         ========================================================= */
 
         .combo-text {
-
-            height: 32px;
-
-            min-height: 32px;
+            height: 28px;
 
             display: flex;
 
+            align-items: center;
             justify-content: center;
 
-            align-items: center;
-
-            color: transparent;
+            color: #ff9f0a;
 
             font-weight: 900;
 
-            font-size: 1rem;
+            font-size: 1.05rem;
 
-            letter-spacing: 2px;
+            letter-spacing: .08em;
 
             text-align: center;
 
-            text-transform: uppercase;
+            text-shadow:
+                0 0 12px rgba(255,126,0,.45);
 
-            transition:
-                opacity 0.2s ease,
-                transform 0.2s ease;
+            flex-shrink: 0;
         }
-
 
         .combo-text:not(:empty) {
-
-            color: #fff;
-
-            text-shadow:
-                0 0 8px rgba(255,69,58,0.9),
-                0 0 22px rgba(255,114,15,0.8);
-
             animation:
-                comboAppear 0.35s ease-out;
+                comboPop .25s ease-out;
         }
 
-
-        @keyframes comboAppear {
-
+        @keyframes comboPop {
             0% {
                 opacity: 0;
-                transform: scale(0.7);
-            }
-
-            70% {
-                opacity: 1;
-                transform: scale(1.08);
+                transform: scale(.8);
             }
 
             100% {
@@ -541,70 +516,49 @@
 
 
         /* =========================================================
-           STOPKA
+           FOOTER
         ========================================================= */
 
-        .game-footer {
-
+        .app-footer {
             flex-shrink: 0;
-
-            height: 25px;
-
-            min-height: 25px;
-
-            display: flex;
-
-            justify-content: center;
-            align-items: center;
-
-            color: #686870;
-
-            font-size: 0.68rem;
-
-            font-weight: 600;
-
-            letter-spacing: 0.3px;
 
             text-align: center;
 
+            color: #6f6f75;
+
+            font-size: .68rem;
+
+            letter-spacing: .04em;
+
+            padding-top: 1px;
             padding-bottom: 2px;
         }
 
-
-        .game-footer span {
-            color: #85858d;
-        }
-
-
-        .game-footer strong {
-            color: #a6a6ad;
-            font-weight: 700;
+        .app-footer span {
+            color: #8c8c92;
         }
 
 
         /* =========================================================
-           MODALE
+           MODALS
         ========================================================= */
 
         .modal {
-
             display: none;
 
             position: fixed;
 
-            inset: 0;
+            top: 0;
+            left: 0;
 
             width: 100%;
             height: 100%;
 
             background:
-                rgba(0,0,0,0.78);
+                rgba(0,0,0,.78);
 
-            backdrop-filter:
-                blur(14px);
-
-            -webkit-backdrop-filter:
-                blur(14px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
 
             justify-content: center;
             align-items: center;
@@ -614,27 +568,21 @@
             padding: 20px;
         }
 
-
         .modal-content {
-
-            position: relative;
-
             background:
                 linear-gradient(
                     180deg,
-                    #202024,
-                    #151518
+                    #252529,
+                    #19191c
                 );
 
             padding: 22px;
 
-            border-radius: 24px;
+            border-radius: 20px;
 
-            border:
-                1px solid rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,.10);
 
             max-width: 500px;
-
             width: 100%;
 
             max-height: 85vh;
@@ -646,106 +594,64 @@
             text-align: left;
 
             box-shadow:
-
-                0 30px 80px rgba(0,0,0,0.65),
-
-                0 0 40px rgba(255,114,15,0.08);
-
-            animation:
-                modalAppear 0.2s ease-out;
+                0 25px 70px rgba(0,0,0,.65),
+                0 0 0 1px rgba(255,126,0,.04);
         }
-
-
-        @keyframes modalAppear {
-
-            from {
-                opacity: 0;
-                transform: translateY(12px) scale(0.97);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
 
         .modal-content h2 {
-
             margin-top: 0;
 
-            color: var(--orange-light);
+            color: #ff9f0a;
 
             text-align: center;
 
             font-size: 1.35rem;
-
-            letter-spacing: -0.3px;
-
-            text-shadow:
-                0 0 18px rgba(255,114,15,0.25);
         }
 
-
         .modal-content h3 {
-
-            color: #ff9b4a;
+            color: #ff9f0a;
 
             margin-bottom: 5px;
 
             font-size: 1rem;
         }
 
-
         .modal-content ul {
-
             padding-left: 20px;
-
             margin-top: 5px;
         }
 
-
         .modal-content li {
-
-            margin-bottom: 7px;
-
-            font-size: 0.9rem;
-
-            color: #d2d2d7;
-
+            margin-bottom: 8px;
+            font-size: .9rem;
             line-height: 1.4;
         }
 
-
         .close-btn {
-
             background:
                 linear-gradient(
-                    180deg,
-                    #ff7a18,
-                    #df5600
+                    135deg,
+                    #ff7a00,
+                    #ff4f00
                 );
 
             margin-top: 15px;
 
             width: 100%;
 
-            padding: 11px;
+            padding: 12px;
 
             border-radius: 13px;
 
             font-weight: 800;
 
-            border:
-                1px solid rgba(255,170,100,0.3);
+            border: none;
 
             box-shadow:
-                0 8px 22px rgba(255,114,15,0.18);
+                0 8px 20px rgba(255,90,0,.18);
         }
 
-
         .modal-text {
-
             font-size: 1rem;
 
             line-height: 1.5;
@@ -755,45 +661,35 @@
             margin: 15px 0;
 
             text-align: center;
-
-            color: #d8d8dd;
         }
 
-
         .version-badge {
-
             text-align: center;
 
-            font-size: 0.75rem;
+            font-size: .75rem;
 
-            color: #77777f;
+            color: #77777d;
 
-            margin-top: -10px;
+            margin-top: -8px;
 
             margin-bottom: 15px;
         }
 
-
         ol {
-
-            padding-left: 20px;
-
+            padding-left: 22px;
             text-align: left;
         }
 
-
         ol li {
-
-            margin-bottom: 7px;
+            margin-bottom: 8px;
         }
 
 
         /* =========================================================
-           INPUT
+           NAME INPUT
         ========================================================= */
 
         .name-input {
-
             width: 100%;
 
             padding: 13px;
@@ -802,11 +698,10 @@
 
             border-radius: 13px;
 
-            border:
-                1px solid rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,126,0,.45);
 
             background:
-                #111114;
+                #111113;
 
             color: white;
 
@@ -816,65 +711,27 @@
 
             outline: none;
 
-            box-sizing: border-box;
-
             user-select: text;
             -webkit-user-select: text;
 
             transition:
-                border-color 0.2s ease,
-                box-shadow 0.2s ease;
+                border-color .2s ease,
+                box-shadow .2s ease;
         }
-
 
         .name-input:focus {
-
-            border-color:
-                var(--orange);
+            border-color: #ff9f0a;
 
             box-shadow:
-                0 0 0 3px rgba(255,114,15,0.12);
+                0 0 0 3px rgba(255,159,10,.12);
         }
-
-
-        .name-input::placeholder {
-            color: #65656d;
-        }
-
 
         .infinity-icon {
-
-            color: var(--orange-light);
+            color: #ff9f0a;
 
             font-weight: bold;
 
             margin-left: 4px;
-
-            text-shadow:
-                0 0 10px rgba(255,114,15,0.5);
-        }
-
-
-        /* =========================================================
-           SCROLLBAR
-        ========================================================= */
-
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-
-        ::-webkit-scrollbar-thumb {
-
-            background:
-                #44444a;
-
-            border-radius: 10px;
         }
 
 
@@ -885,155 +742,131 @@
         @media (max-width: 600px) {
 
             #app-container {
+                padding-left: 10px;
+                padding-right: 10px;
 
-                padding:
-                    max(7px, env(safe-area-inset-top))
-                    7px
-                    max(7px, env(safe-area-inset-bottom))
-                    7px;
+                gap: 8px;
+            }
 
+            .header {
                 gap: 7px;
             }
 
-
-            .header {
-
-                gap: 6px;
-            }
-
-
-            button {
-
-                font-size: 0.76rem;
+            .header button {
+                min-height: 43px;
 
                 padding:
                     9px 7px;
 
+                font-size: .75rem;
+
                 border-radius: 12px;
             }
 
-
             .stats-bar {
+                padding:
+                    8px 9px;
 
-                padding: 9px 10px;
+                gap: 5px;
 
-                gap: 6px;
+                font-size: .70rem;
 
-                font-size: 0.68rem;
-
-                border-radius: 15px;
+                border-radius: 13px;
             }
-
 
             .progress-container {
+                height: 17px;
 
-                height: 8px;
+                border-radius: 10px;
             }
-
 
             .controls {
-
-                gap: 6px;
+                gap: 8px;
             }
 
+            .controls button {
+                min-height: 52px;
 
-            .canvas-container {
+                padding:
+                    11px 5px;
 
-                min-height: 0;
+                font-size: .78rem;
+
+                border-radius: 14px;
             }
-
-
-            canvas {
-
-                border-radius: 15px;
-            }
-
 
             .combo-text {
+                height: 27px;
 
-                height: 29px;
-
-                min-height: 29px;
-
-                font-size: 0.9rem;
-
-                letter-spacing: 1.5px;
+                font-size: .92rem;
             }
 
-
-            .game-footer {
-
-                height: 22px;
-
-                min-height: 22px;
-
-                font-size: 0.62rem;
+            canvas {
+                border-radius: 13px;
             }
 
-
-            .modal {
-
-                padding: 12px;
-            }
-
-
-            .modal-content {
-
-                padding: 18px;
-
-                border-radius: 20px;
-            }
-
-
-            .modal-content h2 {
-
-                font-size: 1.15rem;
-            }
-
-
-            .modal-content li {
-
-                font-size: 0.82rem;
+            .app-footer {
+                font-size: .62rem;
             }
         }
 
 
         /* =========================================================
-           BARDZO MAŁE EKRANY
+           VERY SMALL PHONES
         ========================================================= */
 
-        @media (max-height: 650px) {
+        @media (max-height: 700px) {
 
             #app-container {
                 gap: 5px;
             }
 
+            .header button {
+                min-height: 38px;
+
+                padding:
+                    7px 6px;
+            }
 
             .stats-bar {
+                padding:
+                    6px 8px;
 
-                padding: 6px 9px;
+                font-size: .66rem;
             }
 
+            .progress-container {
+                height: 14px;
+            }
 
             .controls button {
-
-                padding: 7px 8px;
+                min-height: 44px;
             }
-
 
             .combo-text {
+                height: 22px;
 
-                height: 24px;
-
-                min-height: 24px;
+                font-size: .85rem;
             }
 
+            .app-footer {
+                font-size: .58rem;
+            }
+        }
 
-            .game-footer {
 
-                height: 18px;
+        /* =========================================================
+           SAFE AREA - IPHONE
+        ========================================================= */
 
-                min-height: 18px;
+        @supports (padding: max(0px)) {
+
+            #app-container {
+                padding-top:
+                    max(8px, env(safe-area-inset-top));
+
+                padding-bottom:
+                    max(6px, env(safe-area-inset-bottom));
             }
         }
 
@@ -1044,9 +877,9 @@
 
 <div id="app-container">
 
-    <!-- =====================================================
-         GÓRNY PASEK
-    ====================================================== -->
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
 
     <div class="header">
 
@@ -1068,17 +901,15 @@
     </div>
 
 
-    <!-- =====================================================
+    <!-- =========================================================
          STATYSTYKI
-    ====================================================== -->
+    ========================================================== -->
 
     <div class="stats-bar">
 
         <div>
             🚩 Runda:
-            <span
-                id="roundLabel"
-                style="color:#FFD60A;">
+            <span id="roundLabel" style="color:#FFD60A;">
                 1
             </span>
         </div>
@@ -1131,9 +962,9 @@
     </div>
 
 
-    <!-- =====================================================
-         PASEK POSTĘPU
-    ====================================================== -->
+    <!-- =========================================================
+         PROGRESS
+    ========================================================== -->
 
     <div class="progress-container">
 
@@ -1145,9 +976,9 @@
     </div>
 
 
-    <!-- =====================================================
-         PRZYCISKI
-    ====================================================== -->
+    <!-- =========================================================
+         GAME CONTROLS
+    ========================================================== -->
 
     <div class="controls">
 
@@ -1172,9 +1003,9 @@
     </div>
 
 
-    <!-- =====================================================
-         PLANSZA
-    ====================================================== -->
+    <!-- =========================================================
+         GAME BOARD
+    ========================================================== -->
 
     <div class="canvas-container">
 
@@ -1183,9 +1014,9 @@
     </div>
 
 
-    <!-- =====================================================
-         COMBO — POD PLANSZĄ
-    ====================================================== -->
+    <!-- =========================================================
+         COMBO - POD PLANSZĄ
+    ========================================================== -->
 
     <div
         class="combo-text"
@@ -1193,22 +1024,20 @@
     </div>
 
 
-    <!-- =====================================================
-         STOPKA
-    ====================================================== -->
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
 
-    <div class="game-footer">
-        <span>
-            Created by <strong>ToMi</strong> with AI · wersja 2.0.0
-        </span>
+    <div class="app-footer">
+        Created by ToMi with AI · wersja 2.0.0
     </div>
 
 </div>
 
 
-<!-- =========================================================
+<!-- =============================================================
      INSTRUKCJA
-========================================================= -->
+============================================================== -->
 
 <div id="infoModal" class="modal">
 
@@ -1219,9 +1048,8 @@
         </h2>
 
         <div class="version-badge">
-            Wersja 1.2.0
+            Wersja 2.0.0
         </div>
-
 
         <h3>
             1. Zasady rozgrywki i cel gry
@@ -1244,11 +1072,7 @@
                 <strong>90% klocków</strong>
                 z obecnej planszy.
                 Wywoła to
-                <em>Złoty Wstrząs</em>
-                – wolne miejsca zostaną uzupełnione
-                nowymi klockami,
-                a istniejące pozostaną
-                na swoich miejscach.
+                <em>Złoty Wstrząs</em>.
             </li>
 
             <li>
@@ -1257,7 +1081,7 @@
                 gdy upłynie limit czasu
                 lub gdy na planszy zabraknie
                 możliwych ruchów,
-                a cel 90% nie został jeszcze osiągnięty.
+                a cel 90% nie został osiągnięty.
             </li>
 
         </ul>
@@ -1271,21 +1095,14 @@
 
             <li>
                 <strong>Wzrost trudności:</strong>
-                Z każdą nową rundą
-                na planszy pojawia się więcej kolorów
-                (od 3 kolorów w Rundach 1–2
-                do 7 kolorów w najwyższych rundach).
+                Z każdą nową rundą na planszy
+                pojawia się więcej kolorów.
             </li>
 
             <li>
                 <strong>Fizyka klocków:</strong>
-                Po usunięciu grupy,
-                klocki znajdujące się wyżej
-                opadają w dół.
-                Gdy cała pionowa kolumna
-                zostanie opróżniona,
-                pozostałe kolumny
-                zsuwają się do lewej strony.
+                Po usunięciu grupy klocki
+                znajdujące się wyżej opadają w dół.
             </li>
 
         </ul>
@@ -1298,8 +1115,8 @@
         <ul>
 
             <li>
-                Za każdą zbitą kostkę
-                otrzymujesz <strong>1 punkt</strong>.
+                Za każdą zbitą kostkę otrzymujesz
+                <strong>1 punkt</strong>.
             </li>
 
             <li>
@@ -1319,29 +1136,23 @@
         <ul>
 
             <li>
-                ⏱️ <strong>Wyłącz czas:</strong>
-                Zatrzymuje i wyłącza odliczanie zegara,
-                pozwalając na spokojną rozgrywkę bez stresu.
-                Użycie tego koła dodaje symbol
-                <strong>∞</strong>
-                przy Twoim wyniku w tabeli TOP 10.
+                ⏱️
+                <strong>Wyłącz czas:</strong>
+                Zatrzymuje i wyłącza odliczanie zegara.
             </li>
 
             <li>
-                🔨 <strong>Młotek:</strong>
-                Pozwala zniszczyć jedną pojedynczą,
-                wybraną kostkę,
-                która blokuje układ.
-                Kliknij przycisk Młotka,
-                a następnie w wybraną kostkę.
+                🔨
+                <strong>Młotek:</strong>
+                Pozwala zniszczyć jedną pojedynczą
+                wybraną kostkę.
             </li>
 
             <li>
-                🔀 <strong>Mieszaj:</strong>
+                🔀
+                <strong>Mieszaj:</strong>
                 Przemieszcza losowo układ
-                wszystkich pozostałych
-                na planszy,
-                gdy zabraknie pasujących układów.
+                wszystkich pozostałych klocków.
             </li>
 
         </ul>
@@ -1361,9 +1172,9 @@
 </div>
 
 
-<!-- =========================================================
-     WYNIKI
-========================================================= -->
+<!-- =============================================================
+     HIGH SCORES
+============================================================== -->
 
 <div id="scoresModal" class="modal">
 
@@ -1397,9 +1208,9 @@
 </div>
 
 
-<!-- =========================================================
-     KOMUNIKAT
-========================================================= -->
+<!-- =============================================================
+     MESSAGE MODAL
+============================================================== -->
 
 <div id="messageModal" class="modal">
 
@@ -1429,9 +1240,9 @@
 </div>
 
 
-<!-- =========================================================
-     KONIEC GRY
-========================================================= -->
+<!-- =============================================================
+     GAME OVER
+============================================================== -->
 
 <div id="gameOverModal" class="modal">
 
@@ -1464,14 +1275,12 @@
 
         </div>
 
-
         <input
             type="text"
             id="playerNameInput"
             class="name-input"
             placeholder="Wpisz swoje imię..."
             maxlength="20">
-
 
         <button
             class="close-btn"
@@ -1493,10 +1302,6 @@
 
 <script>
 
-    /* =========================================================
-       LOGIKA GRY — BEZ ZMIAN
-    ========================================================= */
-
     const PALETTE = [
         "#1E88E5",
         "#4CAF50",
@@ -1506,7 +1311,6 @@
         "#9C27B0",
         "#FF9800"
     ];
-
 
     let ROWS = 18,
         COLS = 12,
@@ -1545,11 +1349,8 @@
     function getColorsForRound(round) {
 
         if (round <= 2) return 3;
-
         if (round <= 4) return 4;
-
         if (round <= 6) return 5;
-
         if (round <= 8) return 6;
 
         return 7;
@@ -1577,7 +1378,9 @@
     function calculateGridDimensions() {
 
         const container =
-            document.querySelector(".canvas-container");
+            document.querySelector(
+                '.canvas-container'
+            );
 
         const availableWidth =
             container.clientWidth;
@@ -1586,39 +1389,39 @@
             container.clientHeight;
 
         const targetCellSize =
-            window.innerWidth < 600 ? 32 : 40;
+            window.innerWidth < 600
+                ? 32
+                : 40;
 
+        COLS =
+            Math.max(
+                8,
+                Math.floor(
+                    availableWidth /
+                    targetCellSize
+                )
+            );
 
-        COLS = Math.max(
-            8,
-            Math.floor(
-                availableWidth /
-                targetCellSize
-            )
-        );
+        ROWS =
+            Math.max(
+                10,
+                Math.floor(
+                    availableHeight /
+                    targetCellSize
+                )
+            );
 
-
-        ROWS = Math.max(
-            10,
-            Math.floor(
-                availableHeight /
-                targetCellSize
-            )
-        );
-
-
-        cellSize = Math.min(
-
-            Math.floor(
-                availableWidth / COLS
-            ),
-
-            Math.floor(
-                availableHeight / ROWS
-            )
-
-        );
-
+        cellSize =
+            Math.min(
+                Math.floor(
+                    availableWidth /
+                    COLS
+                ),
+                Math.floor(
+                    availableHeight /
+                    ROWS
+                )
+            );
 
         canvas.width =
             COLS * cellSize;
@@ -1634,7 +1437,6 @@
             endGame(
                 "Gra zakończona przez gracza."
             );
-
         else
             newGame();
     }
@@ -1646,7 +1448,6 @@
             document.getElementById(
                 "btnGameAction"
             );
-
 
         if (gameActive) {
 
@@ -1672,27 +1473,18 @@
         calculateGridDimensions();
 
         score = 0;
-
         currentRound = 1;
-
         timeLeft = 180;
-
         isTimerEnabled = true;
-
         gameActive = true;
-
         hammerMode = false;
 
         statRemoved = 0;
-
         statMaxGroup = 0;
-
         usedTimerLifeline = false;
 
         hammerAvailable = true;
-
         shuffleAvailable = true;
-
         timerDisableAvailable = true;
 
 
@@ -1704,8 +1496,7 @@
         btnTimer.innerText =
             "⏱️ Wyłącz czas";
 
-        btnTimer.disabled =
-            false;
+        btnTimer.disabled = false;
 
 
         const btnHammer =
@@ -1720,8 +1511,7 @@
             "active"
         );
 
-        btnHammer.disabled =
-            false;
+        btnHammer.disabled = false;
 
 
         document.getElementById(
@@ -1740,13 +1530,11 @@
             timerInterval
         );
 
-
         timerInterval =
             setInterval(
                 updateTimer,
                 1000
             );
-
 
         drawBoard();
     }
@@ -1758,13 +1546,11 @@
 
         hammerMode = false;
 
-
         document.getElementById(
             "btnHammer"
         ).classList.remove(
             "active"
         );
-
 
         calculateGridDimensions();
 
@@ -1773,7 +1559,6 @@
         updateUI();
 
         drawBoard();
-
 
         showMessageModal(
             "✨ ZŁOTY WSTRZĄS!",
@@ -1789,9 +1574,7 @@
                 currentRound
             );
 
-
         gridData = [];
-
 
         for (
             let r = 0;
@@ -1800,7 +1583,6 @@
         ) {
 
             gridData[r] = [];
-
 
             for (
                 let c = 0;
@@ -1818,16 +1600,14 @@
             }
         }
 
-
         totalRoundBlocks =
             ROWS * COLS;
 
-
         targetBlocks =
             Math.ceil(
-                totalRoundBlocks * 0.90
+                totalRoundBlocks *
+                0.90
             );
-
 
         roundClearedBlocks = 0;
     }
@@ -1840,7 +1620,6 @@
                 currentRound
             );
 
-
         for (
             let r = 0;
             r < ROWS;
@@ -1849,7 +1628,6 @@
 
             if (!gridData[r])
                 gridData[r] = [];
-
 
             for (
                 let c = 0;
@@ -1870,16 +1648,14 @@
             }
         }
 
-
         totalRoundBlocks =
             ROWS * COLS;
 
-
         targetBlocks =
             Math.ceil(
-                totalRoundBlocks * 0.90
+                totalRoundBlocks *
+                0.90
             );
-
 
         roundClearedBlocks = 0;
     }
@@ -1892,18 +1668,15 @@
         ).innerText =
             roundClearedBlocks;
 
-
         document.getElementById(
             "targetBlocks"
         ).innerText =
             targetBlocks;
 
-
         document.getElementById(
             "roundLabel"
         ).innerText =
             currentRound;
-
 
         document.getElementById(
             "diffDisplay"
@@ -1911,7 +1684,6 @@
             getDifficultyLabel(
                 currentRound
             );
-
 
         document.getElementById(
             "totalClearedGame"
@@ -1935,7 +1707,6 @@
                 "progressPercent"
             );
 
-
         percentLabel.innerText =
             currentPercentBoard + "%";
 
@@ -1944,7 +1715,6 @@
             document.getElementById(
                 "progressBarFill"
             );
-
 
         const targetPercentProgress =
             targetBlocks > 0
@@ -1993,23 +1763,19 @@
         )
             return;
 
-
         isTimerEnabled = false;
 
         timerDisableAvailable = false;
 
         usedTimerLifeline = true;
 
-
         clearInterval(
             timerInterval
         );
 
-
         document.getElementById(
             "btnDisableTimer"
         ).disabled = true;
-
 
         updateTimerDisplay();
     }
@@ -2023,7 +1789,6 @@
             canvas.width,
             canvas.height
         );
-
 
         for (
             let r = 0;
@@ -2045,7 +1810,6 @@
                     ctx.fillStyle =
                         gridData[r][c];
 
-
                     ctx.fillRect(
                         c * cellSize,
                         r * cellSize,
@@ -2057,7 +1821,6 @@
 
                     ctx.fillStyle =
                         "#1E1E1E";
-
 
                     ctx.fillRect(
                         c * cellSize,
@@ -2079,11 +1842,9 @@
         )
             return;
 
-
         timeLeft--;
 
         updateTimerDisplay();
-
 
         if (timeLeft <= 0)
             endGame("Czas minął!");
@@ -2097,10 +1858,8 @@
             if (!gameActive)
                 return;
 
-
             const rect =
                 canvas.getBoundingClientRect();
-
 
             const c =
                 Math.floor(
@@ -2109,7 +1868,6 @@
                         rect.left
                     ) / cellSize
                 );
-
 
             const r =
                 Math.floor(
@@ -2133,10 +1891,10 @@
 
                 if (gridData[r][c]) {
 
-                    gridData[r][c] = null;
+                    gridData[r][c] =
+                        null;
 
                     hammerMode = false;
-
                     hammerAvailable = false;
 
 
@@ -2144,7 +1902,6 @@
                         document.getElementById(
                             "btnHammer"
                         );
-
 
                     btnHammer.classList.remove(
                         "active"
@@ -2155,9 +1912,7 @@
 
 
                     roundClearedBlocks++;
-
                     score += 1;
-
                     statRemoved += 1;
 
 
@@ -2169,11 +1924,13 @@
                     if (
                         roundClearedBlocks >=
                         targetBlocks
-                    )
+                    ) {
+
                         setTimeout(
                             startNextRound,
                             200
                         );
+                    }
                 }
 
                 return;
@@ -2263,7 +2020,6 @@
         const color =
             gridData[startR][startC];
 
-
         if (!color)
             return [];
 
@@ -2272,12 +2028,10 @@
             [startR, startC]
         ];
 
-
         const visited =
             new Set([
                 `${startR},${startC}`
             ]);
-
 
         const group = [];
 
@@ -2286,9 +2040,10 @@
             queue.length > 0
         ) {
 
-            const [r, c] =
-                queue.shift();
-
+            const [
+                r,
+                c
+            ] = queue.shift();
 
             group.push([
                 r,
@@ -2344,7 +2099,6 @@
             }
         }
 
-
         return group;
     }
 
@@ -2376,16 +2130,12 @@
                         r !== emptyIdx
                     ) {
 
-                        gridData[
-                            emptyIdx
-                        ][c] =
+                        gridData[emptyIdx][c] =
                             gridData[r][c];
-
 
                         gridData[r][c] =
                             null;
                     }
-
 
                     emptyIdx--;
                 }
@@ -2416,9 +2166,7 @@
                     null
                 ) {
 
-                    isColEmpty =
-                        false;
-
+                    isColEmpty = false;
                     break;
                 }
             }
@@ -2436,17 +2184,13 @@
                         r++
                     ) {
 
-                        gridData[
-                            r
-                        ][targetCol] =
+                        gridData[r][targetCol] =
                             gridData[r][c];
-
 
                         gridData[r][c] =
                             null;
                     }
                 }
-
 
                 targetCol++;
             }
@@ -2465,19 +2209,15 @@
         )
             return;
 
-
         hammerMode =
             !hammerMode;
 
-
-        document
-            .getElementById(
-                "btnHammer"
-            )
-            .classList.toggle(
-                "active",
-                hammerMode
-            );
+        document.getElementById(
+            "btnHammer"
+        ).classList.toggle(
+            "active",
+            hammerMode
+        );
     }
 
 
@@ -2527,7 +2267,6 @@
                     (i + 1)
                 );
 
-
             [
                 flat[i],
                 flat[j]
@@ -2565,11 +2304,9 @@
         shuffleAvailable =
             false;
 
-
         document.getElementById(
             "btnShuffle"
         ).disabled = true;
-
 
         drawBoard();
     }
@@ -2582,14 +2319,14 @@
                 "comboLabel"
             );
 
-
         comboLbl.innerText =
             `🔥 COMBO x${count}!`;
 
 
         setTimeout(
             () => {
-                comboLbl.innerText = "";
+                comboLbl.innerText =
+                    "";
             },
             1500
         );
@@ -2621,7 +2358,6 @@
                             c
                         );
 
-
                     if (
                         group.length >= 2
                     )
@@ -2629,7 +2365,6 @@
                 }
             }
         }
-
 
         return true;
     }
@@ -2642,7 +2377,6 @@
         clearInterval(
             timerInterval
         );
-
 
         updateActionButton();
 
@@ -2672,7 +2406,6 @@
                 "playerNameInput"
             );
 
-
         const name =
             nameInput.value.trim() ||
             "Gracz";
@@ -2698,22 +2431,18 @@
 
 
         highScores.push({
-
             name: name,
-
             score: score,
-
             infinite:
                 usedTimerLifeline,
-
-            date:
-                dateFormatted
+            date: dateFormatted
         });
 
 
         highScores.sort(
             (a, b) =>
-                b.score - a.score
+                b.score -
+                a.score
         );
 
 
@@ -2737,7 +2466,8 @@
         );
 
 
-        nameInput.value = "";
+        nameInput.value =
+            "";
 
 
         showHighScores();
@@ -2760,11 +2490,13 @@
             );
 
 
-        list.innerHTML = "";
+        list.innerHTML =
+            "";
 
 
         if (
-            highScores.length === 0
+            highScores.length ===
+            0
         ) {
 
             list.innerHTML =
