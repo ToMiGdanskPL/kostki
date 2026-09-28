@@ -3,44 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0d0d0f">
 
     <title>Kostki by ToMi</title>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>">
 
     <style>
+
         /* =========================================================
-           KOSTKI BY TOMI
+           KOSTKI BY TOMI 2.0
            NOWOCZESNY INTERFEJS
-           Mechanika gry pozostaje bez zmian.
-           ========================================================= */
+        ========================================================= */
 
         :root {
-            --bg: #0b0b0d;
-            --bg-secondary: #111113;
-            --panel: #171719;
-            --panel-light: #1b1b1e;
-            --panel-hover: #202024;
+            --bg: #0d0d0f;
+            --bg-secondary: #151518;
+            --panel: #19191d;
+            --panel-light: #202024;
 
-            --border: #2b2b30;
-            --border-light: #35353b;
+            --border: rgba(255,255,255,0.10);
+            --border-strong: rgba(255,255,255,0.16);
 
             --text: #f5f5f7;
-            --text-secondary: #a5a5ad;
-            --text-muted: #77777f;
+            --text-secondary: #a5a5ae;
+            --text-muted: #707078;
 
-            --orange: #ff7200;
-            --orange-light: #ff841f;
-            --orange-dark: #d95d00;
+            --orange: #ff720f;
+            --orange-light: #ff8a24;
+            --orange-dark: #d95300;
 
             --green: #30d158;
-            --yellow: #ffd60a;
             --red: #ff453a;
+            --yellow: #ffd60a;
             --blue: #0a84ff;
+            --purple: #bf5af2;
 
-            --shadow: rgba(0, 0, 0, 0.45);
+            --radius-small: 12px;
+            --radius: 18px;
+            --radius-large: 24px;
+
+            --shadow:
+                0 12px 35px rgba(0,0,0,0.35);
+
+            --orange-glow:
+                0 0 25px rgba(255,114,15,0.22);
+
+            --font:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
         }
+
+
+        /* =========================================================
+           RESET
+        ========================================================= */
 
         * {
             box-sizing: border-box;
@@ -48,6 +71,7 @@
             user-select: none;
             -webkit-user-select: none;
         }
+
 
         html,
         body {
@@ -60,65 +84,31 @@
             background:
                 radial-gradient(
                     circle at 50% -20%,
-                    rgba(255, 114, 0, 0.12),
-                    transparent 40%
+                    rgba(255,114,15,0.12),
+                    transparent 38%
                 ),
-                #0b0b0d;
+                radial-gradient(
+                    circle at 0% 100%,
+                    rgba(255,114,15,0.06),
+                    transparent 30%
+                ),
+                var(--bg);
 
             color: var(--text);
 
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "SF Pro Display",
-                "SF Pro Text",
-                "Segoe UI",
-                Roboto,
-                Helvetica,
-                Arial,
-                sans-serif;
+            font-family: var(--font);
 
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
         }
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-
-            background:
-                linear-gradient(
-                    rgba(255,255,255,0.015) 1px,
-                    transparent 1px
-                ),
-                linear-gradient(
-                    90deg,
-                    rgba(255,255,255,0.015) 1px,
-                    transparent 1px
-                );
-
-            background-size: 32px 32px;
-
-            mask-image: linear-gradient(
-                to bottom,
-                black,
-                transparent 80%
-            );
-
-            opacity: 0.35;
-        }
-
 
         /* =========================================================
-           GŁÓWNY KONTENER
-           ========================================================= */
+           APP
+        ========================================================= */
 
         #app-container {
             position: relative;
-            z-index: 1;
 
             display: flex;
             flex-direction: column;
@@ -127,92 +117,119 @@
             height: 100vh;
 
             padding:
-                max(12px, env(safe-area-inset-top))
-                max(12px, env(safe-area-inset-right))
-                max(12px, env(safe-area-inset-bottom))
-                max(12px, env(safe-area-inset-left));
+                max(8px, env(safe-area-inset-top))
+                max(8px, env(safe-area-inset-right))
+                max(8px, env(safe-area-inset-bottom))
+                max(8px, env(safe-area-inset-left));
 
-            gap: 10px;
+            gap: 8px;
 
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
+
+            overflow: hidden;
+        }
+
+
+        /* delikatna poświata w tle */
+
+        #app-container::before {
+            content: "";
+
+            position: absolute;
+
+            width: 380px;
+            height: 380px;
+
+            top: -250px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            background: rgba(255,114,15,0.10);
+
+            filter: blur(80px);
+
+            pointer-events: none;
         }
 
 
         /* =========================================================
-           GÓRNY PASEK
-           ========================================================= */
+           WSPÓLNA SZEROKOŚĆ
+        ========================================================= */
 
-        .header {
+        .header,
+        .stats-bar,
+        .controls,
+        .progress-container,
+        .canvas-container,
+        .combo-text,
+        .game-footer {
+
             width: 100%;
             max-width: 900px;
+        }
 
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .header {
             display: flex;
+
             gap: 8px;
 
             padding: 2px 0;
         }
 
+
         .header button {
-            min-height: 46px;
+            min-height: 42px;
         }
 
 
         /* =========================================================
            STATYSTYKI
-           ========================================================= */
+        ========================================================= */
 
         .stats-bar {
-            width: 100%;
-            max-width: 900px;
 
-            display: grid;
+            display: flex;
 
-            grid-template-columns:
-                repeat(5, minmax(0, 1fr));
+            justify-content: space-between;
+            align-items: center;
 
-            gap: 6px;
+            gap: 8px;
 
-            padding: 6px;
+            padding: 10px 14px;
 
             background:
                 linear-gradient(
                     180deg,
-                    rgba(255,255,255,0.045),
-                    rgba(255,255,255,0.02)
+                    rgba(255,255,255,0.055),
+                    rgba(255,255,255,0.025)
                 );
 
             border: 1px solid var(--border);
 
-            border-radius: 18px;
+            border-radius: var(--radius);
 
             box-shadow:
-                0 10px 35px rgba(0,0,0,0.25),
-                inset 0 1px 0 rgba(255,255,255,0.03);
+                inset 0 1px 0 rgba(255,255,255,0.04),
+                0 8px 25px rgba(0,0,0,0.22);
 
-            font-weight: 600;
-            font-size: 0.76rem;
+            font-weight: 650;
+            font-size: 0.78rem;
 
-            align-items: center;
+            flex-wrap: wrap;
         }
 
-        .stats-bar > div {
-            min-width: 0;
 
-            padding: 9px 5px;
-
-            text-align: center;
-
-            border-radius: 12px;
-
-            color: var(--text-secondary);
-
-            background: rgba(255,255,255,0.018);
-
+        .stats-bar div {
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
+
 
         .stats-bar span {
             font-weight: 800;
@@ -220,44 +237,46 @@
 
 
         /* =========================================================
-           PASEK POSTĘPU
-           ========================================================= */
+           PROGRESS
+        ========================================================= */
 
         .progress-container {
-            width: 100%;
-            max-width: 900px;
 
-            height: 8px;
+            height: 9px;
 
-            padding: 0;
-
-            background: #1b1b1e;
-
-            border: 1px solid #27272c;
-
-            border-radius: 100px;
+            padding: 2px;
 
             overflow: hidden;
 
+            background: #202024;
+
+            border:
+                1px solid rgba(255,255,255,0.07);
+
+            border-radius: 999px;
+
             box-shadow:
-                inset 0 1px 3px rgba(0,0,0,0.7);
+                inset 0 2px 5px rgba(0,0,0,0.5);
         }
 
+
         .progress-bar-fill {
+
             height: 100%;
+
             width: 0%;
+
+            border-radius: 999px;
 
             background:
                 linear-gradient(
                     90deg,
                     #ff6500,
-                    #ff8a22
+                    #ff8a1f
                 );
 
-            border-radius: 100px;
-
             box-shadow:
-                0 0 14px rgba(255,114,0,0.65);
+                0 0 14px rgba(255,114,15,0.65);
 
             transition:
                 width 0.3s ease;
@@ -265,31 +284,31 @@
 
 
         /* =========================================================
-           PRZYCISKI
-           ========================================================= */
+           BUTTONS
+        ========================================================= */
 
         button {
-            appearance: none;
-            -webkit-appearance: none;
+
+            position: relative;
 
             background:
                 linear-gradient(
                     180deg,
-                    #242427,
-                    #19191c
+                    #242428,
+                    #19191d
                 );
 
             color: var(--text);
 
-            border: 1px solid var(--border);
+            border:
+                1px solid rgba(255,255,255,0.10);
 
-            padding: 10px 13px;
+            padding: 9px 11px;
 
-            min-height: 44px;
-
-            border-radius: 14px;
+            border-radius: 13px;
 
             font-weight: 700;
+
             font-size: 0.82rem;
 
             flex: 1;
@@ -299,196 +318,281 @@
             white-space: nowrap;
 
             box-shadow:
-                0 5px 15px rgba(0,0,0,0.25),
-                inset 0 1px 0 rgba(255,255,255,0.04);
+                inset 0 1px 0 rgba(255,255,255,0.05),
+                0 5px 15px rgba(0,0,0,0.25);
 
             transition:
                 transform 0.15s ease,
                 background 0.15s ease,
                 border-color 0.15s ease,
-                box-shadow 0.15s ease,
-                opacity 0.15s ease;
+                box-shadow 0.15s ease;
         }
 
-        button:hover {
-            background:
-                linear-gradient(
-                    180deg,
-                    #2b2b2f,
-                    #1d1d20
-                );
-
-            border-color: #414148;
-        }
 
         button:active {
-            transform: scale(0.96);
+            transform: scale(0.97);
         }
 
+
+        button:hover {
+            border-color:
+                rgba(255,255,255,0.18);
+        }
+
+
         button:disabled {
-            background: #18181b;
-            border-color: #242428;
 
-            color: #5e5e65;
+            background:
+                #202024;
 
-            opacity: 0.5;
+            color:
+                #686870;
+
+            border-color:
+                rgba(255,255,255,0.05);
+
+            opacity: 0.55;
 
             cursor: not-allowed;
 
             box-shadow: none;
         }
 
+
         button.active {
+
             background:
                 linear-gradient(
-                    135deg,
-                    #ff8a22,
-                    #ed6500
+                    180deg,
+                    #ff8a24,
+                    #e95d00
                 );
-
-            border-color: #ff9b4a;
 
             color: #fff;
 
+            border-color:
+                rgba(255,155,80,0.55);
+
             box-shadow:
-                0 0 22px rgba(255,114,0,0.38),
+                0 0 22px rgba(255,114,15,0.35),
                 inset 0 1px 0 rgba(255,255,255,0.18);
         }
 
+
         button.btn-end {
+
             background:
                 linear-gradient(
-                    135deg,
-                    #ff453a,
-                    #c92c25
+                    180deg,
+                    #ff4b40,
+                    #d92d28
                 );
 
-            border-color: rgba(255,69,58,0.55);
+            border-color:
+                rgba(255,90,80,0.45);
 
             box-shadow:
-                0 5px 20px rgba(255,69,58,0.18);
-        }
-
-        button.btn-end:hover {
-            background:
-                linear-gradient(
-                    135deg,
-                    #ff5147,
-                    #d63129
-                );
+                0 0 18px rgba(255,69,58,0.18);
         }
 
 
         /* =========================================================
-           KONTROLKI
-           ========================================================= */
+           CONTROLS
+        ========================================================= */
 
         .controls {
-            width: 100%;
-            max-width: 900px;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 8px;
-        }
-
-        .controls button {
-            min-height: 48px;
-        }
-
-
-        /* =========================================================
-           COMBO
-           ========================================================= */
-
-        .combo-text {
-            height: 28px;
-
-            color: var(--orange);
-
-            font-weight: 900;
-
-            font-size: 1rem;
-
-            text-align: center;
-
-            letter-spacing: 0.08em;
-
-            text-shadow:
-                0 0 15px rgba(255,114,0,0.65);
 
             display: flex;
-            align-items: center;
-            justify-content: center;
 
-            pointer-events: none;
+            gap: 8px;
         }
 
 
         /* =========================================================
            PLANSZA
-           ========================================================= */
+        ========================================================= */
 
         .canvas-container {
+
             flex: 1;
 
-            width: 100%;
+            min-height: 0;
 
             display: flex;
 
             justify-content: center;
             align-items: center;
 
-            min-height: 0;
-
-            padding: 2px;
+            position: relative;
         }
 
-        canvas {
+
+        .canvas-container::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 80%;
+            height: 70%;
+
             background:
-                linear-gradient(
-                    145deg,
-                    #18181b,
-                    #101012
+                radial-gradient(
+                    circle,
+                    rgba(255,114,15,0.09),
+                    transparent 70%
                 );
 
-            border-radius: 20px;
+            filter: blur(25px);
 
-            border: 1px solid #303035;
-
-            box-shadow:
-                0 20px 50px rgba(0,0,0,0.55),
-                0 0 0 1px rgba(255,255,255,0.025),
-                inset 0 1px 0 rgba(255,255,255,0.035);
-
-            max-width: 100%;
-            max-height: 100%;
-
-            transition:
-                box-shadow 0.25s ease;
+            pointer-events: none;
         }
 
-        canvas:active {
+
+        canvas {
+
+            position: relative;
+
+            background:
+                #111114;
+
+            border-radius: 18px;
+
+            border:
+                1px solid rgba(255,255,255,0.12);
+
             box-shadow:
-                0 12px 35px rgba(0,0,0,0.65),
-                0 0 0 1px rgba(255,114,0,0.18);
+
+                0 20px 45px rgba(0,0,0,0.55),
+
+                0 0 0 1px rgba(255,255,255,0.02),
+
+                0 0 35px rgba(255,114,15,0.08);
+
+            display: block;
+        }
+
+
+        /* =========================================================
+           COMBO
+           PRZENIESIONE POD PLANSZĘ
+        ========================================================= */
+
+        .combo-text {
+
+            height: 32px;
+
+            min-height: 32px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            color: transparent;
+
+            font-weight: 900;
+
+            font-size: 1rem;
+
+            letter-spacing: 2px;
+
+            text-align: center;
+
+            text-transform: uppercase;
+
+            transition:
+                opacity 0.2s ease,
+                transform 0.2s ease;
+        }
+
+
+        .combo-text:not(:empty) {
+
+            color: #fff;
+
+            text-shadow:
+                0 0 8px rgba(255,69,58,0.9),
+                0 0 22px rgba(255,114,15,0.8);
+
+            animation:
+                comboAppear 0.35s ease-out;
+        }
+
+
+        @keyframes comboAppear {
+
+            0% {
+                opacity: 0;
+                transform: scale(0.7);
+            }
+
+            70% {
+                opacity: 1;
+                transform: scale(1.08);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+
+        /* =========================================================
+           STOPKA
+        ========================================================= */
+
+        .game-footer {
+
+            flex-shrink: 0;
+
+            height: 25px;
+
+            min-height: 25px;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            color: #686870;
+
+            font-size: 0.68rem;
+
+            font-weight: 600;
+
+            letter-spacing: 0.3px;
+
+            text-align: center;
+
+            padding-bottom: 2px;
+        }
+
+
+        .game-footer span {
+            color: #85858d;
+        }
+
+
+        .game-footer strong {
+            color: #a6a6ad;
+            font-weight: 700;
         }
 
 
         /* =========================================================
            MODALE
-           ========================================================= */
+        ========================================================= */
 
         .modal {
+
             display: none;
 
             position: fixed;
 
-            top: 0;
-            left: 0;
+            inset: 0;
 
             width: 100%;
             height: 100%;
@@ -496,32 +600,38 @@
             background:
                 rgba(0,0,0,0.78);
 
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            backdrop-filter:
+                blur(14px);
+
+            -webkit-backdrop-filter:
+                blur(14px);
 
             justify-content: center;
             align-items: center;
 
             z-index: 100;
 
-            padding: 18px;
+            padding: 20px;
         }
 
+
         .modal-content {
+
             position: relative;
 
             background:
                 linear-gradient(
-                    145deg,
-                    #1c1c20,
-                    #121214
+                    180deg,
+                    #202024,
+                    #151518
                 );
 
-            padding: 24px 20px 20px;
+            padding: 22px;
 
-            border-radius: 26px;
+            border-radius: 24px;
 
-            border: 1px solid #34343a;
+            border:
+                1px solid rgba(255,255,255,0.12);
 
             max-width: 500px;
 
@@ -531,23 +641,26 @@
 
             overflow-y: auto;
 
-            color: var(--text);
+            color: #fff;
 
             text-align: left;
 
             box-shadow:
+
                 0 30px 80px rgba(0,0,0,0.65),
-                0 0 0 1px rgba(255,255,255,0.025),
-                inset 0 1px 0 rgba(255,255,255,0.04);
+
+                0 0 40px rgba(255,114,15,0.08);
 
             animation:
-                modalIn 0.22s ease-out;
+                modalAppear 0.2s ease-out;
         }
 
-        @keyframes modalIn {
+
+        @keyframes modalAppear {
+
             from {
                 opacity: 0;
-                transform: translateY(15px) scale(0.97);
+                transform: translateY(12px) scale(0.97);
             }
 
             to {
@@ -556,163 +669,144 @@
             }
         }
 
-        .modal-content::before {
-            content: "";
-
-            position: absolute;
-
-            top: 0;
-            left: 50%;
-
-            transform: translateX(-50%);
-
-            width: 48px;
-            height: 4px;
-
-            border-radius: 10px;
-
-            background: var(--orange);
-
-            box-shadow:
-                0 0 12px rgba(255,114,0,0.45);
-        }
 
         .modal-content h2 {
-            margin-top: 4px;
 
-            color: var(--text);
+            margin-top: 0;
+
+            color: var(--orange-light);
 
             text-align: center;
 
-            font-size: 1.45rem;
+            font-size: 1.35rem;
 
-            letter-spacing: -0.03em;
+            letter-spacing: -0.3px;
+
+            text-shadow:
+                0 0 18px rgba(255,114,15,0.25);
         }
+
 
         .modal-content h3 {
-            color: var(--orange);
 
-            margin-top: 22px;
-            margin-bottom: 8px;
+            color: #ff9b4a;
 
-            font-size: 0.95rem;
+            margin-bottom: 5px;
+
+            font-size: 1rem;
         }
 
+
         .modal-content ul {
+
             padding-left: 20px;
 
             margin-top: 5px;
         }
 
+
         .modal-content li {
-            margin-bottom: 9px;
+
+            margin-bottom: 7px;
 
             font-size: 0.9rem;
 
-            line-height: 1.45;
+            color: #d2d2d7;
 
-            color: #c7c7cd;
+            line-height: 1.4;
         }
 
-        .modal-content strong {
-            color: #fff;
-        }
 
         .close-btn {
+
             background:
                 linear-gradient(
-                    135deg,
-                    var(--orange-light),
-                    var(--orange-dark)
+                    180deg,
+                    #ff7a18,
+                    #df5600
                 );
 
             margin-top: 15px;
 
             width: 100%;
 
-            padding: 12px;
+            padding: 11px;
 
-            min-height: 48px;
-
-            border-radius: 15px;
+            border-radius: 13px;
 
             font-weight: 800;
 
-            border: 1px solid rgba(255,160,90,0.35);
+            border:
+                1px solid rgba(255,170,100,0.3);
 
             box-shadow:
-                0 8px 25px rgba(255,114,0,0.18);
+                0 8px 22px rgba(255,114,15,0.18);
         }
 
-        .close-btn:hover {
-            background:
-                linear-gradient(
-                    135deg,
-                    #ff9238,
-                    #e96800
-                );
-        }
 
         .modal-text {
+
             font-size: 1rem;
 
-            line-height: 1.55;
+            line-height: 1.5;
 
             white-space: pre-line;
 
-            margin: 18px 0;
+            margin: 15px 0;
 
             text-align: center;
 
-            color: #c9c9ce;
+            color: #d8d8dd;
         }
 
+
         .version-badge {
+
             text-align: center;
 
             font-size: 0.75rem;
 
-            color: var(--text-muted);
+            color: #77777f;
 
-            margin-top: -8px;
-            margin-bottom: 18px;
+            margin-top: -10px;
 
-            letter-spacing: 0.08em;
+            margin-bottom: 15px;
         }
 
+
         ol {
-            padding-left: 24px;
+
+            padding-left: 20px;
 
             text-align: left;
         }
 
+
         ol li {
-            margin-bottom: 10px;
 
-            color: #d2d2d7;
-        }
-
-        ol li strong {
-            color: #fff;
+            margin-bottom: 7px;
         }
 
 
         /* =========================================================
-           POLE IMIENIA
-           ========================================================= */
+           INPUT
+        ========================================================= */
 
         .name-input {
+
             width: 100%;
 
-            padding: 14px 16px;
+            padding: 13px;
 
             margin: 15px 0;
 
-            border-radius: 15px;
+            border-radius: 13px;
 
-            border: 1px solid #37373d;
+            border:
+                1px solid rgba(255,255,255,0.12);
 
-            background: #101012;
+            background:
+                #111114;
 
             color: white;
 
@@ -727,634 +821,681 @@
             user-select: text;
             -webkit-user-select: text;
 
-            box-shadow:
-                inset 0 2px 6px rgba(0,0,0,0.35);
-
             transition:
                 border-color 0.2s ease,
                 box-shadow 0.2s ease;
         }
 
-        .name-input::placeholder {
-            color: #66666e;
-        }
 
         .name-input:focus {
-            border-color: var(--orange);
+
+            border-color:
+                var(--orange);
 
             box-shadow:
-                0 0 0 3px rgba(255,114,0,0.12),
-                inset 0 2px 6px rgba(0,0,0,0.35);
+                0 0 0 3px rgba(255,114,15,0.12);
         }
 
+
+        .name-input::placeholder {
+            color: #65656d;
+        }
+
+
         .infinity-icon {
-            color: var(--orange);
+
+            color: var(--orange-light);
 
             font-weight: bold;
 
             margin-left: 4px;
 
             text-shadow:
-                0 0 8px rgba(255,114,0,0.45);
+                0 0 10px rgba(255,114,15,0.5);
         }
 
 
         /* =========================================================
-           DROBNE EFEKTY
-           ========================================================= */
+           SCROLLBAR
+        ========================================================= */
 
         ::-webkit-scrollbar {
             width: 5px;
         }
 
+
         ::-webkit-scrollbar-track {
             background: transparent;
         }
 
+
         ::-webkit-scrollbar-thumb {
-            background: #3a3a40;
+
+            background:
+                #44444a;
 
             border-radius: 10px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #505057;
-        }
-
 
         /* =========================================================
-           TELEFONY
-           ========================================================= */
+           MOBILE
+        ========================================================= */
 
         @media (max-width: 600px) {
 
             #app-container {
+
                 padding:
-                    max(8px, env(safe-area-inset-top))
-                    8px
-                    max(8px, env(safe-area-inset-bottom))
-                    8px;
+                    max(7px, env(safe-area-inset-top))
+                    7px
+                    max(7px, env(safe-area-inset-bottom))
+                    7px;
 
                 gap: 7px;
             }
 
+
             .header {
+
                 gap: 6px;
             }
 
-            .header button {
-                min-height: 42px;
 
-                padding: 8px 7px;
+            button {
 
-                border-radius: 13px;
+                font-size: 0.76rem;
 
-                font-size: 0.72rem;
+                padding:
+                    9px 7px;
+
+                border-radius: 12px;
             }
+
 
             .stats-bar {
-                grid-template-columns:
-                    repeat(3, 1fr);
 
-                gap: 5px;
+                padding: 9px 10px;
 
-                padding: 5px;
-
-                border-radius: 16px;
-            }
-
-            .stats-bar > div {
-                padding: 7px 3px;
+                gap: 6px;
 
                 font-size: 0.68rem;
 
-                border-radius: 10px;
+                border-radius: 15px;
             }
 
-            .stats-bar > div:nth-child(4) {
-                grid-column: span 1;
+
+            .progress-container {
+
+                height: 8px;
             }
 
-            .stats-bar > div:nth-child(5) {
-                grid-column: span 2;
-            }
 
             .controls {
+
                 gap: 6px;
             }
 
-            .controls button {
-                min-height: 45px;
 
-                padding: 8px 5px;
+            .canvas-container {
 
-                border-radius: 13px;
-
-                font-size: 0.72rem;
+                min-height: 0;
             }
 
-            .combo-text {
-                height: 24px;
-
-                font-size: 0.9rem;
-            }
 
             canvas {
-                border-radius: 18px;
+
+                border-radius: 15px;
             }
 
+
+            .combo-text {
+
+                height: 29px;
+
+                min-height: 29px;
+
+                font-size: 0.9rem;
+
+                letter-spacing: 1.5px;
+            }
+
+
+            .game-footer {
+
+                height: 22px;
+
+                min-height: 22px;
+
+                font-size: 0.62rem;
+            }
+
+
             .modal {
+
                 padding: 12px;
             }
 
+
             .modal-content {
-                padding: 23px 17px 17px;
 
-                border-radius: 23px;
+                padding: 18px;
 
-                max-height: 88vh;
+                border-radius: 20px;
             }
+
 
             .modal-content h2 {
-                font-size: 1.25rem;
+
+                font-size: 1.15rem;
             }
 
-            .modal-content h3 {
-                font-size: 0.9rem;
-            }
 
             .modal-content li {
-                font-size: 0.83rem;
+
+                font-size: 0.82rem;
             }
         }
 
 
         /* =========================================================
            BARDZO MAŁE EKRANY
-           ========================================================= */
+        ========================================================= */
 
-        @media (max-width: 380px) {
+        @media (max-height: 650px) {
 
             #app-container {
                 gap: 5px;
             }
 
-            .header button {
-                font-size: 0.66rem;
-
-                padding-left: 5px;
-                padding-right: 5px;
-            }
-
-            .stats-bar > div {
-                font-size: 0.61rem;
-            }
-
-            .controls button {
-                font-size: 0.65rem;
-
-                min-height: 42px;
-            }
-        }
-
-
-        /* =========================================================
-           SZERSZE EKRANY
-           ========================================================= */
-
-        @media (min-width: 800px) {
-
-            #app-container {
-                padding: 16px;
-            }
-
-            .header,
-            .stats-bar,
-            .controls,
-            .progress-container {
-                max-width: 1000px;
-            }
-
-            button {
-                min-height: 48px;
-
-                font-size: 0.88rem;
-            }
 
             .stats-bar {
-                font-size: 0.82rem;
+
+                padding: 6px 9px;
+            }
+
+
+            .controls button {
+
+                padding: 7px 8px;
+            }
+
+
+            .combo-text {
+
+                height: 24px;
+
+                min-height: 24px;
+            }
+
+
+            .game-footer {
+
+                height: 18px;
+
+                min-height: 18px;
             }
         }
+
     </style>
 </head>
 
 <body>
 
-    <div id="app-container">
+<div id="app-container">
 
-        <div class="header">
+    <!-- =====================================================
+         GÓRNY PASEK
+    ====================================================== -->
 
-            <button
-                id="btnGameAction"
-                class="btn-end"
-                onclick="handleGameAction()">
-                🔴 Zakończ grę
-            </button>
+    <div class="header">
 
-            <button onclick="showInfo()">
-                ℹ️ Instrukcja
-            </button>
+        <button
+            id="btnGameAction"
+            class="btn-end"
+            onclick="handleGameAction()">
+            🔴 Zakończ grę
+        </button>
 
-            <button onclick="showHighScores()">
-                🏆 Wyniki
-            </button>
+        <button onclick="showInfo()">
+            ℹ️ Instrukcja
+        </button>
 
+        <button onclick="showHighScores()">
+            🏆 Wyniki
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATYSTYKI
+    ====================================================== -->
+
+    <div class="stats-bar">
+
+        <div>
+            🚩 Runda:
+            <span
+                id="roundLabel"
+                style="color:#FFD60A;">
+                1
+            </span>
         </div>
 
-
-        <div class="stats-bar">
-
-            <div>
-                🚩 Runda:
-                <span id="roundLabel" style="color:#FFD60A;">
-                    1
-                </span>
-            </div>
-
-            <div>
-                ⏱️
-                <span id="timer">
-                    180
-                </span>
-            </div>
-
-            <div>
-                📦 Łącznie:
-                <span id="totalClearedGame" style="color:#FF9F0A;">
-                    0
-                </span>
-            </div>
-
-            <div>
-                Poziom:
-                <span id="diffDisplay" style="color:#FF9F0A;">
-                    🟢 Bardzo Łatwy
-                </span>
-            </div>
-
-            <div>
-                🎯 Zbite:
-                <span id="clearedCount">
-                    0
-                </span>
-                /
-                <span id="targetBlocks" style="color:#30D158;">
-                    0
-                </span>
-                (
-                <span id="progressPercent" style="color:#0A84FF;">
-                    0%
-                </span>
-                )
-            </div>
-
+        <div>
+            ⏱️
+            <span id="timer">
+                180
+            </span>
         </div>
 
-
-        <div class="progress-container">
-
-            <div
-                id="progressBarFill"
-                class="progress-bar-fill">
-            </div>
-
+        <div>
+            📦 Łącznie:
+            <span
+                id="totalClearedGame"
+                style="color:#FF9F0A;">
+                0
+            </span>
         </div>
 
-
-        <div class="controls">
-
-            <button
-                id="btnDisableTimer"
-                onclick="disableTimerLifeline()">
-                ⏱️ Wyłącz czas
-            </button>
-
-            <button
-                id="btnHammer"
-                onclick="toggleHammer()">
-                🔨 Młotek
-            </button>
-
-            <button
-                id="btnShuffle"
-                onclick="triggerShuffle()">
-                🔀 Mieszaj
-            </button>
-
+        <div>
+            Poziom:
+            <span
+                id="diffDisplay"
+                style="color:#FF9F0A;">
+                🟢 Bardzo Łatwy
+            </span>
         </div>
 
+        <div>
+            🎯 Zbite:
+            <span id="clearedCount">
+                0
+            </span>
+            /
+            <span
+                id="targetBlocks"
+                style="color:#30D158;">
+                0
+            </span>
+            (
+            <span
+                id="progressPercent"
+                style="color:#0A84FF;">
+                0%
+            </span>
+            )
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PASEK POSTĘPU
+    ====================================================== -->
+
+    <div class="progress-container">
 
         <div
-            class="combo-text"
-            id="comboLabel">
-        </div>
-
-
-        <div class="canvas-container">
-
-            <canvas id="gameCanvas"></canvas>
-
+            id="progressBarFill"
+            class="progress-bar-fill">
         </div>
 
     </div>
 
 
-    <!-- =========================================================
-         INSTRUKCJA
-         ========================================================= -->
+    <!-- =====================================================
+         PRZYCISKI
+    ====================================================== -->
 
-    <div id="infoModal" class="modal">
+    <div class="controls">
 
-        <div class="modal-content">
+        <button
+            id="btnDisableTimer"
+            onclick="disableTimerLifeline()">
+            ⏱️ Wyłącz czas
+        </button>
 
-            <h2>
-                📖 Instrukcja obsługi gry
-            </h2>
+        <button
+            id="btnHammer"
+            onclick="toggleHammer()">
+            🔨 Młotek
+        </button>
 
-            <div class="version-badge">
-                Wersja 1.2.0
-            </div>
-
-
-            <h3>
-                1. Zasady rozgrywki i cel gry
-            </h3>
-
-            <ul>
-
-                <li>
-                    <strong>Główne zadanie:</strong>
-                    Klikaj w grupy co najmniej
-                    <strong>2 połączonych ze sobą kostek</strong>
-                    tego samego koloru
-                    (w pionie lub poziomie),
-                    aby usunąć je z planszy.
-                </li>
-
-                <li>
-                    <strong>Awans do kolejnej rundy:</strong>
-                    Musisz wyczyścić co najmniej
-                    <strong>90% klocków</strong>
-                    z obecnej planszy.
-                    Wywoła to
-                    <em>Złoty Wstrząs</em>
-                    – wolne miejsca zostaną uzupełnione
-                    nowymi klockami,
-                    a istniejące pozostaną na swoich miejscach.
-                </li>
-
-                <li>
-                    <strong>Koniec gry:</strong>
-                    Gra kończy się,
-                    gdy upłynie limit czasu
-                    lub gdy na planszy zabraknie
-                    możliwych ruchów,
-                    a cel 90% nie został jeszcze osiągnięty.
-                </li>
-
-            </ul>
-
-
-            <h3>
-                2. Poziomy trudności i grawitacja
-            </h3>
-
-            <ul>
-
-                <li>
-                    <strong>Wzrost trudności:</strong>
-                    Z każdą nową rundą na planszy
-                    pojawia się więcej kolorów
-                    (od 3 kolorów w Rundach 1–2
-                    do 7 kolorów w najwyższych rundach).
-                </li>
-
-                <li>
-                    <strong>Fizyka klocków:</strong>
-                    Po usunięciu grupy,
-                    klocki znajdujące się wyżej
-                    opadają w dół.
-                    Gdy cała pionowa kolumna zostanie
-                    opróżniona,
-                    pozostałe kolumny zsuwają się
-                    do lewej strony.
-                </li>
-
-            </ul>
-
-
-            <h3>
-                3. Punktacja i Combo
-            </h3>
-
-            <ul>
-
-                <li>
-                    Za każdą zbitą kostkę
-                    otrzymujesz
-                    <strong>1 punkt</strong>.
-                </li>
-
-                <li>
-                    Zbijanie dużych grup klocków
-                    (od 8 w górę)
-                    aktywuje specjalną premię wizualną
-                    <strong>🔥 COMBO!</strong>
-                </li>
-
-            </ul>
-
-
-            <h3>
-                4. Ułatwienia i koła ratunkowe
-                (jednorazowe)
-            </h3>
-
-            <ul>
-
-                <li>
-                    ⏱️
-                    <strong>Wyłącz czas:</strong>
-                    Zatrzymuje i wyłącza odliczanie zegara,
-                    pozwalając na spokojną rozgrywkę
-                    bez stresu.
-                    Użycie tego koła dodaje symbol
-                    <strong>∞</strong>
-                    przy Twoim wyniku
-                    w tabeli TOP 10.
-                </li>
-
-                <li>
-                    🔨
-                    <strong>Młotek:</strong>
-                    Pozwala zniszczyć jedną pojedynczą,
-                    wybraną kostkę,
-                    która blokuje układ.
-                    Kliknij przycisk Młotka,
-                    a następnie w wybraną kostkę.
-                </li>
-
-                <li>
-                    🔀
-                    <strong>Mieszaj:</strong>
-                    Przemieszcza losowo układ
-                    wszystkich pozostałych
-                    na planszy,
-                    gdy zabraknie pasujących układów.
-                </li>
-
-            </ul>
-
-
-            <button
-                class="close-btn"
-                style="background:#FF453A;"
-                onclick="closeModal('infoModal')">
-                Zamknij instrukcję
-            </button>
-
-        </div>
+        <button
+            id="btnShuffle"
+            onclick="triggerShuffle()">
+            🔀 Mieszaj
+        </button>
 
     </div>
 
 
-    <!-- =========================================================
-         WYNIKI
-         ========================================================= -->
+    <!-- =====================================================
+         PLANSZA
+    ====================================================== -->
 
-    <div id="scoresModal" class="modal">
+    <div class="canvas-container">
+
+        <canvas id="gameCanvas"></canvas>
+
+    </div>
+
+
+    <!-- =====================================================
+         COMBO — POD PLANSZĄ
+    ====================================================== -->
+
+    <div
+        class="combo-text"
+        id="comboLabel">
+    </div>
+
+
+    <!-- =====================================================
+         STOPKA
+    ====================================================== -->
+
+    <div class="game-footer">
+        <span>
+            Created by <strong>ToMi</strong> with AI · wersja 2.0.0
+        </span>
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     INSTRUKCJA
+========================================================= -->
+
+<div id="infoModal" class="modal">
+
+    <div class="modal-content">
+
+        <h2>
+            📖 Instrukcja obsługi gry
+        </h2>
+
+        <div class="version-badge">
+            Wersja 1.2.0
+        </div>
+
+
+        <h3>
+            1. Zasady rozgrywki i cel gry
+        </h3>
+
+        <ul>
+
+            <li>
+                <strong>Główne zadanie:</strong>
+                Klikaj w grupy co najmniej
+                <strong>2 połączonych ze sobą kostek</strong>
+                tego samego koloru
+                (w pionie lub poziomie),
+                aby usunąć je z planszy.
+            </li>
+
+            <li>
+                <strong>Awans do kolejnej rundy:</strong>
+                Musisz wyczyścić co najmniej
+                <strong>90% klocków</strong>
+                z obecnej planszy.
+                Wywoła to
+                <em>Złoty Wstrząs</em>
+                – wolne miejsca zostaną uzupełnione
+                nowymi klockami,
+                a istniejące pozostaną
+                na swoich miejscach.
+            </li>
+
+            <li>
+                <strong>Koniec gry:</strong>
+                Gra kończy się,
+                gdy upłynie limit czasu
+                lub gdy na planszy zabraknie
+                możliwych ruchów,
+                a cel 90% nie został jeszcze osiągnięty.
+            </li>
+
+        </ul>
+
+
+        <h3>
+            2. Poziomy trudności i grawitacja
+        </h3>
+
+        <ul>
+
+            <li>
+                <strong>Wzrost trudności:</strong>
+                Z każdą nową rundą
+                na planszy pojawia się więcej kolorów
+                (od 3 kolorów w Rundach 1–2
+                do 7 kolorów w najwyższych rundach).
+            </li>
+
+            <li>
+                <strong>Fizyka klocków:</strong>
+                Po usunięciu grupy,
+                klocki znajdujące się wyżej
+                opadają w dół.
+                Gdy cała pionowa kolumna
+                zostanie opróżniona,
+                pozostałe kolumny
+                zsuwają się do lewej strony.
+            </li>
+
+        </ul>
+
+
+        <h3>
+            3. Punktacja i Combo
+        </h3>
+
+        <ul>
+
+            <li>
+                Za każdą zbitą kostkę
+                otrzymujesz <strong>1 punkt</strong>.
+            </li>
+
+            <li>
+                Zbijanie dużych grup klocków
+                (od 8 w górę)
+                aktywuje specjalną premię wizualną
+                <strong>🔥 COMBO!</strong>
+            </li>
+
+        </ul>
+
+
+        <h3>
+            4. Ułatwienia i koła ratunkowe
+        </h3>
+
+        <ul>
+
+            <li>
+                ⏱️ <strong>Wyłącz czas:</strong>
+                Zatrzymuje i wyłącza odliczanie zegara,
+                pozwalając na spokojną rozgrywkę bez stresu.
+                Użycie tego koła dodaje symbol
+                <strong>∞</strong>
+                przy Twoim wyniku w tabeli TOP 10.
+            </li>
+
+            <li>
+                🔨 <strong>Młotek:</strong>
+                Pozwala zniszczyć jedną pojedynczą,
+                wybraną kostkę,
+                która blokuje układ.
+                Kliknij przycisk Młotka,
+                a następnie w wybraną kostkę.
+            </li>
+
+            <li>
+                🔀 <strong>Mieszaj:</strong>
+                Przemieszcza losowo układ
+                wszystkich pozostałych
+                na planszy,
+                gdy zabraknie pasujących układów.
+            </li>
+
+        </ul>
+
+
+        <button
+            class="close-btn"
+            style="background:#FF3B30;"
+            onclick="closeModal('infoModal')">
+
+            Zamknij instrukcję
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     WYNIKI
+========================================================= -->
+
+<div id="scoresModal" class="modal">
+
+    <div
+        class="modal-content"
+        style="text-align:center;">
+
+        <h2>
+            🏆 Najlepsze wyniki (TOP 10)
+        </h2>
+
+        <ol id="highScoresList">
+
+            <li>
+                Brak wyników
+            </li>
+
+        </ol>
+
+        <button
+            class="close-btn"
+            style="background:#FF3B30;"
+            onclick="closeModal('scoresModal')">
+
+            Zamknij
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     KOMUNIKAT
+========================================================= -->
+
+<div id="messageModal" class="modal">
+
+    <div
+        class="modal-content"
+        style="text-align:center;">
+
+        <h2 id="msgModalTitle">
+            Komunikat
+        </h2>
 
         <div
-            class="modal-content"
-            style="text-align:center;">
-
-            <h2>
-                🏆 Najlepsze wyniki (TOP 10)
-            </h2>
-
-            <ol id="highScoresList">
-
-                <li>
-                    Brak wyników
-                </li>
-
-            </ol>
-
-            <button
-                class="close-btn"
-                style="background:#FF453A;"
-                onclick="closeModal('scoresModal')">
-                Zamknij
-            </button>
-
+            id="msgModalText"
+            class="modal-text">
         </div>
+
+        <button
+            class="close-btn"
+            onclick="closeModal('messageModal')">
+
+            OK
+
+        </button>
 
     </div>
 
+</div>
 
-    <!-- =========================================================
-         KOMUNIKAT
-         ========================================================= -->
 
-    <div id="messageModal" class="modal">
+<!-- =========================================================
+     KONIEC GRY
+========================================================= -->
+
+<div id="gameOverModal" class="modal">
+
+    <div
+        class="modal-content"
+        style="text-align:center;">
+
+        <h2>
+            🏁 Koniec gry!
+        </h2>
 
         <div
-            class="modal-content"
-            style="text-align:center;">
-
-            <h2 id="msgModalTitle">
-                Komunikat
-            </h2>
-
-            <div
-                id="msgModalText"
-                class="modal-text">
-            </div>
-
-            <button
-                class="close-btn"
-                onclick="closeModal('messageModal')">
-                OK
-            </button>
-
+            id="gameOverReason"
+            class="modal-text">
         </div>
-
-    </div>
-
-
-    <!-- =========================================================
-         KONIEC GRY
-         ========================================================= -->
-
-    <div id="gameOverModal" class="modal">
 
         <div
-            class="modal-content"
-            style="text-align:center;">
+            style="
+                font-size:1.2rem;
+                font-weight:bold;
+                color:#FF9F0A;
+                margin-bottom:10px;
+            ">
 
-            <h2>
-                🏁 Koniec gry!
-            </h2>
-
-            <div
-                id="gameOverReason"
-                class="modal-text">
-            </div>
-
-            <div
-                style="
-                    font-size:1.2rem;
-                    font-weight:bold;
-                    color:#FF9F0A;
-                    margin-bottom:10px;
-                ">
-
-                Twój wynik:
-                <span id="finalScoreDisplay">
-                    0
-                </span>
-                pkt
-
-            </div>
-
-
-            <input
-                type="text"
-                id="playerNameInput"
-                class="name-input"
-                placeholder="Wpisz swoje imię..."
-                maxlength="20">
-
-
-            <button
-                class="close-btn"
-                style="
-                    background:#30D158;
-                    color:black;
-                    font-weight:bold;
-                "
-                onclick="saveScoreAndClose()">
-
-                💾 Zapisz wynik
-
-            </button>
+            Twój wynik:
+            <span id="finalScoreDisplay">
+                0
+            </span>
+            pkt
 
         </div>
 
+
+        <input
+            type="text"
+            id="playerNameInput"
+            class="name-input"
+            placeholder="Wpisz swoje imię..."
+            maxlength="20">
+
+
+        <button
+            class="close-btn"
+            style="
+                background:#30D158;
+                color:black;
+                font-weight:bold;
+            "
+            onclick="saveScoreAndClose()">
+
+            💾 Zapisz wynik
+
+        </button>
+
     </div>
+
+</div>
 
 
 <script>
+
+    /* =========================================================
+       LOGIKA GRY — BEZ ZMIAN
+    ========================================================= */
 
     const PALETTE = [
         "#1E88E5",
@@ -1365,6 +1506,7 @@
         "#9C27B0",
         "#FF9800"
     ];
+
 
     let ROWS = 18,
         COLS = 12,
@@ -1435,9 +1577,7 @@
     function calculateGridDimensions() {
 
         const container =
-            document.querySelector(
-                '.canvas-container'
-            );
+            document.querySelector(".canvas-container");
 
         const availableWidth =
             container.clientWidth;
@@ -1446,37 +1586,39 @@
             container.clientHeight;
 
         const targetCellSize =
-            window.innerWidth < 600
-                ? 32
-                : 40;
+            window.innerWidth < 600 ? 32 : 40;
 
-        COLS =
-            Math.max(
-                8,
-                Math.floor(
-                    availableWidth /
-                    targetCellSize
-                )
-            );
 
-        ROWS =
-            Math.max(
-                10,
-                Math.floor(
-                    availableHeight /
-                    targetCellSize
-                )
-            );
+        COLS = Math.max(
+            8,
+            Math.floor(
+                availableWidth /
+                targetCellSize
+            )
+        );
 
-        cellSize =
-            Math.min(
-                Math.floor(
-                    availableWidth / COLS
-                ),
-                Math.floor(
-                    availableHeight / ROWS
-                )
-            );
+
+        ROWS = Math.max(
+            10,
+            Math.floor(
+                availableHeight /
+                targetCellSize
+            )
+        );
+
+
+        cellSize = Math.min(
+
+            Math.floor(
+                availableWidth / COLS
+            ),
+
+            Math.floor(
+                availableHeight / ROWS
+            )
+
+        );
+
 
         canvas.width =
             COLS * cellSize;
@@ -1492,6 +1634,7 @@
             endGame(
                 "Gra zakończona przez gracza."
             );
+
         else
             newGame();
     }
@@ -1503,6 +1646,7 @@
             document.getElementById(
                 "btnGameAction"
             );
+
 
         if (gameActive) {
 
@@ -1528,19 +1672,27 @@
         calculateGridDimensions();
 
         score = 0;
+
         currentRound = 1;
+
         timeLeft = 180;
+
         isTimerEnabled = true;
+
         gameActive = true;
+
         hammerMode = false;
 
         statRemoved = 0;
+
         statMaxGroup = 0;
 
         usedTimerLifeline = false;
 
         hammerAvailable = true;
+
         shuffleAvailable = true;
+
         timerDisableAvailable = true;
 
 
@@ -1552,7 +1704,8 @@
         btnTimer.innerText =
             "⏱️ Wyłącz czas";
 
-        btnTimer.disabled = false;
+        btnTimer.disabled =
+            false;
 
 
         const btnHammer =
@@ -1567,7 +1720,8 @@
             "active"
         );
 
-        btnHammer.disabled = false;
+        btnHammer.disabled =
+            false;
 
 
         document.getElementById(
@@ -1582,7 +1736,10 @@
         updateUI();
 
 
-        clearInterval(timerInterval);
+        clearInterval(
+            timerInterval
+        );
+
 
         timerInterval =
             setInterval(
@@ -1601,11 +1758,13 @@
 
         hammerMode = false;
 
+
         document.getElementById(
             "btnHammer"
         ).classList.remove(
             "active"
         );
+
 
         calculateGridDimensions();
 
@@ -1615,10 +1774,10 @@
 
         drawBoard();
 
+
         showMessageModal(
             "✨ ZŁOTY WSTRZĄS!",
-            `Przechodzisz do RUNDY ${currentRound}!
-(${getDifficultyLabel(currentRound)})`
+            `Przechodzisz do RUNDY ${currentRound}!\n(${getDifficultyLabel(currentRound)})`
         );
     }
 
@@ -1629,6 +1788,7 @@
             getColorsForRound(
                 currentRound
             );
+
 
         gridData = [];
 
@@ -1662,10 +1822,12 @@
         totalRoundBlocks =
             ROWS * COLS;
 
+
         targetBlocks =
             Math.ceil(
                 totalRoundBlocks * 0.90
             );
+
 
         roundClearedBlocks = 0;
     }
@@ -1712,10 +1874,12 @@
         totalRoundBlocks =
             ROWS * COLS;
 
+
         targetBlocks =
             Math.ceil(
                 totalRoundBlocks * 0.90
             );
+
 
         roundClearedBlocks = 0;
     }
@@ -1881,6 +2045,7 @@
                     ctx.fillStyle =
                         gridData[r][c];
 
+
                     ctx.fillRect(
                         c * cellSize,
                         r * cellSize,
@@ -1892,6 +2057,7 @@
 
                     ctx.fillStyle =
                         "#1E1E1E";
+
 
                     ctx.fillRect(
                         c * cellSize,
@@ -1970,6 +2136,7 @@
                     gridData[r][c] = null;
 
                     hammerMode = false;
+
                     hammerAvailable = false;
 
 
@@ -1983,11 +2150,14 @@
                         "active"
                     );
 
-                    btnHammer.disabled = true;
+                    btnHammer.disabled =
+                        true;
 
 
                     roundClearedBlocks++;
+
                     score += 1;
+
                     statRemoved += 1;
 
 
@@ -1999,13 +2169,11 @@
                     if (
                         roundClearedBlocks >=
                         targetBlocks
-                    ) {
-
+                    )
                         setTimeout(
                             startNextRound,
                             200
                         );
-                    }
                 }
 
                 return;
@@ -2033,26 +2201,23 @@
                 if (
                     group.length >
                     statMaxGroup
-                ) {
-
+                )
                     statMaxGroup =
                         group.length;
-                }
 
 
                 if (
                     group.length >= 8
-                ) {
-
+                )
                     showCombo(
                         group.length
                     );
-                }
 
 
                 group.forEach(
                     ([gr, gc]) =>
-                        gridData[gr][gc] = null
+                        gridData[gr][gc] =
+                            null
                 );
 
 
@@ -2080,8 +2245,7 @@
                     setTimeout(
                         () =>
                             endGame(
-                                `Brak możliwych ruchów!
-Nie osiągnięto celu 90% zbitych klocków.`
+                                `Brak możliwych ruchów!\nNie osiągnięto celu 90% zbitych klocków.`
                             ),
                         300
                     );
@@ -2104,8 +2268,9 @@ Nie osiągnięto celu 90% zbitych klocków.`
             return [];
 
 
-        const queue =
-            [[startR, startC]];
+        const queue = [
+            [startR, startC]
+        ];
 
 
         const visited =
@@ -2159,7 +2324,8 @@ Nie osiągnięto celu 90% zbitych klocków.`
                 ) {
 
                     if (
-                        gridData[nr][nc] === color &&
+                        gridData[nr][nc] ===
+                        color &&
                         !visited.has(
                             `${nr},${nc}`
                         )
@@ -2202,19 +2368,24 @@ Nie osiągnięto celu 90% zbitych klocków.`
             ) {
 
                 if (
-                    gridData[r][c] !== null
+                    gridData[r][c] !==
+                    null
                 ) {
 
                     if (
                         r !== emptyIdx
                     ) {
 
-                        gridData[emptyIdx][c] =
+                        gridData[
+                            emptyIdx
+                        ][c] =
                             gridData[r][c];
+
 
                         gridData[r][c] =
                             null;
                     }
+
 
                     emptyIdx--;
                 }
@@ -2241,10 +2412,12 @@ Nie osiągnięto celu 90% zbitych klocków.`
             ) {
 
                 if (
-                    gridData[r][c] !== null
+                    gridData[r][c] !==
+                    null
                 ) {
 
-                    isColEmpty = false;
+                    isColEmpty =
+                        false;
 
                     break;
                 }
@@ -2263,13 +2436,17 @@ Nie osiągnięto celu 90% zbitych klocków.`
                         r++
                     ) {
 
-                        gridData[r][targetCol] =
+                        gridData[
+                            r
+                        ][targetCol] =
                             gridData[r][c];
+
 
                         gridData[r][c] =
                             null;
                     }
                 }
+
 
                 targetCol++;
             }
@@ -2289,15 +2466,18 @@ Nie osiągnięto celu 90% zbitych klocków.`
             return;
 
 
-        hammerMode = !hammerMode;
+        hammerMode =
+            !hammerMode;
 
 
-        document.getElementById(
-            "btnHammer"
-        ).classList.toggle(
-            "active",
-            hammerMode
-        );
+        document
+            .getElementById(
+                "btnHammer"
+            )
+            .classList.toggle(
+                "active",
+                hammerMode
+            );
     }
 
 
@@ -2351,8 +2531,7 @@ Nie osiągnięto celu 90% zbitych klocków.`
             [
                 flat[i],
                 flat[j]
-            ] =
-            [
+            ] = [
                 flat[j],
                 flat[i]
             ];
@@ -2383,7 +2562,8 @@ Nie osiągnięto celu 90% zbitych klocków.`
         }
 
 
-        shuffleAvailable = false;
+        shuffleAvailable =
+            false;
 
 
         document.getElementById(
@@ -2431,7 +2611,8 @@ Nie osiągnięto celu 90% zbitych klocków.`
             ) {
 
                 if (
-                    gridData[r][c] !== null
+                    gridData[r][c] !==
+                    null
                 ) {
 
                     const group =
@@ -2517,11 +2698,16 @@ Nie osiągnięto celu 90% zbitych klocków.`
 
 
         highScores.push({
+
             name: name,
+
             score: score,
+
             infinite:
                 usedTimerLifeline,
-            date: dateFormatted
+
+            date:
+                dateFormatted
         });
 
 
@@ -2648,7 +2834,8 @@ Nie osiągnięto celu 90% zbitych klocków.`
 
         document.getElementById(
             id
-        ).style.display = "flex";
+        ).style.display =
+            "flex";
     }
 
 
@@ -2656,7 +2843,8 @@ Nie osiągnięto celu 90% zbitych klocków.`
 
         document.getElementById(
             id
-        ).style.display = "none";
+        ).style.display =
+            "none";
     }
 
 
